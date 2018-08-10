@@ -1,5 +1,6 @@
 package caiococaro.com.br.energy;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,12 +14,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = (Button) findViewById(R.id.energyBtn);
+        Button button = (Button) findViewById(R.id.btnEntrar);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"TZZZ!!!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
+                startActivity(intent);
             }
         });
     }
