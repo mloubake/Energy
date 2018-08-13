@@ -16,7 +16,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MenuPrincipal"></activity>
+        <activity android:name=".MenuPrincipal" />
+        <activity android:name=".ConsumoTempoReal" />
+        <activity android:name=".HistoricoConsumo" />
+        <activity android:name=".ReclamacaoEspecial" />
+        <activity
+            android:name=".AcompanhamEquipeTecnica"
+            android:label="@string/title_activity_acompanham_equipe_tecnica"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".CadastroClienteVital" />
+        <activity android:name=".CadastroBaixaRenda"></activity>
     </application>
 
 </manifest>

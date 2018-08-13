@@ -3,6 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="btnEntrar">#d44b4b</color>
-    <color name="bgmTelaLogin">#13bedc</color>
+    <color name="bgBtnEntrar">#d44b4b</color>
+    <color name="btnEntrar">#FFFFFF</color>
+    <color name="bgTelaLogin">#13bedc</color>
+    <color name="bgEdTxt">#FFFFFF</color>
+    <color name="transparente"></color>
 </resources>

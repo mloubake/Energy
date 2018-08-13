@@ -6,38 +6,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@color/bgTelaLogin"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:background="@color/bgmTelaLogin"
-        android:gravity="center_horizontal">
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints">
+
         <ImageView
-            android:src="@drawable/imagemlogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
-
+            android:src="@drawable/imagemlogin"
+            android:layout_marginBottom="10dp"/>
         <EditText
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_edittext"
             android:hint="CPF ou CNPJ"
-            />
-
+            android:layout_marginBottom="8dp"/>
         <EditText
-            style="@android:style/Widget.Holo.Light.AutoCompleteTextView"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/rounded_edittext"
             android:hint="Número do Cliente (Sem o digito) "
-            android:inputType="none|number" />
+            android:inputType="none|number"
+            android:layout_marginBottom="8dp"/>
         <Button
             android:id="@+id/btnEntrar"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_edittext_2"
             android:text="@string/btnEntrar"
-            android:background="@color/btnEntrar"
-           />
+            android:textColor="@color/btnEntrar"/>
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="CONSULTAR NÚMERO DE CLIENTE"
+            android:textColor="@color/btnEntrar"
+            android:background="@color/transparente"/>
     </LinearLayout>
 
 

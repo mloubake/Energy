@@ -2,4 +2,6 @@
     <string name="app_name">Energy</string>
     <string name="title_activity_menu_principal">MenuPrincipal</string>
     <string name="btnEntrar"><font fgcolor="White">Entrar</font></string>
+    <string name="title_activity_consumo_tempo_real">ConsumoTempoReal</string>
+    <string name="title_activity_acompanham_equipe_tecnica">AcompanhamEquipeTecnica</string>
 </resources>
