@@ -26,13 +26,17 @@ public class MenuPrincipal extends AppCompatActivity {
 
             //Button[] btnList = {btnConsumo};
             ListView listView = (ListView) findViewById(R.id.lista);
-            String[] values = new String[]{"Consumo Tempo Real", "Histórico de Consumo", "Reclamações Especiais",
+
+            String[] arrayFuncionalidades = new String[]{"Consumo Tempo Real", "Histórico de Consumo", "Reclamações Especiais",
                                                 "Acompanhamento de Manutenção da Equipe Técnica",
                                                 "Cadastro de Acompanhamento de Cliente Vital", "Cadastro de Baixa Renda"};
+
             //ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listString);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.activity_list_item, android.R.id.text1, values);
+                    android.R.layout.activity_list_item, android.R.id.text1, arrayFuncionalidades);
+
             listView.setAdapter(adapter);
+
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -62,10 +66,6 @@ public class MenuPrincipal extends AppCompatActivity {
                     }
                 }
             });
-
-
-
-
 
     }
 }

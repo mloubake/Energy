@@ -1,54 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="368dp"
         android:layout_height="fill_parent"
         android:background="@color/bgTelaLogin"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp"
         tools:ignore="MissingConstraints">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/imagemlogin"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/imagemlogin" />
+
         <EditText
+            android:id="@+id/etCpfCnpj"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_edittext"
             android:hint="CPF ou CNPJ"
-            android:layout_marginBottom="8dp"/>
+            android:inputType="none|number" />
+
         <EditText
+            android:id="@+id/etNumCliente"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_edittext"
-            android:hint="Número do Cliente (Sem o digito) "
-            android:inputType="none|number"
-            android:layout_marginBottom="8dp"/>
+            android:hint="Número do Cliente (Sem o digito)"
+            android:inputType="none|number" />
+
         <Button
             android:id="@+id/btnEntrar"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_edittext_2"
             android:text="@string/btnEntrar"
-            android:textColor="@color/btnEntrar"/>
+            android:textColor="@color/btnEntrar" />
+
         <Button
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:background="@color/transparente"
             android:text="CONSULTAR NÚMERO DE CLIENTE"
-            android:textColor="@color/btnEntrar"
-            android:background="@color/transparente"/>
+            android:textColor="@color/btnEntrar" />
     </LinearLayout>
 
 
