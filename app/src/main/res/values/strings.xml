@@ -4,4 +4,5 @@
     <string name="btnEntrar"><font fgcolor="White">Entrar</font></string>
     <string name="title_activity_consumo_tempo_real">ConsumoTempoReal</string>
     <string name="title_activity_acompanham_equipe_tecnica">AcompanhamEquipeTecnica</string>
+    <string name="consultar_numero_cliente">Consultar número de cliente</string>
 </resources>

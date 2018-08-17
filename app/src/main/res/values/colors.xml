@@ -5,7 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="bgBtnEntrar">#d44b4b</color>
     <color name="btnEntrar">#FFFFFF</color>
-    <color name="bgTelaLogin">#13bedc</color>
+    <color name="bgTelaLogin">#40b9e6</color>
     <color name="bgEdTxt">#FFFFFF</color>
     <color name="transparente"></color>
+
 </resources>
