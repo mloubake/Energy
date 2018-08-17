@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 mFirestore.collection("Usuarios").add(userMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(MainActivity.this,"Enviando para Firestore", Toast.LENGTH_LONG).show();
+                        
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Error: " + erro, Toast.LENGTH_LONG).show();
                     }
                 });
-                Toast.makeText(MainActivity.this, "KD O TOAST PORRA!!!!!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Login realizado", Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
                 startActivity(intent);
