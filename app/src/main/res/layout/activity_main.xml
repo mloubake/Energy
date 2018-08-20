@@ -1,110 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/bgTelaLogin"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints">
+        android:orientation="horizontal"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="250dip"
+            android:gravity="center_horizontal">
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="95dp"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            android:src="@drawable/imagemlogin"
-            android:visibility="visible" />
+            <ImageView
+                android:layout_width="120dip"
+                android:layout_height="141dip"
+                android:layout_marginTop="90dip"
+                android:adjustViewBounds="true"
+                android:contentDescription="TODO"
+                android:cropToPadding="true"
+                android:src="@drawable/imagemlogin"
+                android:visibility="visible" />
+        </TableRow>
 
-        <EditText
-            android:id="@+id/etCpfCnpj"
-            android:layout_width="330dp"
-            android:layout_height="43dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="284dp"
-            android:background="@drawable/rounded_edittext"
-            android:hint="CPF ou CNPJ"
-            android:inputType="none|number"
-            android:shadowRadius="10"
-            android:textStyle="italic" />
-
-        <EditText
-            android:id="@+id/etNumCliente"
-            android:layout_width="330dp"
-            android:layout_height="43dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="339dp"
-            android:background="@drawable/rounded_edittext"
-            android:hint="Número do cliente (sem o dígito)"
-            android:inputType="none|number"
-            android:shadowRadius="10"
-            android:textStyle="italic" />
-
-        <Button
-            android:layout_width="232dp"
+        <TableRow
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="317dp"
-            android:background="@color/transparente"
-            android:text="@string/consultar_numero_cliente"
-            android:textAllCaps="false"
-            android:textColor="@color/btnEntrar"
-            android:textSize="15dp" />
+            android:gravity="center_horizontal">
 
-        <Button
-            android:id="@+id/btnEntrar"
-            android:layout_width="330dp"
+            <EditText
+                android:id="@+id/etNumCliente"
+                android:layout_width="500dip"
+                android:layout_height="43dip"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dip"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Número do cliente (sem o dígito)"
+                android:inputType="none|number"
+                android:shadowRadius="10"
+                android:textStyle="italic" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/circle_button"
-            android:text="Entrar"
-            android:textAllCaps="false"
-            android:textColor="@color/btnEntrar"
-            android:textSize="15dp" />
+            android:gravity="center_horizontal">
 
-        <Button
-            android:id="@+id/btnServicos"
-            android:layout_width="268dp"
+            <EditText
+                android:id="@+id/etCpfCnpj"
+                android:layout_width="271dp"
+                android:layout_height="43dip"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dip"
+                android:background="@drawable/rounded_edittext"
+                android:hint="CPF ou CNPJ"
+                android:inputType="none|number"
+                android:shadowRadius="10"
+                android:textStyle="italic" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="36dp"
-            android:layout_marginEnd="27dp"
-            android:background="@drawable/circle_button"
-            android:text="Serviços"
-            android:textAllCaps="false"
-            android:textColor="@color/btnEntrar"
-            android:textSize="15dp" />
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnEntrarsemLogin"
-            android:layout_width="271dp"
+            <Button
+                android:id="@+id/btnEntrar"
+                android:layout_width="100dip"
+                android:layout_height="50dip"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dip"
+                android:background="@drawable/circle_button"
+                android:text="Entrar"
+                android:textAllCaps="false"
+                android:textColor="@color/btnEntrar"
+                android:textSize="15dip" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="190dip"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="232dip"
+                android:layout_height="43dip"
+                android:layout_marginBottom="100dip"
+                android:layout_marginTop="5dip"
+                android:background="@color/transparente"
+                android:text="@string/consultar_numero_cliente"
+                android:textAllCaps="false"
+                android:textColor="@color/btnEntrar"
+                android:textSize="15dip" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="16dp"
-            android:background="@drawable/circle_button"
-            android:text="Entrar sem login"
-            android:textAllCaps="false"
-            android:textColor="@color/btnEntrar"
-            android:textSize="15dp" />
+            android:gravity="center_horizontal">
 
-    </RelativeLayout>
+            <TableRow
+                android:layout_width="162dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:id="@+id/btnEntrarsemLogin"
+                    android:layout_width="200dip"
+                    android:layout_marginTop="80dip"
+                    android:layout_weight="5"
+                    android:background="@drawable/circle_button"
+                    android:gravity="center"
+                    android:padding="14dip"
+                    android:text="Entrar sem login"
+                    android:textAllCaps="false"
+                    android:textColor="@color/btnEntrar"
+                    android:textSize="15dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:id="@+id/btnServicos"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80dip"
+                    android:layout_weight="1"
+                    android:background="@drawable/circle_button"
+                    android:gravity="center"
+                    android:padding="14dip"
+                    android:text="Serviços"
+                    android:textAllCaps="false"
+                    android:textColor="@color/btnEntrar"
+                    android:textSize="15dip" />
+
+            </TableRow>
+
+        </TableRow>
+
+    </TableLayout>
 
 </android.support.constraint.ConstraintLayout>
