@@ -20,21 +20,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public class MainActivity extends AppCompatActivity {
 
 
     //private Firebase mRef;
     //private Button mSendData;
+    //Declaração da Inicialiação do FireStore
     private FirebaseFirestore mFirestore;
 
 
     //Fazer BD de equipes de manutenção
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,24 +77,44 @@ public class MainActivity extends AppCompatActivity {
         Button button = (Button) findViewById(R.id.btnEntrar);
         final EditText etCpfCnpj = (EditText) findViewById(R.id.etCpfCnpj);
         final EditText etNumCliente = (EditText) findViewById(R.id.etNumCliente);
+        //final EditText etRecuperando = (EditText) findViewById(R.id.etRecuperando);
 
+        //Inicialização do FireStore
         mFirestore = FirebaseFirestore.getInstance();
 
+        //Botão do Login
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String cpfCnpj = etCpfCnpj.getText().toString();
+                //EditTexts passando para Strings para serem usadas no Map
+                final String cpfCnpj = etCpfCnpj.getText().toString();
                 String numClinte = etNumCliente.getText().toString();
+
                 Map<String, String> userMap = new HashMap<>();
 
                 userMap.put("CpfCnpj", cpfCnpj);
                 userMap.put("NumCliente", numClinte);
 
+                //Adiciona uma coleção "Usuários" ao DB
                 mFirestore.collection("Usuarios").add(userMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        
+
+                        mFirestore.collection("Usuarios").document().get();
+
+                        if (etCpfCnpj.getText().toString() == userId.toString()){
+                            Toast.makeText(MainActivity.this, "Recuperando", Toast.LENGTH_LONG).show();
+                           // etRecuperando.setText(userId);
+                        }
+
+
+
+                        /*
+                        Toast.makeText(MainActivity.this, "Login realizado", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
+                        startActivity(intent);
+                        */
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -100,10 +123,10 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Error: " + erro, Toast.LENGTH_LONG).show();
                     }
                 });
-                Toast.makeText(MainActivity.this, "Login realizado", Toast.LENGTH_LONG).show();
 
-                Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
-                startActivity(intent);
+
+
+
 
             }
         });
