@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //EditTexts passando para Strings para serem usadas no Map
                 final String cpfCnpj = etCpfCnpj.getText().toString();
-                String numClinte = etNumCliente.getText().toString();
+                final String numClinte = etNumCliente.getText().toString();
 
                 Map<String, String> userMap = new HashMap<>();
 
@@ -101,20 +101,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
 
+                        /*
                         mFirestore.collection("Usuarios").document().get();
 
-                        if (etCpfCnpj.getText().toString() == userId.toString()){
+                        if (etCpfCnpj.getText().toString() == userId.toString()) {
                             Toast.makeText(MainActivity.this, "Recuperando", Toast.LENGTH_LONG).show();
-                           // etRecuperando.setText(userId);
-                        }
+                            etRecuperando.setText(userId);
+                        }*/
 
 
-
-                        /*
                         Toast.makeText(MainActivity.this, "Login realizado", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
                         startActivity(intent);
-                        */
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -125,13 +124,11 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-
-
-
             }
         });
 
-
-
     }
+
+
 }
+

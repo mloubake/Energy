@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/bgTelaLogin"
         android:orientation="horizontal"
+        android:padding="30dp"
         android:shrinkColumns="*"
         android:stretchColumns="*"
         tools:ignore="MissingConstraints"
@@ -26,30 +27,12 @@
             <ImageView
                 android:layout_width="120dip"
                 android:layout_height="141dip"
-                android:layout_marginTop="90dip"
+                android:layout_marginTop="50dip"
                 android:adjustViewBounds="true"
                 android:contentDescription="TODO"
                 android:cropToPadding="true"
                 android:src="@drawable/imagemlogin"
                 android:visibility="visible" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
-
-            <EditText
-                android:id="@+id/etNumCliente"
-                android:layout_width="500dip"
-                android:layout_height="43dip"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dip"
-                android:background="@drawable/rounded_edittext"
-                android:hint="Número do cliente (sem o dígito)"
-                android:inputType="none|number"
-                android:shadowRadius="10"
-                android:textStyle="italic" />
         </TableRow>
 
         <TableRow
@@ -69,6 +52,25 @@
                 android:inputType="none|number"
                 android:shadowRadius="10"
                 android:textStyle="italic" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <EditText
+                android:id="@+id/etNumCliente"
+                android:layout_width="500dip"
+                android:layout_height="43dip"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dip"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Número do cliente (sem o dígito)"
+                android:inputType="none|number"
+                android:shadowRadius="10"
+                android:textStyle="italic" />
+
         </TableRow>
 
         <TableRow
@@ -107,53 +109,6 @@
                 android:textAllCaps="false"
                 android:textColor="@color/btnEntrar"
                 android:textSize="15dip" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
-
-            <TableRow
-                android:layout_width="162dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
-
-                <Button
-                    android:id="@+id/btnEntrarsemLogin"
-                    android:layout_width="200dip"
-                    android:layout_marginTop="80dip"
-                    android:layout_weight="5"
-                    android:background="@drawable/circle_button"
-                    android:gravity="center"
-                    android:padding="14dip"
-                    android:text="Entrar sem login"
-                    android:textAllCaps="false"
-                    android:textColor="@color/btnEntrar"
-                    android:textSize="15dp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
-
-                <Button
-                    android:id="@+id/btnServicos"
-                    android:layout_width="200dip"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="80dip"
-                    android:layout_weight="1"
-                    android:background="@drawable/circle_button"
-                    android:gravity="center"
-                    android:padding="14dip"
-                    android:text="Serviços"
-                    android:textAllCaps="false"
-                    android:textColor="@color/btnEntrar"
-                    android:textSize="15dip" />
-
-            </TableRow>
 
         </TableRow>
 
