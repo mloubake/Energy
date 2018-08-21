@@ -64,7 +64,7 @@ public class MenuPrincipal extends AppCompatActivity {
                         Intent intent = new Intent(view.getContext(), CadastroBaixaRenda.class);
                         startActivity(intent);
                     }
-                }
+                }*/
             });
 
     }

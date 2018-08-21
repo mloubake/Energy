@@ -7,11 +7,104 @@
     android:layout_height="match_parent"
     tools:context=".MenuPrincipal">
 
-    <ListView
+
+
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lista">
-    </ListView>
+        android:shrinkColumns="*"  android:stretchColumns="*" android:background="#ffffff">
 
+        <!-- Cabeçalho -->
+        <TableRow
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:background="#2b2a2a">
+
+
+            <ImageView
+                android:layout_width="318dp"
+                android:layout_height="170dp"
+                android:src="@drawable/imagemcabecalho"
+                android:visibility="visible" />
+        </TableRow>
+        <!-- Linha 1 -->
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/TextView01"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:background="#00AF00"
+                android:gravity="center"
+                android:padding="18dip"
+                android:text="Controle de Consumo"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:text="Histórico de consumo"
+                android:layout_weight="1"
+                android:background="#00FF00"
+                android:textColor="#000000"
+                android:padding="18dip"
+                android:gravity="center"/>
+        </TableRow>
+
+        <!-- Linha 2 -->
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/TextView01"
+                android:text="Cadastro de baixa renda"
+                android:layout_weight="1"
+                android:background="#00AF00"
+                android:textColor="#000000"
+                android:padding="18dip"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:text="Cadastro e acompanhamento de cliente vital"
+                android:layout_weight="1"
+                android:background="#00FF00"
+                android:textColor="#000000"
+                android:padding="18dip"
+                android:gravity="center"/>
+        </TableRow>
+
+        <!-- Linha 3 -->
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/TextView01"
+                android:text="Acompanhamento de equipe"
+                android:layout_weight="1"
+                android:background="#00AF00"
+                android:textColor="#000000"
+                android:padding="18dip"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:text="Reclamação especial"
+                android:layout_weight="1"
+                android:background="#00FF00"
+                android:textColor="#000000"
+                android:padding="18dip"
+                android:gravity="center"/>
+        </TableRow>
+
+    </TableLayout>
 
 </android.support.constraint.ConstraintLayout>
