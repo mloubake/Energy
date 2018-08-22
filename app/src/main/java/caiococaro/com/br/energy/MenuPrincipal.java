@@ -17,15 +17,15 @@ public class MenuPrincipal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
 
-        /*Button btnConsumo = (Button) findViewById(R.id.btnConsumo);
-        /*Button btnHistConsumo = (Button) findViewById(R.id.btnHistConsumo);
-        Button btnReclamacao = (Button) findViewById(R.id.btnReclamacao);
-        Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
-        Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
-        Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);*/
+        //Button btnConsumo = (Button) findViewById(R.id.btnConsumo);
+        //Button btnHistConsumo = (Button) findViewById(R.id.btnHistConsumo);
+        //Button btnReclamacao = (Button) findViewById(R.id.btnReclamacao);
+        //Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
+        //Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
+        //Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);
 
             //Button[] btnList = {btnConsumo};
-            ListView listView = (ListView) findViewById(R.id.lista);
+            //ListView listView = (ListView) findViewById(R.id.lista);
 
             String[] arrayFuncionalidades = new String[]{"Consumo Tempo Real", "Histórico de Consumo", "Reclamações Especiais",
                                                 "Acompanhamento de Manutenção da Equipe Técnica",
@@ -35,9 +35,9 @@ public class MenuPrincipal extends AppCompatActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.activity_list_item, android.R.id.text1, arrayFuncionalidades);
 
-            listView.setAdapter(adapter);
+            //listView.setAdapter(adapter);
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            //listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if(position == 0){
@@ -64,7 +64,7 @@ public class MenuPrincipal extends AppCompatActivity {
                         Intent intent = new Intent(view.getContext(), CadastroBaixaRenda.class);
                         startActivity(intent);
                     }
-                }*/
+                }
             });
 
     }
