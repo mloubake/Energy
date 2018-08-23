@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     //Declaração da Inicialiação do FireStore
     private FirebaseFirestore mFirestore;
     String teteus = "Teteus";
+    boolean ctrl = false;
 
     //Fazer BD de equipes de manutenção
 
@@ -133,13 +134,12 @@ public class MainActivity extends AppCompatActivity {
 
                                     Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
                                     startActivity(intent);
-                                    Toast.makeText(getApplicationContext(), "Login Efetuado com Sucesso.", Toast.LENGTH_SHORT).show();
+                                    ctrl = true;
                                     break;
                                 }
                                 else{
-                                    Toast.makeText(getApplicationContext(),"Dados incorretos. Verifique novamente." , Toast.LENGTH_LONG).show();
+                                    ctrl = false;
                                 }
-
                                     /*
                                     Log.d(TAG, "Valor do editText: " + String.valueOf(etCpfCnpj.getText()));
                                     Log.d(TAG, "1 Valor do recuperando: " + String.valueOf(etRecuperando.getText()));
@@ -152,7 +152,13 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d(TAG, " ");
                                     */
 
+                            }
 
+                            if(ctrl==true){
+                                Toast.makeText(getApplicationContext(), "Login efetuado com sucesso.", Toast.LENGTH_SHORT).show();
+                            }
+                             else{
+                                Toast.makeText(getApplicationContext(),"Dados incorretos.Verifique e tente novamente." , Toast.LENGTH_LONG).show();
                             }
                         }
                         else{
