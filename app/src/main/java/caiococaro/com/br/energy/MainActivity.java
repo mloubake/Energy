@@ -128,15 +128,17 @@ public class MainActivity extends AppCompatActivity {
                             for (DocumentSnapshot document : task.getResult()) {
 
                                 if(String.valueOf(document.getData().get("CpfCnpj")).equals(String.valueOf(etCpfCnpj.getText()))
-                                        && String.valueOf(document.getData().get("NumCliente")).equals(String.valueOf(etNumCliente.getText()))){
-          //                          etRecuperando.setText( document.getData().get("idUser").toString());
+                                        && String.valueOf(document.getData().get("NumCliente")).equals(String.valueOf(etNumCliente.getText()))) {
+                                    //                          etRecuperando.setText( document.getData().get("idUser").toString());
 
                                     Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
                                     startActivity(intent);
                                     Toast.makeText(getApplicationContext(), "Login Efetuado com Sucesso.", Toast.LENGTH_SHORT).show();
-                                    Log.d(TAG, "entrou no if");
-
-
+                                    break;
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(),"Dados incorretos. Verifique novamente." , Toast.LENGTH_LONG).show();
+                                }
 
                                     /*
                                     Log.d(TAG, "Valor do editText: " + String.valueOf(etCpfCnpj.getText()));
@@ -150,16 +152,7 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d(TAG, " ");
                                     */
 
-                                }
-                                else {
-                                    Toast.makeText(getApplicationContext(),"Dados incorretos. Verifique novamente." , Toast.LENGTH_LONG).show();
-                                    Log.d(TAG, "entrou no else");
-                                    /*
-                                    Log.d(TAG, "22 Valor do recuperando: " + String.valueOf(etRecuperando.getText()));
-                                    etRecuperando.setText( "idUser não encontrado");
-                                    Log.d(TAG, "333 Valor do recuperando: " + String.valueOf(etRecuperando.getText()));
-                                    */
-                                }
+
                             }
                         }
                         else{
