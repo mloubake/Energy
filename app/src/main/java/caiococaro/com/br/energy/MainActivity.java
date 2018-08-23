@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful() ) {
                             for (DocumentSnapshot document : task.getResult()) {
+
                                 if(String.valueOf(document.getData().get("CpfCnpj")).equals(String.valueOf(etCpfCnpj.getText()))
                                         && String.valueOf(document.getData().get("NumCliente")).equals(String.valueOf(etNumCliente.getText()))){
           //                          etRecuperando.setText( document.getData().get("idUser").toString());
@@ -133,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
                                     Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
                                     startActivity(intent);
                                     Toast.makeText(getApplicationContext(), "Login Efetuado com Sucesso.", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "entrou no if");
 
-                                    break;
 
 
                                     /*

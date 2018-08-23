@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -23,49 +24,61 @@ public class MenuPrincipal extends AppCompatActivity {
         //Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
         //Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
         //Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);
+        ImageButton btnConsumo = (ImageButton) findViewById(R.id.btnConsumo);
+        ImageButton btnHistConsumo = (ImageButton) findViewById(R.id.btnHistConsumo);
+        ImageButton btnReclamacao = (ImageButton) findViewById(R.id.btnReclamacao);
+        ImageButton btnAcompanhamento = (ImageButton) findViewById(R.id.btnAcompanhamento);
+        ImageButton btnCadastroVital = (ImageButton) findViewById(R.id.btnCadastroVital);
+        ImageButton btnCadastroBaixaRenda = (ImageButton) findViewById(R.id.btnCadastroBaixaRenda);
 
-            //Button[] btnList = {btnConsumo};
-            //ListView listView = (ListView) findViewById(R.id.lista);
 
-            String[] arrayFuncionalidades = new String[]{"Consumo Tempo Real", "Histórico de Consumo", "Reclamações Especiais",
-                                                "Acompanhamento de Manutenção da Equipe Técnica",
-                                                "Cadastro de Acompanhamento de Cliente Vital", "Cadastro de Baixa Renda"};
+        btnConsumo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuPrincipal.this, ConsumoTempoReal.class);
+                startActivity(intent);
+            }
+        });
 
-            //ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listString);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.activity_list_item, android.R.id.text1, arrayFuncionalidades);
+        btnHistConsumo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuPrincipal.this, HistoricoConsumo.class);
+                startActivity(intent);
+            }
+        });
 
-            //listView.setAdapter(adapter);
+        btnReclamacao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuPrincipal.this, ReclamacaoEspecial.class);
+                startActivity(intent);
+            }
+        });
 
-            //listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if(position == 0){
-                        Intent intent = new Intent(view.getContext(), ConsumoTempoReal.class);
-                        startActivity(intent);
-                    }
-                    if(position == 1){
-                        Intent intent = new Intent(view.getContext(), HistoricoConsumo.class);
-                        startActivity(intent);
-                    }
-                    if(position == 2){
-                        Intent intent = new Intent(view.getContext(), ReclamacaoEspecial.class);
-                        startActivity(intent);
-                    }
-                    if(position == 3){
-                        Intent intent = new Intent(view.getContext(), AcompanhamEquipeTecnica.class);
-                        startActivity(intent);
-                    }
-                    if(position == 4){
-                        Intent intent = new Intent(view.getContext(), CadastroClienteVital.class);
-                        startActivity(intent);
-                    }
-                    if(position == 5){
-                        Intent intent = new Intent(view.getContext(), CadastroBaixaRenda.class);
-                        startActivity(intent);
-                    }
-                }
-            });
+        btnAcompanhamento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuPrincipal.this, AcompanhamEquipeTecnica.class);
+                startActivity(intent);
+            }
+        });
 
+        btnCadastroVital.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuPrincipal.this, CadastroClienteVital.class);
+                startActivity(intent);
+            }
+        });
+
+        btnCadastroBaixaRenda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuPrincipal.this, CadastroBaixaRenda.class);
+                startActivity(intent);
+            }
+        });
     }
 }
+
