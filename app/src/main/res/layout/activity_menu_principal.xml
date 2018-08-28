@@ -35,7 +35,7 @@
                     android:layout_width="100dp"
                     android:layout_height="114dp"
                     android:layout_marginTop="20dp"
-                    android:contentDescription="@string/energy"
+                    android:contentDescription="@string/app_name"
                     android:src="@drawable/imagemcabecalho"
                     android:visibility="visible" />
             </TableRow>
@@ -149,7 +149,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_red"
-                    android:contentDescription="@string/reclam_especial"
+                    android:contentDescription="@string/reclam_postal"
                     android:gravity="center"
                     android:src="@drawable/imagemlogin"
                     android:textColor="#000000" />
