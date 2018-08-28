@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     //private Button mSendData;
     //Declaração da Inicialiação do FireStore
     private FirebaseFirestore mFirestore;
-    String teteus = "Teteus";
     boolean ctrl = false;
 
     //Fazer BD de equipes de manutenção
@@ -53,36 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*NÃO APAGAR, USAR COMO AJUDA/EXEMPLO
-        EditText etCpfCnpj = (EditText) findViewById(R.id.etCpfCnpj);
-        EditText etNumCliente = (EditText) findViewById(R.id.etNumCliente);
-        Button button = (Button) findViewById(R.id.btnEntrar);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //Criar botão de cadastro
-                //Tentar botar um forEach para sempre incrementar um Indice
-
-                final String valueCpf = etCpfCnpj.getText().toString();
-                String valueNumCliente = etNumCliente.getText().toString();
-
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRefCpfCnpj = database.getReference("CpfCnpj");
-                DatabaseReference myRefNumCliente = database.getReference("NumCliente");
-
-                myRefCpfCnpj.setValue(valueCpf);
-                myRefNumCliente.setValue(valueNumCliente);
-
-                Toast.makeText(getApplicationContext(),"enviado", Toast.LENGTH_LONG).show();;
-                //Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
-                //startActivity(intent);
-
-            }
-        });
-    */
-
+        //NÃO APAGAR, USAR COMO AJUDA/EXEMPLO
 
         final Button button = (Button) findViewById(R.id.btnEntrar);
         final EditText etCpfCnpj = (EditText) findViewById(R.id.etCpfCnpj);
@@ -105,21 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 userMap.put("CpfCnpj", cpfCnpj);
                 userMap.put("NumCliente", numClinte);
 
-
-                /*
-                //Cria uma Coleção e add um Documento à essa coleção
-                mFirestore.collection("Usuario").add(userMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-                */
 
                 //Recuperando os dados
                 mFirestore.collection("Usuario").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -144,10 +99,19 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d(TAG, "Valor do editText: " + String.valueOf(etCpfCnpj.getText()));
                                     Log.d(TAG, "1 Valor do recuperando: " + String.valueOf(etRecuperando.getText()));
 
+                                    //Recupera o id do documento especificado
                                     Log.d(TAG, "getId: " + document.getId());
+
+                                   //Recupera todos os campos do documento especificado
                                     Log.d(TAG, "getData: " + document.getData());
+
+                                    //Recupera só o campo numClinete do documento especificado
                                     Log.d(TAG, "getData.get(NumCliente): " + document.getData().get("NumCliente"));
+
+                                    //Recupera só o campo cpfCnpj do documento especificado
                                     Log.d(TAG, "getData.get(CpfCnpj): " + document.getData().get("CpfCnpj"));
+
+                                    //Recupera só o campo idUser do documento especificado
                                     Log.d(TAG, "getData.get(idUser): " + document.getData().get("idUser"));
                                     Log.d(TAG, " ");
                                     */
@@ -162,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         else{
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            Log.w(TAG, "Falha ao recuperar documents.", task.getException());
                         }
                     }
                 });
