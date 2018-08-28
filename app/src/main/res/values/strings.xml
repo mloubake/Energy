@@ -5,4 +5,13 @@
     <string name="title_activity_consumo_tempo_real">ConsumoTempoReal</string>
     <string name="title_activity_acompanham_equipe_tecnica">AcompanhamEquipeTecnica</string>
     <string name="consultar_numero_cliente">Consultar número de cliente</string>
+    <string name="controle_consumo">Controle de consumo</string>
+    <string name="hist_consumo">Histórico de consumo</string>
+    <string name="cadastro_cliente_vital">Cadastro de cliente vital</string>
+    <string name="cadastro_baixa_renda">Cadastro de baixa renda</string>
+    <string name="acompanham_equipe_tecnica">Acompanhamento de equipe técnica</string>
+    <string name="reclam_postal">Reclamação postal</string>
+
+
+
 </resources>
