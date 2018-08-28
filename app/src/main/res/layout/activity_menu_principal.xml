@@ -50,15 +50,16 @@
                 android:gravity="center_horizontal"
                 android:padding="20dp">
 
-                <ImageButton
+                <Button
                     android:id="@+id/btnConsumo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_blue"
-                    android:contentDescription="@string/controle_consumo"
+                    android:text="@string/controle_consumo"
+                    android:textAllCaps="false"
                     android:gravity="center"
-                    android:src="@drawable/imagemlogin"
-                    android:textColor="#000000" />
+                    android:drawableLeft="@drawable/consumo"
+                    android:textColor="#FFFF" />
 
             </TableRow>
 
@@ -69,17 +70,16 @@
                 android:gravity="center_horizontal"
                 android:padding="20dp">
 
-                <ImageButton
+                <Button
                     android:id="@+id/btnHistConsumo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_green"
-                    android:contentDescription="@string/hist_consumo"
+                    android:text="@string/hist_consumo"
+                    android:textAllCaps="false"
                     android:gravity="center"
-                    android:src="@drawable/imagemlogin"
-                    android:textColor="#000000"
-                    tools:layout_editor_absoluteX="16dp"
-                    tools:layout_editor_absoluteY="282dp" />
+                    android:textColor="#FFFF"
+                    android:drawableLeft="@drawable/hist_consumo"/>
 
             </TableRow>
 
@@ -90,15 +90,16 @@
                 android:gravity="center_horizontal"
                 android:padding="20dp">
 
-                <ImageButton
+                <Button
                     android:id="@+id/btnCadastroVital"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_red"
-                    android:contentDescription="@string/cadastro_cliente_vital"
+                    android:text="@string/cadastro_cliente_vital"
+                    android:textAllCaps="false"
                     android:gravity="center"
-                    android:src="@drawable/imagemlogin"
-                    android:textColor="#000000" />
+                    android:textColor="#FFFF"
+                    android:drawableLeft="@drawable/vital"/>
             </TableRow>
 
             <!-- Linha 4 -->
@@ -108,15 +109,16 @@
                 android:gravity="center_horizontal"
                 android:padding="20dp">
 
-                <ImageButton
+                <Button
                     android:id="@+id/btnCadastroBaixaRenda"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_pink"
-                    android:contentDescription="@string/cadastro_baixa_renda"
+                    android:text="@string/cadastro_baixa_renda"
+                    android:textAllCaps="false"
                     android:gravity="center"
-                    android:src="@drawable/imagemlogin"
-                    android:textColor="#000000" />
+                    android:textColor="#FFFF"
+                    android:drawableLeft="@drawable/baixa_renda"/>
             </TableRow>
 
             <!-- Linha 5-->
@@ -126,15 +128,16 @@
                 android:gravity="center_horizontal"
                 android:padding="20dp">
 
-                <ImageButton
+                <Button
                     android:id="@+id/btnAcompanhamento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_blue"
-                    android:contentDescription="@string/acompanham_equipe_tecnica"
+                    android:text="@string/acompanham_equipe_tecnica"
+                    android:textAllCaps="false"
                     android:gravity="center"
-                    android:src="@drawable/imagemlogin"
-                    android:textColor="#000000" />
+                    android:textColor="#FFFF"
+                    android:drawableLeft="@drawable/equipe_tec"/>
             </TableRow>
 
             <!-- Linha 6 -->
@@ -144,15 +147,16 @@
                 android:gravity="center_horizontal"
                 android:padding="20dp">
 
-                <ImageButton
+                <Button
                     android:id="@+id/btnReclamacao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_red"
-                    android:contentDescription="@string/reclam_postal"
+                    android:text="@string/reclam_postal"
+                    android:textAllCaps="false"
                     android:gravity="center"
-                    android:src="@drawable/imagemlogin"
-                    android:textColor="#000000" />
+                    android:textColor="#FFFF"
+                    android:drawableLeft="@drawable/rec_postal"/>
             </TableRow>
 
         </TableLayout>

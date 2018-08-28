@@ -4,6 +4,7 @@
     <string name="btnEntrar"><font fgcolor="White">Entrar</font></string>
     <string name="title_activity_consumo_tempo_real">ConsumoTempoReal</string>
     <string name="title_activity_acompanham_equipe_tecnica">AcompanhamEquipeTecnica</string>
+    <string name="title_activity_maps">Map</string>
     <string name="consultar_numero_cliente">Consultar número de cliente</string>
     <string name="controle_consumo">Controle de consumo</string>
     <string name="hist_consumo">Histórico de consumo</string>

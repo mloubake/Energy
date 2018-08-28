@@ -28,6 +28,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
@@ -52,15 +62,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //NÃO APAGAR, USAR COMO AJUDA/EXEMPLO
 
         final Button button = (Button) findViewById(R.id.btnEntrar);
         final EditText etCpfCnpj = (EditText) findViewById(R.id.etCpfCnpj);
         final EditText etNumCliente = (EditText) findViewById(R.id.etNumCliente);
+        final String debugLogHeader = "Linklet Debug Message";
         //final EditText etRecuperando = (EditText) findViewById(R.id.etRecuperando);
 
         //Inicialização do FireStore
         mFirestore = FirebaseFirestore.getInstance();
+
 
         //Botão do Login
         button.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                                     */
 
                             }
+
 
                             if(ctrl==true){
                                 Toast.makeText(getApplicationContext(), "Login efetuado com sucesso.", Toast.LENGTH_SHORT).show();

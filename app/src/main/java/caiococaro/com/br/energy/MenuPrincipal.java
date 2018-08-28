@@ -24,12 +24,12 @@ public class MenuPrincipal extends AppCompatActivity {
         //Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
         //Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
         //Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);
-        ImageButton btnConsumo = (ImageButton) findViewById(R.id.btnConsumo);
-        ImageButton btnHistConsumo = (ImageButton) findViewById(R.id.btnHistConsumo);
-        ImageButton btnReclamacao = (ImageButton) findViewById(R.id.btnReclamacao);
-        ImageButton btnAcompanhamento = (ImageButton) findViewById(R.id.btnAcompanhamento);
-        ImageButton btnCadastroVital = (ImageButton) findViewById(R.id.btnCadastroVital);
-        ImageButton btnCadastroBaixaRenda = (ImageButton) findViewById(R.id.btnCadastroBaixaRenda);
+        Button btnConsumo = (Button) findViewById(R.id.btnConsumo);
+        Button btnHistConsumo = (Button) findViewById(R.id.btnHistConsumo);
+        Button btnReclamacao = (Button) findViewById(R.id.btnReclamacao);
+        Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
+        Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
+        Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);
 
 
         btnConsumo.setOnClickListener(new View.OnClickListener() {
