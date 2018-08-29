@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MenuPrincipal">
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <TableLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -48,7 +43,9 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:padding="20dp">
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="40dp">
 
                 <Button
                     android:id="@+id/btnConsumo"
@@ -68,7 +65,9 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:padding="20dp">
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp">
 
                 <Button
                     android:id="@+id/btnHistConsumo"
@@ -88,7 +87,9 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:padding="20dp">
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp">
 
                 <Button
                     android:id="@+id/btnCadastroVital"
@@ -107,7 +108,9 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:padding="20dp">
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp">
 
                 <Button
                     android:id="@+id/btnCadastroBaixaRenda"
@@ -126,7 +129,9 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:padding="20dp">
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp">
 
                 <Button
                     android:id="@+id/btnAcompanhamento"
@@ -145,7 +150,9 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:padding="20dp">
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp">
 
                 <Button
                     android:id="@+id/btnReclamacao"
@@ -160,7 +167,5 @@
             </TableRow>
 
         </TableLayout>
-    </ScrollView>
-
 
 </android.support.constraint.ConstraintLayout>

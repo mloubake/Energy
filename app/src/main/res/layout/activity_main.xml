@@ -10,9 +10,11 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bgTelaLogin"
+        android:background="#FFFF"
         android:orientation="horizontal"
-        android:padding="40dp"
+        android:paddingTop="80dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
         android:shrinkColumns="*"
         android:stretchColumns="*"
         tools:ignore="MissingConstraints"
@@ -31,7 +33,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="TODO"
                 android:cropToPadding="true"
-                android:src="@drawable/imagemlogin"
+                android:src="@mipmap/enel"
                 android:visibility="visible" />
         </TableRow>
 
@@ -46,7 +48,7 @@
                 android:layout_height="43dip"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dip"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/rounded_edittext"
                 android:hint="CPF ou CNPJ"
                 android:inputType="none|number"
@@ -88,7 +90,7 @@
                 android:background="@drawable/circle_button"
                 android:text="Entrar"
                 android:textAllCaps="false"
-                android:textColor="@color/btnEntrar"
+                android:textColor="#FFFF"
                 android:textSize="15dip" />
 
         </TableRow>

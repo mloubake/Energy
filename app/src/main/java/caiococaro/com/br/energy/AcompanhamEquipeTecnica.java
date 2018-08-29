@@ -151,6 +151,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                     Intent intent = new Intent(AcompanhamEquipeTecnica.this, MapsActivity.class);
                     Bundle b = new Bundle();
                     b.putString("localizacao", String.valueOf(etNumRequerimento.getText()));
+                    Log.d(TAG,""+b);
                     intent.putExtras(b);
                     startActivity(intent);
 

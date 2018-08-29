@@ -6,24 +6,77 @@
     android:layout_height="match_parent"
     tools:context=".CadastroBaixaRenda">
 
-    <LinearLayout
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFF"
+        android:gravity="center"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <TextView
+        tools:layout_editor_absoluteX="46dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Acompanhamento de Manutenção da Equipe Técnica"/>
-        <Button
-            android:id="@+id/btnPesquisarEquipe"
+            android:background="#FFFF"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/equipe_tec_img"
+                android:visibility="visible" />
+
+        </TableRow>
+
+        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Acompanhar Equipe"/>
-        <EditText
-            android:id="@+id/etNumRequerimento"
+            android:background="#FFFF"
+            android:gravity="center_horizontal"
+            android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Acompanhamento de Manutenção da Equipe Técnica" />
+        </TableRow>
+
+        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Digite o número do seu requerimento"
-            android:inputType="none|number"/>
-    </LinearLayout>
+            android:background="#FFFF"
+            android:gravity="center_horizontal">
+
+                <EditText
+                    android:id="@+id/etNumRequerimento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="Digite o número do seu requerimento"
+                    android:paddingTop="50dp"
+                    android:inputType="none|number" />
+        </TableRow>
+
+        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFF"
+            android:gravity="center_horizontal"
+            android:paddingTop="30dp">
+
+                <Button
+                    android:id="@+id/btnPesquisarEquipe"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_blue"
+                    android:text="Acompanhar Equipe"
+                    android:gravity="center"
+                    android:textColor="#FFFFFF" />
+        </TableRow>
+
+    </TableLayout>
 </android.support.constraint.ConstraintLayout>

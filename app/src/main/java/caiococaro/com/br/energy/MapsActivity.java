@@ -37,9 +37,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Intent i = getIntent();
     //String bundle = i.getStringExtra("localizacao");
 
-//    String strLocalizacao = getIntent().getStringExtra(i.toString());
+    //String strLocalizacao = getIntent().getStringExtra(bundle.toString());
 
-    int localEquipe;
+    //double localEquipe;
 
 
 
