@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     //Declaração da Inicialiação do FireStore
     private FirebaseFirestore mFirestore;
     boolean ctrl = false;
+    public String Num_cliente;
 
     //Fazer BD de equipes de manutenção
 
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 userMap.put("CpfCnpj", cpfCnpj);
                 userMap.put("NumCliente", numClinte);
 
+                Num_cliente = numClinte;
 
                 //Recuperando os dados
                 mFirestore.collection("Usuario").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
