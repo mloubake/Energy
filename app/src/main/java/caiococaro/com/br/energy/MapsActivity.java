@@ -33,15 +33,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Task<DocumentSnapshot> documentSnapshotTask;
 
 
-
-    Intent i = getIntent();
-    //String bundle = i.getStringExtra("localizacao");
-
-    //String strLocalizacao = getIntent().getStringExtra(bundle.toString());
-
-    //double localEquipe;
-
-
+    String strLocalizacao = null;
+    int localEquipe;
 
     int count = 1;
 
@@ -49,6 +42,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+
+        Bundle extras = getIntent().getExtras();
+
+
+        if(strLocalizacao != null){
+            strLocalizacao = extras.getString("localizacao");
+        }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -62,10 +64,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful() ) {
                     for (DocumentSnapshot document : task.getResult()) {
-                       /*
-                        if(document.getData().get("numRequerimento").equals(strLocalizacao)){
+                       if(document.getData().get("numRequerimento").equals(strLocalizacao)){
                             localEquipe = Integer.valueOf(String.valueOf(document.getData().get("localizacao")));
-                        }*/
+                            Log.d(TAG, "LOCALEQUIPELOCALEQUIPELOCALEQUIPELOCALEQUIPE "+localEquipe);
+
+
+
+
+                       }
                     }
 
                 }
@@ -123,7 +129,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         // Add a marker in Sydney and move the camera
-        LatLng brazil = new LatLng(-20, -43.012719);
+        LatLng brazil = new LatLng(localEquipe, localEquipe);
         equipeMap.addMarker(new MarkerOptions().position(brazil).title("Equipe"));
         equipeMap.moveCamera(CameraUpdateFactory.newLatLng(brazil));
 

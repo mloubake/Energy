@@ -29,8 +29,8 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     boolean ctrl = false;
     private FirebaseFirestore mFirestore;
     private static final String TAG = "";
-    boolean var1 = false;
-    boolean var2 = true;
+    boolean var1;
+    boolean var2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +40,13 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         //final FirebaseFirestore mFirestore;
 
 
-
         Button btnPesquisar = (Button) findViewById(R.id.btnPesquisarEquipe);
         final EditText etNumRequerimento = (EditText) findViewById(R.id.etNumRequerimento);
 
         mFirestore = FirebaseFirestore.getInstance();
+
+
+
 
         btnPesquisar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,10 +56,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
                 Map<String, Object> userMap = new HashMap<>();
                 userMap.put("numRequerimento", numRequerimento);
-
-
-
-
 
 
                 //Var1
@@ -72,8 +70,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                                     var1 = true;
                                     ctrl = true;
                                     break;
-
-
                                 }
                                 else{
                                     ctrl = false;
@@ -148,21 +144,14 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                     Log.d(TAG, "var1: "+var1);
                     Log.d(TAG, "var2: "+var2);
 
+                    String texto = etNumRequerimento.getText().toString();
                     Intent intent = new Intent(AcompanhamEquipeTecnica.this, MapsActivity.class);
                     Bundle b = new Bundle();
-                    b.putString("localizacao", String.valueOf(etNumRequerimento.getText()));
+                    b.putString("localizacao", texto);
                     Log.d(TAG,""+b);
                     intent.putExtras(b);
                     startActivity(intent);
-
-
-
-
                 }
-
-
-
-
             }
         });
     }
