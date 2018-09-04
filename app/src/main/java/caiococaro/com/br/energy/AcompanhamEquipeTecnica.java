@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -20,7 +19,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,9 +42,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         final EditText etNumRequerimento = (EditText) findViewById(R.id.etNumRequerimento);
 
         mFirestore = FirebaseFirestore.getInstance();
-
-
-
 
         btnPesquisar.setOnClickListener(new View.OnClickListener() {
             @Override
