@@ -114,7 +114,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
                             etkwAnterior.setText(kwAnterior);
                             etkwAtual.setText(kwAtual);
 
-
+                            //fazer para outros documentos
                         }
                     }
                 }

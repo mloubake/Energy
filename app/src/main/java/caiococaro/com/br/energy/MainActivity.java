@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         //Inicialização do FireStore
         mFirestore = FirebaseFirestore.getInstance();
 
-
+//alterei
         //Botão do Login
         button.setOnClickListener(new View.OnClickListener() {
             @Override
