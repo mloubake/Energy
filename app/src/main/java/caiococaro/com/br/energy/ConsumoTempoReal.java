@@ -40,6 +40,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.w3c.dom.Document;
 import org.w3c.dom.Text;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,11 +51,17 @@ public class ConsumoTempoReal extends AppCompatActivity {
     boolean ctrl;
     int num_cliente;
 
+    float PIS;
+    float COFINS;
+    float ICMS;
+    float CIP;
+
     float TUSD;//*********************************************
     float TE;//*********************************************
-    float kwBantar1;//*********************************************
-    float kwBantar2;//*********************************************
-    float kwBantar3;//*********************************************
+    float BantarVerde;//*********************************************
+    float BantarAmarela;//*********************************************
+    float bantarVermelha1;//*********************************************
+    float bantarVermelha2;//*********************************************
 
 
     float bVerde;
@@ -62,9 +69,10 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float bAmarela;
     float bVermelha;
 
-    String kwAnterior;
-    String kwAtual;
-    int kwMes;
+    String leituraAnterior;
+    String leituraAtual;
+    int leituraMes;
+
 
 
     /*colocar após recuperação de dados
@@ -92,8 +100,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("ConsumoTempoReal"));
 
-        final TextView etkwAnterior = (TextView) findViewById(R.id.etkwAnterior);
-        final TextView etkwAtual = (TextView) findViewById(R.id.etkwAtual);
+        final TextView etleituraAnterior = (TextView) findViewById(R.id.etleituraAnterior);
+        final TextView etleituraAtual = (TextView) findViewById(R.id.etleituraAtual);
 
         db = FirebaseFirestore.getInstance();
 
@@ -105,26 +113,74 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                         if (String.valueOf(num_cliente).equals(String.valueOf(document.getData().get("numCliente")))) {
 
-                            kwAnterior = String.valueOf(document.getData().get("kwAnterior"));
+                            leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
 
-                            kwAtual = String.valueOf(document.getData().get("kwAtual"));
+                            leituraAtual = String.valueOf(document.getData().get("leituraAtual"));
 
-                            kwMes = (Integer.valueOf(kwAtual)) - (Integer.valueOf(kwAnterior));
+                            leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
 
-                            etkwAnterior.setText(kwAnterior);
-                            etkwAtual.setText(kwAtual);
+                            String cip = String.valueOf(document.getData().get("CIP"));
+                            CIP = Float.valueOf(cip);
 
-                            //fazer para outros documentos
+                            etleituraAnterior.setText(leituraAnterior);
+                            etleituraAtual.setText(leituraAtual);
+
                         }
                     }
                 }
             }
         });
 
+        db.collection("TarifasAplicacao").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String pis="";
+                String cofins="";
+                String icms="";
+
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+
+                            pis = String.valueOf(document.getData().get("PIS"));
+
+                            cofins = String.valueOf(document.getData().get("COFINS"));
+
+                            icms = String.valueOf(document.getData().get("ICMS"));
+                        }
+                    }
+                PIS = Float.valueOf(pis);
+                COFINS = Float.valueOf(cofins);
+                ICMS = Float.valueOf(icms);
+                }
+        });
+
+        db.collection("TarifasAplicacao").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String te="teste";
+                String tusd="testando";
+
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+
+                        te = String.valueOf(document.getData().get("te"));
+
+                        tusd = String.valueOf(document.getData().get("tusd"));
+
+                    }
+                    Toast.makeText(getApplicationContext(),"TE "+te,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"TUSD "+tusd,Toast.LENGTH_LONG).show();
+
+                }
+                //TE = Float.valueOf(te);
+                //TUSD = Float.valueOf(tusd);
+                //Toast.makeText(getApplicationContext(),"TE "+TE,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"TUSD "+TUSD,Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 }
-
 
 
 

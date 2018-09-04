@@ -66,7 +66,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                             for (DocumentSnapshot document : task.getResult()) {
                                 if(String.valueOf(document.getData().get("numRequerimento")).equals(String.valueOf(etNumRequerimento.getText()))) {
                                     Log.d(TAG, mFirestore.collection("Usuario").document("numRequerimento").getId());
-                                    Log.d(TAG, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                                     var1 = true;
                                     ctrl = true;
                                     break;
@@ -74,7 +73,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                                 else{
                                     ctrl = false;
                                     var1 = false;
-                                    Log.d(TAG, "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
                                 }
                                     /*
                                     Log.d(TAG, "Valor do editText: " + String.valueOf(etCpfCnpj.getText()));
@@ -112,7 +110,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                             for (DocumentSnapshot document : task.getResult()) {
                                 if(String.valueOf(document.getData().get("numRequerimento")).equals(String.valueOf(etNumRequerimento.getText()))) {
                                     Log.d(TAG, mFirestore.collection("EquipeManutencao").document("numRequerimento").getId());
-                                    Log.d(TAG, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                                     var2 = true;
                                     ctrl = true;
                                     break;

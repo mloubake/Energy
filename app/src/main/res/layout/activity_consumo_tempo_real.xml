@@ -23,10 +23,10 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="75dp"
                 android:layout_marginTop="1dp"
                 android:contentDescription="@string/app_name"
-                android:src="@drawable/equipe_tec_img"
+                android:src="@drawable/consumo"
                 android:visibility="visible" />
 
         </TableRow>
@@ -42,9 +42,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="KwAnterior" />
+                android:text="Leitura anterior" />
             <TextView
-                android:id="@+id/etkwAnterior"
+                android:id="@+id/etleituraAnterior"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -62,9 +62,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="KwAtual" />
+                android:text="Leitura atual" />
             <TextView
-                android:id="@+id/etkwAtual"
+                android:id="@+id/etleituraAtual"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
