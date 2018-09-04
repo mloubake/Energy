@@ -3,6 +3,7 @@ package caiococaro.com.br.energy;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     //Declaração da Inicialiação do FireStore
     private FirebaseFirestore mFirestore;
     boolean ctrl = false;
-    public String Num_cliente;
 
     //Fazer BD de equipes de manutenção
 
@@ -83,13 +83,11 @@ public class MainActivity extends AppCompatActivity {
 
                 //EditTexts passando para Strings para serem usadas no Map
                 final String cpfCnpj = etCpfCnpj.getText().toString();
-                final String numClinte = etNumCliente.getText().toString();
+                final String numCliente = etNumCliente.getText().toString();
 
                 Map<String, Object> userMap = new HashMap<>();
                 userMap.put("CpfCnpj", cpfCnpj);
-                userMap.put("NumCliente", numClinte);
-
-                Num_cliente = numClinte;
+                userMap.put("NumCliente", numCliente);
 
                 //Recuperando os dados
                 mFirestore.collection("Usuario").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -98,9 +96,16 @@ public class MainActivity extends AppCompatActivity {
                         if(task.isSuccessful() ) {
                             for (DocumentSnapshot document : task.getResult()) {
 
-                                if(String.valueOf(document.getData().get("CpfCnpj")).equals(String.valueOf(etCpfCnpj.getText()))
-                                        && String.valueOf(document.getData().get("NumCliente")).equals(String.valueOf(etNumCliente.getText()))) {
+                                if(String.valueOf(document.getData().get("cpfCnpj")).equals(String.valueOf(etCpfCnpj.getText()))
+                                        && String.valueOf(document.getData().get("numCliente")).equals(String.valueOf(etNumCliente.getText()))) {
                                     //                          etRecuperando.setText( document.getData().get("idUser").toString());
+
+                                    Intent intentConsumo = new Intent(MainActivity.this, ConsumoTempoReal.class);
+                                    Bundle b = new Bundle();
+                                    b.putString("ConsumoTempoReal", numCliente);
+                                    intentConsumo.putExtras(b);
+                                    LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(intentConsumo);
+
 
                                     Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
                                     startActivity(intent);
@@ -132,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
                                     */
 
                             }
-
 
                             if(ctrl==true){
                                 Toast.makeText(getApplicationContext(), "Login efetuado com sucesso.", Toast.LENGTH_SHORT).show();

@@ -4,10 +4,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ConsumoTempoReal">
+    tools:context=".CadastroBaixaRenda">
 
-    <TextView
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Consumo Tempo Real"/>
+        android:background="#FFFF"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="46dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFF"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/equipe_tec_img"
+                android:visibility="visible" />
+
+        </TableRow>
+
+        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFF"
+            android:gravity="left"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="KwAnterior" />
+            <TextView
+                android:id="@+id/etkwAnterior"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                />
+        </TableRow>
+
+        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFF"
+            android:gravity="left"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="KwAtual" />
+            <TextView
+                android:id="@+id/etkwAtual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                />
+        </TableRow>
+
+
+        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFF"
+            android:gravity="center_horizontal"
+            android:paddingTop="30dp">
+
+            <Button
+                android:id="@+id/btnAtualizar"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/button_blue"
+                android:gravity="center"
+                android:text="Atualizar medição"
+                android:textColor="#FFFFFF" />
+        </TableRow>
+
+    </TableLayout>
 </android.support.constraint.ConstraintLayout>
