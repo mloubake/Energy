@@ -60,8 +60,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float TE;//*********************************************
     float BantarVerde;//*********************************************
     float BantarAmarela;//*********************************************
-    float bantarVermelha1;//*********************************************
-    float bantarVermelha2;//*********************************************
+    float BantarVermelha1;//*********************************************
+    float BantarVermelha2;//*********************************************
 
 
     float bVerde;
@@ -147,25 +147,29 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                             icms = String.valueOf(document.getData().get("ICMS"));
                         }
-                    }
+                }
                 PIS = Float.valueOf(pis);
                 COFINS = Float.valueOf(cofins);
                 ICMS = Float.valueOf(icms);
                 }
         });
 
-        db.collection("TarifasAplicacao").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        //Não recupera TE e TUSD
+
+        DocumentReference docRefBantar = db.collection("TarifasAplicacao").document("Bantar");
+
+        docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String te="teste";
-                String tusd="testando";
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                String te="";
+                String tusd="";
 
                 if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
+                    DocumentSnapshot document = task.getResult();
 
-                        te = String.valueOf(document.getData().get("te"));
+                        te = String.valueOf(document.getData().get("TE"));
 
-                        tusd = String.valueOf(document.getData().get("tusd"));
+                        tusd = String.valueOf(document.getData().get("TUSD"));
 
                     }
                     Toast.makeText(getApplicationContext(),"TE "+te,Toast.LENGTH_LONG).show();
@@ -176,6 +180,34 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 //TUSD = Float.valueOf(tusd);
                 //Toast.makeText(getApplicationContext(),"TE "+TE,Toast.LENGTH_LONG).show();
                 //Toast.makeText(getApplicationContext(),"TUSD "+TUSD,Toast.LENGTH_LONG).show();
+        });
+
+        db.collection("TarifasAplicacao").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String bantVerde="";
+                String bantAmarela="";
+                String bantVermelha1="";
+                String bantVermelha2="";
+
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+
+                        bantVerde = String.valueOf(document.getData().get("verde"));
+
+                        bantAmarela = String.valueOf(document.getData().get("amarela"));
+
+                        bantVermelha1 = String.valueOf(document.getData().get("vermelha1"));
+
+                        bantVermelha2 = String.valueOf(document.getData().get("vermelha2"));
+                    }
+                }
+                //BantarVerde = Float.valueOf(bantVerde);
+                //BantarAmarela = Float.valueOf(bantAmarela);
+                //BantarVermelha1 = Float.valueOf(bantVermelha1);
+                //BantarVermelha2 = Float.valueOf(bantVermelha2);
+
+                Toast.makeText(getApplicationContext(),"Bantar Vermelha 2 "+bantVermelha2,Toast.LENGTH_LONG).show();
             }
         });
 
