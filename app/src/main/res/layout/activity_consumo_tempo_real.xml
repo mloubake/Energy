@@ -15,27 +15,13 @@
         tools:layout_editor_absoluteX="46dp"
         tools:layout_editor_absoluteY="0dp">
 
-        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#FFFF"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="75dp"
-                android:layout_marginTop="1dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/consumo"
-                android:visibility="visible" />
-
-        </TableRow>
 
         <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFFF"
             android:gravity="left"
+            android:paddingLeft="50dp"
             android:paddingTop="10dp">
 
             <TextView
@@ -49,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 />
+
         </TableRow>
 
         <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
@@ -56,6 +43,7 @@
             android:layout_height="wrap_content"
             android:background="#FFFF"
             android:gravity="left"
+            android:paddingLeft="50dp"
             android:paddingTop="10dp">
 
             <TextView
@@ -74,18 +62,22 @@
 
         <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:background="#FFFF"
             android:gravity="center_horizontal"
-            android:paddingTop="30dp">
+            android:paddingTop="20dp">
 
             <Button
                 android:id="@+id/btnAtualizar"
                 android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:background="@drawable/button_blue"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_blue_edit"
+                android:drawableLeft="@mipmap/editar_medidor"
                 android:gravity="center"
+                android:onClick="showDialog"
+                android:src="@mipmap/editar_medidor"
                 android:text="Atualizar medição"
+                android:textAllCaps="false"
                 android:textColor="#FFFFFF" />
         </TableRow>
 

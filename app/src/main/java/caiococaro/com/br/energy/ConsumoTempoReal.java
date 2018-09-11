@@ -1,7 +1,11 @@
 package caiococaro.com.br.energy;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -23,6 +27,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,15 +79,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
     int leituraMes;
 
 
-
-    /*colocar após recuperação de dados
-    bVerde = (TUSD+TE)/1000;
-    bAzul = (TUSD/1000);
-    bAmarela = (kwBantar1+bVerde);
-    bVermelha = (bVerde+kwBantar3);
-    kwMes = (kwAtual-kwAnterior);
-    */
-
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -91,6 +87,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
             num_cliente = Integer.valueOf(NumCliente);
         }
     };
+
 
 
     @Override
@@ -102,6 +99,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         final TextView etleituraAnterior = (TextView) findViewById(R.id.etleituraAnterior);
         final TextView etleituraAtual = (TextView) findViewById(R.id.etleituraAtual);
+
 
         db = FirebaseFirestore.getInstance();
 
@@ -172,8 +170,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
                         tusd = String.valueOf(document.getData().get("TUSD"));
 
                     }
-                    Toast.makeText(getApplicationContext(),"TE "+te,Toast.LENGTH_LONG).show();
-                    Toast.makeText(getApplicationContext(),"TUSD "+tusd,Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(),"TE "+te,Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(),"TUSD "+tusd,Toast.LENGTH_LONG).show();
 
                 }
                 //TE = Float.valueOf(te);
@@ -207,11 +205,23 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 //BantarVermelha1 = Float.valueOf(bantVermelha1);
                 //BantarVermelha2 = Float.valueOf(bantVermelha2);
 
-                Toast.makeText(getApplicationContext(),"Bantar Vermelha 2 "+bantVermelha2,Toast.LENGTH_LONG).show();
             }
         });
 
+        bVerde = (TUSD+TE)/1000;
+        bAzul = (TUSD/1000);
+        bAmarela = (BantarAmarela+bVerde);
+        bVermelha = (bVerde+BantarVermelha2);
+
     }
+
+    public void showDialog(View view){
+
+        MyDialog myDialog = new MyDialog();
+        myDialog.show(getSupportFragmentManager(),"my_dialog");
+    }
+
+
 }
 
 
