@@ -129,34 +129,38 @@ public class ConsumoTempoReal extends AppCompatActivity {
             }
         });
 
-        db.collection("TarifasAplicacao").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DocumentReference docRefTributario = db.collection("TarifasAplicacao").document("Tributario");
+        docRefTributario.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 String pis="";
                 String cofins="";
                 String icms="";
 
                 if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
 
-                            pis = String.valueOf(document.getData().get("PIS"));
+                        pis = String.valueOf(document.getData().get("PIS"));
 
-                            cofins = String.valueOf(document.getData().get("COFINS"));
+                        cofins = String.valueOf(document.getData().get("COFINS"));
 
-                            icms = String.valueOf(document.getData().get("ICMS"));
-                        }
+                        icms = String.valueOf(document.getData().get("ICMS"));
+                    }
+
                 }
+
                 PIS = Float.valueOf(pis);
                 COFINS = Float.valueOf(cofins);
                 ICMS = Float.valueOf(icms);
                 }
+
         });
 
-        //Não recupera TE e TUSD
 
-        DocumentReference docRefBantar = db.collection("TarifasAplicacao").document("Bantar");
+        DocumentReference docRefResidencial = db.collection("TarifasAplicacao").document("Residencial");
 
-        docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        docRefResidencial.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 String te="";
@@ -164,32 +168,32 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
 
-                        te = String.valueOf(document.getData().get("TE"));
+                            te = String.valueOf(document.getData().get("TE"));
 
-                        tusd = String.valueOf(document.getData().get("TUSD"));
+                            tusd = String.valueOf(document.getData().get("TUSD"));
+
 
                     }
-                    //Toast.makeText(getApplicationContext(),"TE "+te,Toast.LENGTH_LONG).show();
-                    //Toast.makeText(getApplicationContext(),"TUSD "+tusd,Toast.LENGTH_LONG).show();
-
                 }
-                //TE = Float.valueOf(te);
-                //TUSD = Float.valueOf(tusd);
-                //Toast.makeText(getApplicationContext(),"TE "+TE,Toast.LENGTH_LONG).show();
-                //Toast.makeText(getApplicationContext(),"TUSD "+TUSD,Toast.LENGTH_LONG).show();
+                TE = Float.valueOf(te);
+                TUSD = Float.valueOf(tusd);
+            }
         });
 
-        db.collection("TarifasAplicacao").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DocumentReference docRefBantar = db.collection("TarifasAplicacao").document("Bantar");
+        docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 String bantVerde="";
                 String bantAmarela="";
                 String bantVermelha1="";
                 String bantVermelha2="";
 
                 if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
 
                         bantVerde = String.valueOf(document.getData().get("verde"));
 
@@ -200,11 +204,10 @@ public class ConsumoTempoReal extends AppCompatActivity {
                         bantVermelha2 = String.valueOf(document.getData().get("vermelha2"));
                     }
                 }
-                //BantarVerde = Float.valueOf(bantVerde);
-                //BantarAmarela = Float.valueOf(bantAmarela);
-                //BantarVermelha1 = Float.valueOf(bantVermelha1);
-                //BantarVermelha2 = Float.valueOf(bantVermelha2);
-
+                BantarVerde = Float.valueOf(bantVerde);
+                BantarAmarela = Float.valueOf(bantAmarela);
+                BantarVermelha1 = Float.valueOf(bantVermelha1);
+                BantarVermelha2 = Float.valueOf(bantVermelha2);
             }
         });
 
