@@ -130,13 +130,15 @@
             android:background="#FFFF"
             android:paddingLeft="80dp"
             android:gravity="left"
-            android:paddingTop="10dp">
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Valor do consumo - R$"
+                android:text="Valor do consumo              R$"
+                android:textSize="15dp"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/tvValor_consumo"
@@ -144,6 +146,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textStyle="bold"
+                android:textSize="15dp"
                 android:paddingLeft="200dp" />
         </RelativeLayout>
 
@@ -152,12 +155,12 @@
             android:layout_height="50dp"
             android:background="#FFFF"
             android:gravity="center_horizontal"
-            android:paddingTop="20dp">
+            android:paddingTop="5dp">
 
             <Button
                 android:id="@+id/btnAtualizar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
                 android:background="@drawable/button_blue_edit"
                 android:gravity="center"
                 android:onClick="showDialog"
@@ -172,7 +175,7 @@
             android:layout_height="50dp"
             android:background="#FFFF"
             android:gravity="center_horizontal"
-            android:paddingTop="20dp">
+            android:paddingTop="10dp">
             <WebView
                 android:id="@+id/web_view"
                 android:layout_width="400dp"
