@@ -16,12 +16,12 @@
         tools:layout_editor_absoluteY="0dp">
 
 
-        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFFF"
-            android:gravity="left"
-            android:paddingLeft="50dp"
+            android:layout_gravity="left"
+            android:paddingLeft="80dp"
             android:paddingTop="10dp">
 
             <TextView
@@ -30,20 +30,20 @@
                 android:gravity="center"
                 android:text="Leitura anterior" />
             <TextView
-                android:id="@+id/etleituraAnterior"
+                android:id="@+id/tvLeituraAnterior"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                />
+                android:paddingLeft="200dp"
+                android:gravity="center" />
 
-        </TableRow>
+        </RelativeLayout>
 
-        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFFF"
             android:gravity="left"
-            android:paddingLeft="50dp"
+            android:paddingLeft="80dp"
             android:paddingTop="10dp">
 
             <TextView
@@ -52,15 +52,102 @@
                 android:gravity="center"
                 android:text="Leitura atual" />
             <TextView
-                android:id="@+id/etleituraAtual"
+                android:id="@+id/tvLeituraAtual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="200dp"
+                android:layout_gravity="center" />
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFF"
+            android:gravity="left"
+            android:paddingLeft="80dp"
+            android:paddingTop="10dp">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                />
-        </TableRow>
+                android:text="Consumo (Kwh)" />
+            <TextView
+                android:id="@+id/tvConsumo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="200dp" />
 
+        </RelativeLayout>
 
-        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFF"
+            android:paddingLeft="80dp"
+            android:gravity="left"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:gravity="center"
+                android:text="Tarifa" />
+            <TextView
+                android:id="@+id/tvTarifa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="200dp" />
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFF"
+            android:paddingLeft="80dp"
+            android:gravity="left"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="CIP" />
+            <TextView
+                android:id="@+id/tvCIP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="200dp" />
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFF"
+            android:paddingLeft="80dp"
+            android:gravity="left"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Valor do consumo - R$"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tvValor_consumo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:paddingLeft="200dp" />
+        </RelativeLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:background="#FFFF"
@@ -72,16 +159,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_blue_edit"
-                android:drawableLeft="@mipmap/editar_medidor"
                 android:gravity="center"
                 android:onClick="showDialog"
-                android:src="@mipmap/editar_medidor"
-                android:text="Atualizar medição"
+                android:text="Atualizar leitura"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF" />
-        </TableRow>
+        </LinearLayout>
 
-        <!--foi-->
+
+        <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:background="#FFFF"
+            android:gravity="center_horizontal"
+            android:paddingTop="20dp">
+            <WebView
+                android:id="@+id/web_view"
+                android:layout_width="400dp"
+                android:layout_height="300dp"
+                android:layout_marginBottom="8dp" />
+        </TableRow>
 
     </TableLayout>
 </android.support.constraint.ConstraintLayout>

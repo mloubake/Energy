@@ -29,6 +29,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -45,8 +47,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.w3c.dom.Document;
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class ConsumoTempoReal extends AppCompatActivity {
@@ -61,18 +65,21 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float ICMS;
     float CIP;
 
-    float TUSD;//*********************************************
-    float TE;//*********************************************
-    float BantarVerde;//*********************************************
-    float BantarAmarela;//*********************************************
-    float BantarVermelha1;//*********************************************
-    float BantarVermelha2;//*********************************************
+    float TUSD;
+    float TE;
+    float BantarVerde;
+    float BantarAmarela;
+    float BantarVermelha1;
+    float BantarVermelha2;
 
 
     float bVerde;
     float bAzul;
     float bAmarela;
     float bVermelha;
+
+    float tarifa;
+    float valor_consumo;
 
     String leituraAnterior;
     String leituraAtual;
@@ -89,17 +96,28 @@ public class ConsumoTempoReal extends AppCompatActivity {
     };
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consumo_tempo_real);
 
+        WebView mWebView = (WebView) findViewById(R.id.web_view);
+
+        WebSettings webSettings = mWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+        //mWebView.loadUrl("http://google.com");
+
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("ConsumoTempoReal"));
 
-        final TextView etleituraAnterior = (TextView) findViewById(R.id.etleituraAnterior);
-        final TextView etleituraAtual = (TextView) findViewById(R.id.etleituraAtual);
+        final TextView tvLeituraAnterior = (TextView) findViewById(R.id.tvLeituraAnterior);
+        final TextView tvLeituraAtual = (TextView) findViewById(R.id.tvLeituraAtual);
+        final TextView tvCIP = (TextView) findViewById(R.id.tvCIP);
+        final TextView tvConsumo = (TextView) findViewById(R.id.tvConsumo);
+        final TextView tvTarifa = (TextView) findViewById(R.id.tvTarifa);
+        final TextView tvValor_consumo = (TextView) findViewById(R.id.tvValor_consumo);
 
+        final DecimalFormat df = new DecimalFormat("#,###.00");
 
         db = FirebaseFirestore.getInstance();
 
@@ -120,8 +138,10 @@ public class ConsumoTempoReal extends AppCompatActivity {
                             String cip = String.valueOf(document.getData().get("CIP"));
                             CIP = Float.valueOf(cip);
 
-                            etleituraAnterior.setText(leituraAnterior);
-                            etleituraAtual.setText(leituraAtual);
+                            tvLeituraAnterior.setText(leituraAnterior);
+                            tvLeituraAtual.setText(leituraAtual);
+                            tvCIP.setText(String.valueOf(df.format(CIP)));
+                            tvConsumo.setText(String.valueOf(leituraMes));
 
                         }
                     }
@@ -174,7 +194,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                             tusd = String.valueOf(document.getData().get("TUSD"));
 
-
                     }
                 }
                 TE = Float.valueOf(te);
@@ -186,10 +205,10 @@ public class ConsumoTempoReal extends AppCompatActivity {
         docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                String bantVerde="";
-                String bantAmarela="";
-                String bantVermelha1="";
-                String bantVermelha2="";
+                String bantVerde = "";
+                String bantAmarela = "";
+                String bantVermelha1 = "";
+                String bantVermelha2 = "";
 
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
@@ -208,15 +227,30 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 BantarAmarela = Float.valueOf(bantAmarela);
                 BantarVermelha1 = Float.valueOf(bantVermelha1);
                 BantarVermelha2 = Float.valueOf(bantVermelha2);
+
+                bVerde = (TUSD + TE) / 1000;
+                bAzul = (TUSD / 1000);
+                bAmarela = (BantarAmarela + bVerde);
+                bVermelha = (bVerde + BantarVermelha2);
+
+                tarifa = bAmarela;
+
+                tvTarifa.setText(String.valueOf(tarifa));
+
+                Integer leituraMesV = leituraMes;
+                Float cip = CIP;
+
+                valor_consumo = ((Float.valueOf(leituraMesV) * tarifa) + cip);
+                df.format(valor_consumo);
+
+                tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
+
             }
         });
 
-        bVerde = (TUSD+TE)/1000;
-        bAzul = (TUSD/1000);
-        bAmarela = (BantarAmarela+bVerde);
-        bVermelha = (bVerde+BantarVermelha2);
 
     }
+
 
     public void showDialog(View view){
 
