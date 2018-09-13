@@ -117,7 +117,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
         final TextView tvTarifa = (TextView) findViewById(R.id.tvTarifa);
         final TextView tvValor_consumo = (TextView) findViewById(R.id.tvValor_consumo);
 
-        final DecimalFormat df = new DecimalFormat("#,###.00");
+        final DecimalFormat df = new DecimalFormat("#.##");
 
         db = FirebaseFirestore.getInstance();
 
@@ -233,15 +233,24 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 bAmarela = (BantarAmarela + bVerde);
                 bVermelha = (bVerde + BantarVermelha2);
 
-                tarifa = bAmarela;
+                tarifa = bVermelha;
 
                 tvTarifa.setText(String.valueOf(tarifa));
 
-                Integer leituraMesV = leituraMes;
-                Float cip = CIP;
+                Float consumo = Float.valueOf(leituraMes);
 
-                valor_consumo = ((Float.valueOf(leituraMesV) * tarifa) + cip);
-                df.format(valor_consumo);
+                //Toast.makeText(getApplicationContext(),""+leituraMes,Toast.LENGTH_LONG).show();
+
+                valor_consumo = consumo * tarifa;
+
+                PIS = valor_consumo*PIS;
+
+                COFINS = valor_consumo*COFINS;
+
+                ICMS = valor_consumo*ICMS;
+
+                valor_consumo = valor_consumo + PIS + COFINS + ICMS + CIP;
+
 
                 tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
 
