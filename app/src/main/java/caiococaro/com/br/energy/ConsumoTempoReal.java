@@ -81,17 +81,17 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float tarifa;
     float valor_consumo;
 
-    String leituraAnterior;
-    String leituraAtual;
-    int leituraMes;
+    String leituraAnterior="0";
+    String leituraAtual="0";
+    int leituraMes=0;
 
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            final String NumCliente = intent.getStringExtra("ConsumoTempoReal");
+            final String numCliente = intent.getStringExtra("ConsumoTempoReal");
 
-            num_cliente = Integer.valueOf(NumCliente);
+            num_cliente = Integer.valueOf(numCliente);
         }
     };
 
@@ -135,13 +135,16 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                             leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
 
+                            tvConsumo.setText(String.valueOf(leituraMes));
+
                             String cip = String.valueOf(document.getData().get("CIP"));
                             CIP = Float.valueOf(cip);
 
                             tvLeituraAnterior.setText(leituraAnterior);
                             tvLeituraAtual.setText(leituraAtual);
                             tvCIP.setText(String.valueOf(df.format(CIP)));
-                            tvConsumo.setText(String.valueOf(leituraMes));
+
+                            break;
 
                         }
                     }
@@ -233,15 +236,12 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 bAmarela = (BantarAmarela + bVerde);
                 bVermelha = (bVerde + BantarVermelha2);
 
+
                 tarifa = bVermelha;
 
                 tvTarifa.setText(String.valueOf(tarifa));
 
-                Float consumo = Float.valueOf(leituraMes);
-
-                //Toast.makeText(getApplicationContext(),""+leituraMes,Toast.LENGTH_LONG).show();
-
-                valor_consumo = consumo * tarifa;
+                valor_consumo = (Float.valueOf(leituraMes) * tarifa);
 
                 PIS = valor_consumo*PIS;
 
