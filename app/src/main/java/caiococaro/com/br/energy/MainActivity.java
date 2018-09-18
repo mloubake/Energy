@@ -1,61 +1,50 @@
 package caiococaro.com.br.energy;
 
 import android.content.Intent;
-import android.nfc.Tag;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    //TAG do Log do Console
     private static final String TAG = "";
+
+    //Tabelas do FireStore
+    private static final String TABLE_USUARIO = "Usuario";
+
+    //Campos do Firebase
+    private static final String FIELD_CPF_CNPJ = "cpfCnpj";
+    private static final String FIELD_NUM_CLIENTE = "numCliente";
+    private static final String FIELD_TOKEN_ACESSO = "tokenAcesso";
+
+    //Keys da Bundle (Dados (ou valores) que serão passados para a próxima Activity através da Bundle)
+    private static final String KEY_NUM_CLIENTE = "NumeroCliente";
+    private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
+
+
     //private Firebase mRef;
     //private Button mSendData;
     //Declaração da Inicialiação do FireStore
     private FirebaseFirestore mFirestore;
     boolean ctrl = false;
 
-    //Fazer BD de equipes de manutenção
+    public String tokenAcesso;
 
 
     @Override
@@ -85,29 +74,48 @@ public class MainActivity extends AppCompatActivity {
                 final String cpfCnpj = etCpfCnpj.getText().toString();
                 final String numCliente = etNumCliente.getText().toString();
 
-                Map<String, Object> userMap = new HashMap<>();
-                userMap.put("CpfCnpj", cpfCnpj);
-                userMap.put("NumCliente", numCliente);
+                //Não lembro o pq disso
+//                Map<String, Object> userMap = new HashMap<>();
+//                userMap.put(KEY_CPF_CNPJ, cpfCnpj);
+//                userMap.put(KEY_NUM_CLIENTE, numCliente);
 
                 //Recuperando os dados
-                mFirestore.collection("Usuario").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful() ) {
                             for (DocumentSnapshot document : task.getResult()) {
-
-                                if(String.valueOf(document.getData().get("cpfCnpj")).equals(String.valueOf(etCpfCnpj.getText()))
-                                        && String.valueOf(document.getData().get("numCliente")).equals(String.valueOf(etNumCliente.getText()))) {
+                                if(String.valueOf(document.getData().get(FIELD_CPF_CNPJ)).equals(String.valueOf(etCpfCnpj.getText()))
+                                        && String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(String.valueOf(etNumCliente.getText()))) {
                                     //                          etRecuperando.setText( document.getData().get("idUser").toString());
 
+                                    tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
+                                    Log.d(TAG, "TOKEN_ACESSO: "+tokenAcesso);
+
+                                    /*
+                                    //Passar dados para outra activity
+                                    Intent intentMap = new Intent(MainActivity.this, AcompanhamEquipeTecnica.class);
+                                    Bundle tokenBundle = new Bundle();
+                                    tokenBundle.putString("Acompanhamento", tokenAcesso);
+                                    intentMap.putExtra("Acompanhamento2", tokenBundle);
+                                    LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(intentMap);
+                                    //Log.d(TAG, "BUNDLE_ACESSO: "+tokenBundle);
+
+                                    //Passar dados para a activity ConsumoTempoReal
                                     Intent intentConsumo = new Intent(MainActivity.this, ConsumoTempoReal.class);
                                     Bundle b = new Bundle();
                                     b.putString("ConsumoTempoReal", numCliente);
                                     intentConsumo.putExtras(b);
                                     LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(intentConsumo);
+                                    */
 
 
+                                    //Iniciar activity MenuPrincipal com Bud
                                     Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(KEY_NUM_CLIENTE, numCliente);
+                                    bundle.putString(KEY_TOKEN_ACESSO, tokenAcesso);
+                                    intent.putExtras(bundle);
                                     startActivity(intent);
                                     ctrl = true;
                                     break;
@@ -146,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         else{
-                            Log.w(TAG, "Falha ao recuperar documents.", task.getException());
+                            Log.w(TAG, "Falha ao recuperar Documents.", task.getException());
                         }
                     }
                 });

@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +30,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String TAG = "";
@@ -39,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     double geoLat, geoLongi;
     String strLocalizacao;
 
-    Object objLat;
+    int count =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +57,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(strLocalizacao == null){
             strLocalizacao = extras.getString("localizacao");
-            Log.d(TAG, "-1-1-1-1"+strLocalizacao);
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -108,6 +112,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         equipeMap = googleMap;
 
+
+
+
+
         mFirestore.collection("EquipeManutencao").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -117,10 +125,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                             geoLat = Double.parseDouble(String.valueOf(document.getGeoPoint("localizacao").getLatitude()));
                             geoLongi = Double.parseDouble(String.valueOf(document.getGeoPoint("localizacao").getLongitude()));
-
-
-                            Log.d(TAG, "/*/*/*/*/*/*/*/*/*/*/*/*/*/ "+geoLat);
-                            Log.d(TAG, "/*/*/*/*/*/*/*/*/*/*/*/*/*/ "+geoLongi);
 
                             // Add a marker in Sydney and move the camera
                             LatLng equipeBrazil = new LatLng( geoLat, geoLongi);
@@ -134,6 +138,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
+
+/*
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+        TimerTask doTask = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @SuppressWarnings("unchecked")
+                    public void run() {
+                        try {
+
+                        }
+                        catch (Exception e) {
+                            // TODO Auto-generated catch block
+                        }
+                    }
+                });
+            }
+        };
+        //timer.schedule(doTask, 0, "Your time 10 minute");
+*/
+
+
+
+
+
+
+/*
         Thread t = new Thread(){
             @Override
             public void run(){
@@ -144,18 +177,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                /*
-                                // Add a marker in Sydney and move the camera
-                                LatLng brazil = new LatLng(count, -43.012719);
-                                equipeMap.addMarker(new MarkerOptions().position(brazil).title("Equipe"));
-                                equipeMap.moveCamera(CameraUpdateFactory.newLatLng(brazil));
 
-                                LatLng userBrazil = new LatLng(-22.886434, -43.115283);
-                                usuarioMap.addMarker(new MarkerOptions().position(userBrazil).title("Usuário"));
-                                usuarioMap.moveCamera(CameraUpdateFactory.newLatLng(userBrazil));
 
-                                Log.d(TAG, ""+count);*/
-                               // count++;
 
                             }
                         });
@@ -166,10 +189,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         };
-
+*/
 
 
         //pesquisar sobre handler
+
+
+
+
+
+
+
 
 
     }

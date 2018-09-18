@@ -55,10 +55,33 @@ import java.util.Map;
 
 public class ConsumoTempoReal extends AppCompatActivity {
 
-    private FirebaseFirestore db;
+    //TAG do Log do Console
     private static final String TAG = "";
+
+    //Tabelas do FireStore
+    private static final String TABLE_USUARIO = "Usuario";
+
+    //Campos do Firebase
+    private static final String FIELD_CPF_CNPJ = "cpfCnpj";
+    private static final String FIELD_NUM_CLIENTE = "numCliente";
+    private static final String FIELD_TOKEN_ACESSO = "tokenAcesso";
+
+    //Keys da Bundle
+    private static final String KEY_NUM_CLIENTE = "NumeroCliente";
+    private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
+
+    //Names para cada Bundle Específica
+//    private static final String NAME_ACOMPANHAMENTO = "Acompanhamento";
+//    private static final String NAME_BAIXA_RENDA = "BaixaRenda";
+//    private static final String NAME_CLIENTE_VITAL = "ClienteVital";
+      private static final String NAME_CONSUMO = "Consumo";
+//    private static final String NAME_HISTORICO = "Historico";
+//    private static final String NAME_RECLAMACAO = "Reclamacao";
+
+
+    private FirebaseFirestore mFirestore;
     boolean ctrl;
-    int num_cliente;
+    String numCliente;
 
     float PIS;
     float COFINS;
@@ -85,7 +108,9 @@ public class ConsumoTempoReal extends AppCompatActivity {
     String leituraAtual;
     int leituraMes;
 
+    Bundle bundle = new Bundle();
 
+    /*
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -94,12 +119,22 @@ public class ConsumoTempoReal extends AppCompatActivity {
             num_cliente = Integer.valueOf(NumCliente);
         }
     };
-
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consumo_tempo_real);
+
+        //Recebendo bundle do MenuActivity com vários valores
+        bundle = getIntent().getExtras();
+        Log.d(TAG, "XXXXXXXXXXXXXX: "+bundle);
+
+        if(bundle != null ){
+            numCliente = bundle.getString(NAME_CONSUMO);
+            Log.d(TAG, "ACTIVITYCONSUMO: "+numCliente);
+        }
+
 
         WebView mWebView = (WebView) findViewById(R.id.web_view);
 
@@ -108,7 +143,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         //mWebView.loadUrl("http://google.com");
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("ConsumoTempoReal"));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("ConsumoTempoReal"));
 
         final TextView tvLeituraAnterior = (TextView) findViewById(R.id.tvLeituraAnterior);
         final TextView tvLeituraAtual = (TextView) findViewById(R.id.tvLeituraAtual);
@@ -119,20 +154,21 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         final DecimalFormat df = new DecimalFormat("#.##");
 
-        db = FirebaseFirestore.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
 
-        db.collection("Usuario").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
 
-                        if (String.valueOf(num_cliente).equals(String.valueOf(document.getData().get("numCliente")))) {
+                        if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
 
                             leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
+                            Log.d(TAG, "LEITURAANTERIOR: "+leituraAnterior);
 
                             leituraAtual = String.valueOf(document.getData().get("leituraAtual"));
-
+                            Log.d(TAG, "LEITURAATUAL: "+leituraAtual);
                             leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
 
                             String cip = String.valueOf(document.getData().get("CIP"));
@@ -149,7 +185,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
             }
         });
 
-        DocumentReference docRefTributario = db.collection("TarifasAplicacao").document("Tributario");
+        DocumentReference docRefTributario = mFirestore.collection("TarifasAplicacao").document("Tributario");
         docRefTributario.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -178,7 +214,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
         });
 
 
-        DocumentReference docRefResidencial = db.collection("TarifasAplicacao").document("Residencial");
+        DocumentReference docRefResidencial = mFirestore.collection("TarifasAplicacao").document("Residencial");
 
         docRefResidencial.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -201,7 +237,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
             }
         });
 
-        DocumentReference docRefBantar = db.collection("TarifasAplicacao").document("Bantar");
+        DocumentReference docRefBantar = mFirestore.collection("TarifasAplicacao").document("Bantar");
         docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -250,7 +286,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 ICMS = valor_consumo*ICMS;
 
                 valor_consumo = valor_consumo + PIS + COFINS + ICMS + CIP;
-
 
                 tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
 
