@@ -108,10 +108,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                 final String numRequerimento = etNumRequerimento.getText().toString();
 
 
-//                Map<String, Object> userMap = new HashMap<>();
-//                userMap.put("numRequerimento", numRequerimento);
-
-
                 //Recuperar da Coleção Usuário
                 mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -125,10 +121,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                                     ctrl = true;
                                     break;
                                 }
-//                                else{
-//                                    ctrl = false;
-//                                    var1 = false;
-//                                }
                                     /*
                                     Log.d(TAG, "Valor do editText: " + String.valueOf(etCpfCnpj.getText()));
                                     Log.d(TAG, "1 Valor do recuperando: " + String.valueOf(etRecuperando.getText()));
@@ -149,7 +141,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                             else{
                                 //Toast.makeText(getApplicationContext(),"Dados incorretos.Verifique e tente novamente." , Toast.LENGTH_LONG).show();
                             }
-                            startMapsActivity();
+
                         }
                         else{
                             Log.w(TAG, "Error getting documents.", task.getException());
@@ -181,7 +173,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                                 //Toast.makeText(getApplicationContext(),"Dados incorretos.Verifique e tente novamente." , Toast.LENGTH_LONG).show();
                             }
 
-                            startMapsActivity();
+
                         }
                         else{
 
@@ -196,7 +188,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful() ) {
                             for (DocumentSnapshot document : task.getResult()) {
-                                if(String.valueOf(document.getData().get(FIELD_TOKEN_ACESSO)).equals(String.valueOf(tokenAcesso))) {
+                                if(String.valueOf(document.getData().get(FIELD_TOKEN_ACESSO)).equals(tokenAcesso)) {
                                     tokenAcessoCheck = true;
                                     Log.d(TAG, "TOKEN_ACESSO: "+tokenAcesso);
                                     ctrl = true;

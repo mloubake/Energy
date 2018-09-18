@@ -87,28 +87,9 @@ public class MainActivity extends AppCompatActivity {
                             for (DocumentSnapshot document : task.getResult()) {
                                 if(String.valueOf(document.getData().get(FIELD_CPF_CNPJ)).equals(String.valueOf(etCpfCnpj.getText()))
                                         && String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(String.valueOf(etNumCliente.getText()))) {
-                                    //                          etRecuperando.setText( document.getData().get("idUser").toString());
 
                                     tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
                                     Log.d(TAG, "TOKEN_ACESSO: "+tokenAcesso);
-
-                                    /*
-                                    //Passar dados para outra activity
-                                    Intent intentMap = new Intent(MainActivity.this, AcompanhamEquipeTecnica.class);
-                                    Bundle tokenBundle = new Bundle();
-                                    tokenBundle.putString("Acompanhamento", tokenAcesso);
-                                    intentMap.putExtra("Acompanhamento2", tokenBundle);
-                                    LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(intentMap);
-                                    //Log.d(TAG, "BUNDLE_ACESSO: "+tokenBundle);
-
-                                    //Passar dados para a activity ConsumoTempoReal
-                                    Intent intentConsumo = new Intent(MainActivity.this, ConsumoTempoReal.class);
-                                    Bundle b = new Bundle();
-                                    b.putString("ConsumoTempoReal", numCliente);
-                                    intentConsumo.putExtras(b);
-                                    LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(intentConsumo);
-                                    */
-
 
                                     //Iniciar activity MenuPrincipal com Bud
                                     Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
