@@ -55,13 +55,16 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     boolean var1;
     boolean var2;
 
-
     String tokenAcesso;
-
-
     boolean tokenAcessoCheck;
+
     RelativeLayout progressContainer;
     EditText etNumRequerimento;
+
+    Bundle bundle = new Bundle();
+
+
+
 /*
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -81,7 +84,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
 
         //Recebendo bundle do MenuActivity com vários valores
-        Bundle bundle = new Bundle();
+
         bundle = getIntent().getExtras();
 
         if(bundle != null ){
@@ -134,17 +137,17 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                                     */
 
                             }
-
+                            //If para o Toast funcionar
                             if(ctrl==true){
-                               //Toast.makeText(getApplicationContext(), "Login efetuado com sucesso.", Toast.LENGTH_SHORT).show();
+                               //Sem Toast de confirmamento
                             }
                             else{
-                                //Toast.makeText(getApplicationContext(),"Dados incorretos.Verifique e tente novamente." , Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"AAA - Número de Requerimento incorreto." , Toast.LENGTH_LONG).show();
                             }
 
                         }
                         else{
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
                         }
                     }
                 });
@@ -166,48 +169,46 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                                     var2 = false;
                                 }
                             }
+                            //If para o Toast funcionar
                             if(ctrl==true){
-                                //Toast.makeText(getApplicationContext(), "Login efetuado com sucesso.", Toast.LENGTH_SHORT).show();
+                                //Sem Toast de confirmamento
                             }
                             else{
-                                //Toast.makeText(getApplicationContext(),"Dados incorretos.Verifique e tente novamente." , Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Não foi possível achar a equipe de manutenção. Por favor, verifique o Número de Requerimento." , Toast.LENGTH_LONG).show();
                             }
-
-
                         }
                         else{
-
+                            Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
                         }
                     }
                 });
 
 
                 //Recuperar da Coleção Usuário verificando o Token de Acesso
-                mFirestore.collection("Usuario").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful() ) {
                             for (DocumentSnapshot document : task.getResult()) {
                                 if(String.valueOf(document.getData().get(FIELD_TOKEN_ACESSO)).equals(tokenAcesso)) {
                                     tokenAcessoCheck = true;
-                                    Log.d(TAG, "TOKEN_ACESSO: "+tokenAcesso);
+                                    Log.d(TAG, "AAA - TOKEN_ACESSO: "+tokenAcesso);
                                     ctrl = true;
                                     break;
                                 }
                                 else{
-                                    Toast.makeText(getApplicationContext(), "Número de Requerimento inválido", Toast.LENGTH_LONG).show();
                                     ctrl = false;
                                 }
                             }
+                            //If para o Toast funcionar
                             if(ctrl==true){
-                                //Toast.makeText(getApplicationContext(), "Login efetuado com sucesso.", Toast.LENGTH_SHORT).show();
+                                //Sem Toast de confirmamento
                             }
                             else{
-                                //Toast.makeText(getApplicationContext(),"Dados incorretos.Verifique e tente novamente." , Toast.LENGTH_LONG).show();
-                            }
+                                Toast.makeText(getApplicationContext(), "BBB - Número de Requerimento inválido", Toast.LENGTH_LONG).show();                            }
                         }
                         else{
-
+                            Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
                         }
                     }
                 });
@@ -228,7 +229,18 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 //                }
 
                 //Chamando o Método: Começar a Activity do Google Maps
-                startMapsActivity();
+                try {
+
+                    //sleep 5 seconds
+                    Thread.sleep(2000);
+                    startMapsActivity();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+
             }
         });
     }
@@ -244,6 +256,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     //Método: Começar a Activity do Google Maps
     public void startMapsActivity() {
         if (checkHasCpfAndClientNumber()) {
+            Toast.makeText(getApplicationContext(), "Localizando a sua equipe...", Toast.LENGTH_SHORT).show();
             String texto = etNumRequerimento.getText().toString();
             Intent intentMaps = new Intent(AcompanhamEquipeTecnica.this, MapsActivity.class);
             Bundle b = new Bundle();

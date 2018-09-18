@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                                     */
 
                             }
-
+                            //If para o Toast funcionar
                             if(ctrl==true){
                                 Toast.makeText(getApplicationContext(), "Login efetuado com sucesso.", Toast.LENGTH_SHORT).show();
                             }
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         else{
-                            Log.w(TAG, "Falha ao recuperar Documents.", task.getException());
+                            Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
                         }
                     }
                 });
