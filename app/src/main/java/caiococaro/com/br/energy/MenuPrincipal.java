@@ -32,9 +32,12 @@ public class MenuPrincipal extends AppCompatActivity {
     private static final String NAME_HISTORICO = "Historico";
     private static final String NAME_RECLAMACAO = "Reclamacao";
 
-
+    //Valores passados entre os bundles
     String valorNumCliente;
+    String valorToken;
 
+
+    //
     Bundle bundle = new Bundle();
 
     @Override
@@ -45,39 +48,20 @@ public class MenuPrincipal extends AppCompatActivity {
         //Recebendo a bundle da MainActivity com vários valores
         bundle = getIntent().getExtras();
 
-        //Setando os valores do bundle da MainActivity para bundles das outras Activities
+        //Setando os valores do bundle da MainActivity para MenuPrincipal para depois setar os bundles das outras Activities
         if(bundle != null ){
             valorNumCliente = bundle.getString(KEY_NUM_CLIENTE);
-            Log.d(TAG, "MENUPRINCIPALCONSUMO: "+valorNumCliente);
+            valorToken = bundle.getString(KEY_TOKEN_ACESSO);
+            Log.d(TAG, "MENUPRINCIPALBUNDLES: "+valorNumCliente+ " / " + valorToken);
         }
 
 
-
-        //Enviando bundle com token para AcompanhamentoEquipeTecnica
-        Bundle bundleAcompanhamento = new Bundle();
-        bundleAcompanhamento = bundle.getBundle("ConsumoTempoReal");
-
-        //Button btnConsumo = (Button) findViewById(R.id.btnConsumo);
-        //Button btnHistConsumo = (Button) findViewById(R.id.btnHistConsumo);
-        //Button btnReclamacao = (Button) findViewById(R.id.btnReclamacao);
-        //Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
-        //Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
-        //Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);
         Button btnConsumo = (Button) findViewById(R.id.btnConsumo);
         Button btnHistConsumo = (Button) findViewById(R.id.btnHistConsumo);
         Button btnReclamacao = (Button) findViewById(R.id.btnReclamacao);
         Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
         Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
         Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);
-
-        /*
-        Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("ConsumoTempoReal", numCliente);
-        bundle.putString("Acompanhamento", tokenAcesso);
-        intent.putExtras(bundle);
-        startActivity(intent);
-        */
 
 
         //Inciando Activity ConsumoTempoReal
@@ -116,8 +100,13 @@ public class MenuPrincipal extends AppCompatActivity {
         btnAcompanhamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentEquipeTecnica = new Intent(MenuPrincipal.this, AcompanhamEquipeTecnica.class);
-                startActivity(intentEquipeTecnica);
+                Intent intentAcompanhamento= new Intent(MenuPrincipal.this, AcompanhamEquipeTecnica.class);
+
+                //Enviando bundle para ConsumoTempoReal
+                Bundle bundleAcompanhamento = new Bundle();
+                bundleAcompanhamento.putString(NAME_ACOMPANHAMENTO, valorToken);
+                intentAcompanhamento.putExtras( bundleAcompanhamento);
+                startActivity(intentAcompanhamento);
             }
         });
 

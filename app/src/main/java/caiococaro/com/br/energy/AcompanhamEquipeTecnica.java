@@ -41,10 +41,14 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
     //Campos do Firebase
     private static final String FIELD_NUM_REQUERIMENTO = "numRequerimento";
+    private static final String FIELD_TOKEN_ACESSO = "tokenAcesso";
 
     //Keys da Bundle
     private static final String KEY_NUM_CLIENTE = "NumeroCliente";
     private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
+
+    //Names para cada Bundle Específica
+    private static final String NAME_ACOMPANHAMENTO = "Acompanhamento";
 
     boolean ctrl = false;
     private FirebaseFirestore mFirestore;
@@ -52,8 +56,8 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     boolean var2;
 
 
+    String tokenAcesso;
 
-    int tokenAcesso;
 
     boolean tokenAcessoCheck;
     RelativeLayout progressContainer;
@@ -81,7 +85,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         bundle = getIntent().getExtras();
 
         if(bundle != null ){
-
+            tokenAcesso = bundle.getString(NAME_ACOMPANHAMENTO);
         }
 
 
@@ -186,39 +190,39 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                 });
 
 
-//                //Recuperar da Coleção Usuário verificando o Token de Acesso
-//                mFirestore.collection("Usuario").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if(task.isSuccessful() ) {
-//                            for (DocumentSnapshot document : task.getResult()) {
-//                                if(String.valueOf(document.getData().get("tokenAcesso")).equals(String.valueOf(tokenAcesso))) {
-//                                    tokenAcessoCheck = true;
-//                                    Log.d(TAG, "TOKEN_ACESSO: "+tokenAcesso);
-//                                    ctrl = true;
-//                                    break;
-//                                }
-//                                else{
-//                                    Toast.makeText(getApplicationContext(), "Número de Requerimento inválido", Toast.LENGTH_LONG).show();
-//                                    ctrl = false;
-//                                }
-//                            }
-//                            if(ctrl==true){
-//                                //Toast.makeText(getApplicationContext(), "Login efetuado com sucesso.", Toast.LENGTH_SHORT).show();
-//                            }
-//                            else{
-//                                //Toast.makeText(getApplicationContext(),"Dados incorretos.Verifique e tente novamente." , Toast.LENGTH_LONG).show();
-//                            }
-//                        }
-//                        else{
-//
-//                        }
-//                    }
-//                });
+                //Recuperar da Coleção Usuário verificando o Token de Acesso
+                mFirestore.collection("Usuario").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful() ) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                if(String.valueOf(document.getData().get(FIELD_TOKEN_ACESSO)).equals(String.valueOf(tokenAcesso))) {
+                                    tokenAcessoCheck = true;
+                                    Log.d(TAG, "TOKEN_ACESSO: "+tokenAcesso);
+                                    ctrl = true;
+                                    break;
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "Número de Requerimento inválido", Toast.LENGTH_LONG).show();
+                                    ctrl = false;
+                                }
+                            }
+                            if(ctrl==true){
+                                //Toast.makeText(getApplicationContext(), "Login efetuado com sucesso.", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                //Toast.makeText(getApplicationContext(),"Dados incorretos.Verifique e tente novamente." , Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        else{
+
+                        }
+                    }
+                });
 
 
 
-//                if(((var1)&&(var2))/* && tokenAcessoCheck*/){
+//                if(((var1)&&(var2)) && tokenAcessoCheck){
 //
 //                    String texto = etNumRequerimento.getText().toString();
 //                    Intent intent = new Intent(AcompanhamEquipeTecnica.this, MapsActivity.class);
@@ -239,7 +243,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
     //Método: Checkar CPF e Número do cliente
     public boolean checkHasCpfAndClientNumber() {
-        if (var1 && var2) {
+        if ((var1 && var2) && tokenAcessoCheck) {
             return true;
         }
         return false;

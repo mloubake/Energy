@@ -79,9 +79,10 @@ public class ConsumoTempoReal extends AppCompatActivity {
 //    private static final String NAME_RECLAMACAO = "Reclamacao";
 
 
+    String numCliente;
+
     private FirebaseFirestore mFirestore;
     boolean ctrl;
-    String numCliente;
 
     float PIS;
     float COFINS;
