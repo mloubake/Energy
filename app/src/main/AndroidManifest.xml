@@ -29,7 +29,6 @@
         <activity android:name=".MenuPrincipal" />
         <activity android:name=".ConsumoTempoReal" />
         <activity android:name=".HistoricoConsumo" />
-        <activity android:name=".ReclamacaoEspecial" />
         <activity
             android:name=".AcompanhamEquipeTecnica"
             android:label="@string/title_activity_acompanham_equipe_tecnica"

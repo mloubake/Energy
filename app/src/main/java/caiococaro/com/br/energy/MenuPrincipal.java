@@ -30,7 +30,6 @@ public class MenuPrincipal extends AppCompatActivity {
     private static final String NAME_CLIENTE_VITAL = "ClienteVital";
     private static final String NAME_CONSUMO = "Consumo";
     private static final String NAME_HISTORICO = "Historico";
-    private static final String NAME_RECLAMACAO = "Reclamacao";
 
     //Valores passados entre os bundles
     String valorNumCliente;
@@ -58,7 +57,6 @@ public class MenuPrincipal extends AppCompatActivity {
 
         Button btnConsumo = (Button) findViewById(R.id.btnConsumo);
         Button btnHistConsumo = (Button) findViewById(R.id.btnHistConsumo);
-        Button btnReclamacao = (Button) findViewById(R.id.btnReclamacao);
         Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
         Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
         Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);
@@ -84,15 +82,6 @@ public class MenuPrincipal extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intentHistorico = new Intent(MenuPrincipal.this, HistoricoConsumo.class);
                 startActivity(intentHistorico);
-            }
-        });
-
-        //Inciando Activity ReclamacaoEspecial
-        btnReclamacao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentReclamacao = new Intent(MenuPrincipal.this, ReclamacaoEspecial.class);
-                startActivity(intentReclamacao);
             }
         });
 

@@ -45,7 +45,7 @@
                 android:gravity="center_horizontal"
                 android:paddingRight="20dp"
                 android:paddingLeft="20dp"
-                android:paddingTop="40dp">
+                android:paddingTop="50dp">
 
                 <Button
                     android:id="@+id/btnConsumo"
@@ -143,27 +143,6 @@
                     android:gravity="center"
                     android:textColor="#FFFF"
                     android:drawableLeft="@drawable/equipe_tec"/>
-            </TableRow>
-
-            <!-- Linha 6 -->
-            <TableRow
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:paddingRight="20dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="20dp">
-
-                <Button
-                    android:id="@+id/btnReclamacao"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_red"
-                    android:text="@string/reclam_postal"
-                    android:textAllCaps="false"
-                    android:gravity="center"
-                    android:textColor="#FFFF"
-                    android:drawableLeft="@drawable/rec_postal"/>
             </TableRow>
 
         </TableLayout>
