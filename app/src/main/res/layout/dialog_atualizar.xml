@@ -35,16 +35,6 @@
             android:layout_marginBottom="4dp"
             android:hint="Ex: 00001000" />
 
-        <Button
-            android:id="@+id/btnAtualizarConsumo"
-            android:inputType="number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="4dp"
-            android:hint="Ex: 00001000" />
     </LinearLayout>
 
 

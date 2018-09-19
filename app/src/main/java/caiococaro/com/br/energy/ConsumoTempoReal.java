@@ -1,5 +1,9 @@
 package caiococaro.com.br.energy;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +22,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.DecimalFormat;
+
+import static caiococaro.com.br.energy.AtualizaConsumo.*;
 
 public class ConsumoTempoReal extends AppCompatActivity {
 
@@ -106,13 +112,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
         final DecimalFormat df = new DecimalFormat("#.##");
 
         Button btnAtualizar = (Button) findViewById(R.id.btnAtualizar);
-
-        btnAtualizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AtualizaConsumo(this).show();
-            }
-        });
 
         mFirestore = FirebaseFirestore.getInstance();
 
@@ -274,7 +273,15 @@ public class ConsumoTempoReal extends AppCompatActivity {
         tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
 
     }
+
+    public void showDialog(View view){
+
+        AtualizaConsumo AtualizaConsumo = new AtualizaConsumo();
+        AtualizaConsumo.show(getSupportFragmentManager(),"my_dialog");
+    }
+
 }
+
 
     /*
     db.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

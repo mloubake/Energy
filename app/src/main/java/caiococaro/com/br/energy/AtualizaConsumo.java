@@ -1,53 +1,54 @@
 package caiococaro.com.br.energy;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import caiococaro.com.br.energy.R;
+
+import static android.support.constraint.Constraints.TAG;
 
 
-public class AtualizaConsumo extends Dialog {
-
-    private EditText editTextNome;
-
-    public AtualizaConsumo(View.OnClickListener context) {
-        super((Context) context);
-    }
-
-    private static final String NAME_CONSUMO_ATUAL = "ConsumoAtual";
-
-    private String leitura_atualizada;
-
-
+public class AtualizaConsumo extends android.support.v4.app.DialogFragment {
+    private FirebaseFirestore db;
+    @NonNull
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialog_atualizar);
-        editTextNome = (EditText) findViewById(R.id.leituraAtualMedidor);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.dialog_atualizar, null));
 
-        Button buttonAtualizar = (Button) findViewById(R.id.btnAtualizarConsumo);
-        buttonAtualizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), editTextNome.getText().toString(), Toast.LENGTH_SHORT).show();
+        builder
+                .setPositiveButton("Atualizar",new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //Atualizar
+                    Dialog leitura = AtualizaConsumo.this.getDialog();
+                    Log.d(TAG, "Valor do editText: " + leitura);
+                         /*
+                        db = FirebaseFirestore.getInstance();
+                         DocumentReference update = db.collection("Usuario").document("padrão");
+                         String leitura = leituraAtualMedidor.getText().toString();
+                         update
+                                .update("leituraAtual", leitura);*/
+                }
+            });
+        builder
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //cancelar atualização
+                    }
+                });
 
-                leitura_atualizada = editTextNome.getText().toString();
-
-                /*Iniciar activity MenuPrincipal com Bud
-                Intent intent = new Intent(AtualizaConsumo.this, ConsumoTempoReal.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(NAME_CONSUMO_ATUAL, leitura_atualizada);
-                intent.putExtras(bundle);
-                startActivity(intent);*/
-            }
-        });
+        return builder.create();
     }
 }
-
-
