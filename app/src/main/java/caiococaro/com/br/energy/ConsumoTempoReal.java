@@ -104,6 +104,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     float tarifa;
     float valor_consumo;
+    float consumo;
 
     String leituraAnterior;
     String leituraAtual;
@@ -172,6 +173,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
                             Log.d(TAG, "LEITURAATUAL: "+leituraAtual);
                             leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
 
+                            consumo = Float.valueOf(leituraMes);
+
                             String cip = String.valueOf(document.getData().get("CIP"));
                             CIP = Float.valueOf(cip);
 
@@ -180,16 +183,18 @@ public class ConsumoTempoReal extends AppCompatActivity {
                             tvCIP.setText(String.valueOf(df.format(CIP)));
                             tvConsumo.setText(String.valueOf(leituraMes));
 
+
                         }
                     }
                 }
             }
+
         });
 
         DocumentReference docRefTributario = mFirestore.collection("TarifasAplicacao").document("Tributario");
         docRefTributario.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            public void onComplete (@NonNull Task<DocumentSnapshot> task) {
                 String pis="";
                 String cofins="";
                 String icms="";
@@ -219,9 +224,9 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         docRefResidencial.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                String te="";
-                String tusd="";
+            public void onComplete (@NonNull Task<DocumentSnapshot> task) {
+                String te="1";
+                String tusd="1";
 
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
@@ -235,8 +240,12 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 }
                 TE = Float.valueOf(te);
                 TUSD = Float.valueOf(tusd);
+
             }
         });
+
+        //Toast.makeText(getApplicationContext(),"TUSD "+TUSD,Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),"TE "+TE,Toast.LENGTH_LONG).show();
 
         DocumentReference docRefBantar = mFirestore.collection("TarifasAplicacao").document("Bantar");
         docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -264,35 +273,33 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 BantarAmarela = Float.valueOf(bantAmarela);
                 BantarVermelha1 = Float.valueOf(bantVermelha1);
                 BantarVermelha2 = Float.valueOf(bantVermelha2);
-
-                bVerde = (TUSD + TE) / 1000;
-                bAzul = (TUSD / 1000);
-                bAmarela = (BantarAmarela + bVerde);
-                bVermelha = (bVerde + BantarVermelha2);
-
-                tarifa = bVermelha;
-
-                tvTarifa.setText(String.valueOf(tarifa));
-
-                Float consumo = Float.valueOf(leituraMes);
-
-                //Toast.makeText(getApplicationContext(),""+leituraMes,Toast.LENGTH_LONG).show();
-
-                valor_consumo = consumo * tarifa;
-
-                PIS = valor_consumo*PIS;
-
-                COFINS = valor_consumo*COFINS;
-
-                ICMS = valor_consumo*ICMS;
-
-                valor_consumo = valor_consumo + PIS + COFINS + ICMS + CIP;
-
-                tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
-
             }
         });
 
+        bVerde = (TUSD + TE) / 1000;
+        bAzul = (TUSD / 1000);
+        bAmarela = (BantarAmarela + bVerde);
+        bVermelha = (bVerde + BantarVermelha2);
+
+        tarifa = bVermelha;
+
+        tvTarifa.setText(String.valueOf(tarifa));
+
+        Toast.makeText(getApplicationContext(), "Leitura: "+consumo, Toast.LENGTH_SHORT).show();
+
+        valor_consumo = consumo * tarifa;
+        //Toast.makeText(getApplicationContext(), "Consumo"+valor_consumo, Toast.LENGTH_SHORT).show();
+
+        PIS = valor_consumo*PIS;
+        //Toast.makeText(getApplicationContext(), "PIS"+PIS, Toast.LENGTH_SHORT).show();
+
+        COFINS = valor_consumo*COFINS;
+
+        ICMS = valor_consumo*ICMS;
+
+        valor_consumo = valor_consumo + PIS + COFINS + ICMS + CIP;
+
+        tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
 
     }
 
