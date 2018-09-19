@@ -62,19 +62,20 @@ public class MenuPrincipal extends AppCompatActivity {
         Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);
 
 
-        //Inciando Activity ConsumoTempoReal
-        btnConsumo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentConsumo = new Intent(MenuPrincipal.this, ConsumoTempoReal.class);
+        //Inciando Activity ConsumoTempoRealbtnConsumo.setOnClickListener(new View.OnClickListener() {
+            btnConsumo.setOnClickListener(new View.OnClickListener() {
+                                              @Override
+                                              public void onClick(View v) {
+                                                  Intent intentConsumo = new Intent(MenuPrincipal.this, ConsumoTempoReal.class);
 
-                //Enviando bundle para ConsumoTempoReal
-                Bundle bundleConsumo = new Bundle();
-                bundleConsumo.putString(NAME_CONSUMO, valorNumCliente);
-                intentConsumo.putExtras( bundleConsumo);
-                startActivity(intentConsumo);
-            }
-        });
+                                                  //Enviando bundle para ConsumoTempoReal
+                                                  Bundle bundleConsumo = new Bundle();
+                                                  bundleConsumo.putString(NAME_CONSUMO, valorNumCliente);
+                                                  intentConsumo.putExtras(bundleConsumo);
+                                                  startActivity(intentConsumo);
+                                              }
+                                          });
+
 
         //Inciando Activity HistoricoConsumo
         btnHistConsumo.setOnClickListener(new View.OnClickListener() {

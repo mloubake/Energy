@@ -1,14 +1,6 @@
 package caiococaro.com.br.energy;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.IntentFilter;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,39 +11,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 public class ConsumoTempoReal extends AppCompatActivity {
 
@@ -62,8 +28,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
     private static final String TABLE_USUARIO = "Usuario";
 
     //Campos do Firebase
-    private static final String FIELD_CPF_CNPJ = "cpfCnpj";
-    private static final String FIELD_NUM_CLIENTE = "numCliente";
     private static final String FIELD_TOKEN_ACESSO = "tokenAcesso";
 
     //Keys da Bundle
@@ -71,12 +35,9 @@ public class ConsumoTempoReal extends AppCompatActivity {
     private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
 
     //Names para cada Bundle Específica
-//    private static final String NAME_ACOMPANHAMENTO = "Acompanhamento";
-//    private static final String NAME_BAIXA_RENDA = "BaixaRenda";
-//    private static final String NAME_CLIENTE_VITAL = "ClienteVital";
-      private static final String NAME_CONSUMO = "Consumo";
-//    private static final String NAME_HISTORICO = "Historico";
-//    private static final String NAME_RECLAMACAO = "Reclamacao";
+
+    private static final String NAME_CONSUMO = "Consumo";
+    private static final String NAME_CONSUMO_ATUAL = "ConsumoAtual";
 
 
     String numCliente;
@@ -110,18 +71,9 @@ public class ConsumoTempoReal extends AppCompatActivity {
     String leituraAtual;
     int leituraMes;
 
+    String tokenAcesso;
+
     Bundle bundle = new Bundle();
-
-    /*
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String NumCliente = intent.getStringExtra("ConsumoTempoReal");
-
-            num_cliente = Integer.valueOf(NumCliente);
-        }
-    };
-    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,13 +82,12 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         //Recebendo bundle do MenuActivity com vários valores
         bundle = getIntent().getExtras();
-        Log.d(TAG, "XXXXXXXXXXXXXX: "+bundle);
+        Log.d(TAG, "XXXXXXXXXXXXXX: " + bundle);
 
-        if(bundle != null ){
+        if (bundle != null) {
             numCliente = bundle.getString(NAME_CONSUMO);
-            Log.d(TAG, "ACTIVITYCONSUMO: "+numCliente);
+            Log.d(TAG, "ACTIVITYCONSUMO: " + numCliente);
         }
-
 
         WebView mWebView = (WebView) findViewById(R.id.web_view);
 
@@ -144,8 +95,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true);
 
         //mWebView.loadUrl("http://google.com");
-
-        //LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("ConsumoTempoReal"));
 
         final TextView tvLeituraAnterior = (TextView) findViewById(R.id.tvLeituraAnterior);
         final TextView tvLeituraAtual = (TextView) findViewById(R.id.tvLeituraAtual);
@@ -155,6 +104,15 @@ public class ConsumoTempoReal extends AppCompatActivity {
         final TextView tvValor_consumo = (TextView) findViewById(R.id.tvValor_consumo);
 
         final DecimalFormat df = new DecimalFormat("#.##");
+
+        Button btnAtualizar = (Button) findViewById(R.id.btnAtualizar);
+
+        btnAtualizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AtualizaConsumo(this).show();
+            }
+        });
 
         mFirestore = FirebaseFirestore.getInstance();
 
@@ -166,11 +124,22 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                         if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
 
+                            //Recebendo bundle do MyDialog com Consumo Atual
+                            bundle = getIntent().getExtras();
+                            Log.d(TAG, "XXXXXXXXXXXXXX: " + bundle);
+
+                            if (bundle != null) {
+                                numCliente = bundle.getString(NAME_CONSUMO_ATUAL);
+                                Log.d(TAG, "ACTIVITYCONSUMO: " + leituraAtual);
+                            }
+
+                            //ATUALIZAR A LEITURA ATUAL AQUI-------------------------------------------------------------------
+
                             leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
-                            Log.d(TAG, "LEITURAANTERIOR: "+leituraAnterior);
+                            Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
 
                             leituraAtual = String.valueOf(document.getData().get("leituraAtual"));
-                            Log.d(TAG, "LEITURAATUAL: "+leituraAtual);
+                            Log.d(TAG, "LEITURAATUAL: " + leituraAtual);
                             leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
 
                             consumo = Float.valueOf(leituraMes);
@@ -184,6 +153,10 @@ public class ConsumoTempoReal extends AppCompatActivity {
                             tvConsumo.setText(String.valueOf(leituraMes));
 
 
+                            tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
+                            Log.d(TAG, "TOKEN_ACESSO: " + tokenAcesso);
+
+
                         }
                     }
                 }
@@ -194,10 +167,10 @@ public class ConsumoTempoReal extends AppCompatActivity {
         DocumentReference docRefTributario = mFirestore.collection("TarifasAplicacao").document("Tributario");
         docRefTributario.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete (@NonNull Task<DocumentSnapshot> task) {
-                String pis="";
-                String cofins="";
-                String icms="";
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                String pis = "";
+                String cofins = "";
+                String icms = "";
 
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
@@ -215,7 +188,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 PIS = Float.valueOf(pis);
                 COFINS = Float.valueOf(cofins);
                 ICMS = Float.valueOf(icms);
-                }
+            }
 
         });
 
@@ -224,17 +197,16 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         docRefResidencial.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete (@NonNull Task<DocumentSnapshot> task) {
-                String te="1";
-                String tusd="1";
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                String te = "";
+                String tusd = "";
 
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                            te = String.valueOf(document.getData().get("TE"));
-
-                            tusd = String.valueOf(document.getData().get("TUSD"));
+                        te = String.valueOf(document.getData().get("TE"));
+                        tusd = String.valueOf(document.getData().get("TUSD"));
 
                     }
                 }
@@ -244,8 +216,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
             }
         });
 
-        //Toast.makeText(getApplicationContext(),"TUSD "+TUSD,Toast.LENGTH_LONG).show();
-        //Toast.makeText(getApplicationContext(),"TE "+TE,Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "TUSD " + TUSD, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "TE " + TE, Toast.LENGTH_LONG).show();
 
         DocumentReference docRefBantar = mFirestore.collection("TarifasAplicacao").document("Bantar");
         docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -285,33 +257,55 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         tvTarifa.setText(String.valueOf(tarifa));
 
-        Toast.makeText(getApplicationContext(), "Leitura: "+consumo, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Leitura: " + consumo, Toast.LENGTH_SHORT).show();
 
         valor_consumo = consumo * tarifa;
         //Toast.makeText(getApplicationContext(), "Consumo"+valor_consumo, Toast.LENGTH_SHORT).show();
 
-        PIS = valor_consumo*PIS;
+        PIS = valor_consumo * PIS;
         //Toast.makeText(getApplicationContext(), "PIS"+PIS, Toast.LENGTH_SHORT).show();
 
-        COFINS = valor_consumo*COFINS;
+        COFINS = valor_consumo * COFINS;
 
-        ICMS = valor_consumo*ICMS;
+        ICMS = valor_consumo * ICMS;
 
         valor_consumo = valor_consumo + PIS + COFINS + ICMS + CIP;
 
         tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
 
     }
+}
 
+    /*
+    db.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (DocumentSnapshot document : task.getResult()) {
 
-    public void showDialog(View view){
+                                                if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
 
-        MyDialog myDialog = new MyDialog();
-        myDialog.show(getSupportFragmentManager(),"my_dialog");
-    }
+                                                    Log.d(TAG, "Numero do Cliente: " + numCliente);
+                                                }
 
+                                        /*
+                                        db = FirebaseFirestore.getInstance();
+
+                                        DocumentReference update = db.collection("Usuario").document("padrão");
+
+                                        String leitura = leituraAtualMedidor.getText().toString();
+
+                                        update
+                                                .update("leituraAtual", leitura);
 
 }
+                                }
+                                        }
+                                        });
+     */
+
+
+
 
 
 
