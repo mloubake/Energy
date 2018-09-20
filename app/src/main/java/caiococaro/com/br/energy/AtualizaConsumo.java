@@ -3,8 +3,10 @@ package caiococaro.com.br.energy;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +20,11 @@ import caiococaro.com.br.energy.R;
 
 import static android.support.constraint.Constraints.TAG;
 
+public class AtualizaConsumo extends android.support.v4.app.DialogFragment{
 
-public class AtualizaConsumo extends android.support.v4.app.DialogFragment {
-    private FirebaseFirestore db;
+    private static final String LEITURA = "Leitura";
+
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -34,12 +38,11 @@ public class AtualizaConsumo extends android.support.v4.app.DialogFragment {
                     //Atualizar
                     Dialog leitura = AtualizaConsumo.this.getDialog();
                     Log.d(TAG, "Valor do editText: " + leitura);
-                         /*
-                        db = FirebaseFirestore.getInstance();
-                         DocumentReference update = db.collection("Usuario").document("padrão");
-                         String leitura = leituraAtualMedidor.getText().toString();
-                         update
-                                .update("leituraAtual", leitura);*/
+                    /*Intent intent = new Intent(AtualizaConsumo.this, ConsumoTempoReal.class);
+                    /Bundle bundle = new Bundle();
+                    bundle.putString(LEITURA, String.valueOf(leitura));
+                    intent.putExtras(bundle);
+                    startActivity(intent);*/
                 }
             });
         builder
