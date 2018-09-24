@@ -10,7 +10,7 @@
         <TableLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="600dp"
             android:background="#fffafa"
             android:shrinkColumns="*"
             android:stretchColumns="*"
@@ -28,8 +28,8 @@
 
                 <ImageView
                     android:layout_width="100dp"
-                    android:layout_height="157dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="0dp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/imagemcabecalho"
                     android:visibility="visible" />
@@ -41,7 +41,7 @@
 
             <TableRow
                 android:layout_width="20dp"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:gravity="center_horizontal"
                 android:paddingRight="20dp"
                 android:paddingLeft="20dp"
@@ -63,7 +63,7 @@
             <!-- Linha 2 -->
             <TableRow
                 android:layout_width="20dp"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:gravity="center_horizontal"
                 android:paddingRight="20dp"
                 android:paddingLeft="20dp"
@@ -85,7 +85,7 @@
             <!-- Linha 3 -->
             <TableRow
                 android:layout_width="20dp"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:gravity="center_horizontal"
                 android:paddingRight="20dp"
                 android:paddingLeft="20dp"
@@ -106,7 +106,7 @@
             <!-- Linha 4 -->
             <TableRow
                 android:layout_width="20dp"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:gravity="center_horizontal"
                 android:paddingRight="20dp"
                 android:paddingLeft="20dp"
@@ -127,7 +127,7 @@
             <!-- Linha 5-->
             <TableRow
                 android:layout_width="20dp"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:gravity="center_horizontal"
                 android:paddingRight="20dp"
                 android:paddingLeft="20dp"

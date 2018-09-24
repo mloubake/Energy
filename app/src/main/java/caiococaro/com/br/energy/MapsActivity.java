@@ -9,7 +9,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -33,9 +35,27 @@ import org.w3c.dom.Text;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    //TAG do Log do Console
     private static final String TAG = "";
+
+    //Tabelas do FireStore
+    private static final String TABLE_EQUIPE_MANUTENCAO = "EquipeManutencao";
+
+    //Campos do Firebase
+    private static final String FIELD_NUM_REQUERIMENTO = "numRequerimento";
+    private static final String FIELD_LOCALIZACAO = "localizacao";
+
+    //Keys da Bundle
+    private static final String KEY_LOCALIZACAO = "Localizacao";
+
+    //Título dos Marcadores do Maps
+    private static final String TITLE_EQUIPE = "Equipe";
+
+
     private GoogleMap equipeMap;
 
     private FirebaseFirestore mFirestore;
@@ -44,7 +64,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     double geoLat, geoLongi;
     String strLocalizacao;
 
-    int count =1;
+    int count = 1;
+
+    // Create the Handler object (on the main thread by default)
+    Handler handler = new Handler();
+    Runnable mRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +77,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //tentar jogar a busca no map ready
 
-        Bundle extras = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
 
-        if(strLocalizacao == null){
-            strLocalizacao = extras.getString("localizacao");
+        if (bundle != null) {
+            strLocalizacao = bundle.getString(KEY_LOCALIZACAO);
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -68,34 +92,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
-
-
-    //Update
-    /*
-    Thread t = new Thread(){
-        @Override
-        public void run(){
-            while (!isInterrupted()){
-                try{
-                    Thread.sleep(10000);
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-
-
-                        }
-                    });
-                }
-                catch (InterruptedException e){
-
-                }
-            }
-        }
-    };
-    */
-
 
 
     /**
@@ -112,65 +108,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         equipeMap = googleMap;
 
-
-
-
-
-        mFirestore.collection("EquipeManutencao").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful() ) {
-                    for (DocumentSnapshot document : task.getResult()) {
-                        if(String.valueOf(document.getData().get("numRequerimento")).equals(String.valueOf(strLocalizacao))){
-
-                            geoLat = Double.parseDouble(String.valueOf(document.getGeoPoint("localizacao").getLatitude()));
-                            geoLongi = Double.parseDouble(String.valueOf(document.getGeoPoint("localizacao").getLongitude()));
-
-                            // Add a marker in Sydney and move the camera
-                            LatLng equipeBrazil = new LatLng( geoLat, geoLongi);
-                            equipeMap.addMarker(new MarkerOptions().position(equipeBrazil).title("Equipe"));
-                            equipeMap.moveCamera(CameraUpdateFactory.newLatLng(equipeBrazil));
-
-                        }
-                    }
-                }
-            }
-        });
-
-
-
-/*
-        final Handler handler = new Handler();
-        Timer timer = new Timer();
-        TimerTask doTask = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @SuppressWarnings("unchecked")
-                    public void run() {
-                        try {
-
-                        }
-                        catch (Exception e) {
-                            // TODO Auto-generated catch block
-                        }
-                    }
-                });
-            }
-        };
-        //timer.schedule(doTask, 0, "Your time 10 minute");
-*/
-
-
-
-
-
-
-/*
         Thread t = new Thread(){
             @Override
             public void run(){
-                while (!isInterrupted()){
+                while(!isInterrupted()){
+
                     try{
                         Thread.sleep(1000);
 
@@ -178,22 +120,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             @Override
                             public void run() {
 
+                                mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (DocumentSnapshot document : task.getResult()) {
+                                                if (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(strLocalizacao))) {
+
+                                                    geoLat = Double.parseDouble(String.valueOf(document.getGeoPoint(FIELD_LOCALIZACAO).getLatitude()));
+                                                    geoLongi = Double.parseDouble(String.valueOf(document.getGeoPoint(FIELD_LOCALIZACAO).getLongitude()));
 
 
+                                                    // Add a marker in Sydney and move the camera
+                                                    LatLng equipeBrazil = new LatLng(geoLat, geoLongi);
+                                                    equipeMap.addMarker(new MarkerOptions().position(equipeBrazil).title(TITLE_EQUIPE));
+                                                    equipeMap.moveCamera(CameraUpdateFactory.newLatLng(equipeBrazil));
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                                Toast.makeText(getApplicationContext(), "AAAAA", Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }
-                    catch (InterruptedException e){
 
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
                     }
                 }
             }
         };
-*/
 
-
-        //pesquisar sobre handler
-
+        t.start();
 
 
 
@@ -203,4 +162,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
 }
+
+

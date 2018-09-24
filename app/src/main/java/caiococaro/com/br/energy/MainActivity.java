@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -64,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         //Inicialização do FireStore
         mFirestore = FirebaseFirestore.getInstance();
 
-//alterei
         //Botão do Login
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,11 +73,6 @@ public class MainActivity extends AppCompatActivity {
                 //EditTexts passando para Strings para serem usadas no Map
                 final String cpfCnpj = etCpfCnpj.getText().toString();
                 final String numCliente = etNumCliente.getText().toString();
-
-                //Não lembro o pq disso
-//                Map<String, Object> userMap = new HashMap<>();
-//                userMap.put(KEY_CPF_CNPJ, cpfCnpj);
-//                userMap.put(KEY_NUM_CLIENTE, numCliente);
 
                 //Recuperando os dados
                 mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

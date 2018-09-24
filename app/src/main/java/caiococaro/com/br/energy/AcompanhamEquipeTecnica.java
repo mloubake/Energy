@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,6 +31,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
@@ -46,6 +50,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     //Keys da Bundle
     private static final String KEY_NUM_CLIENTE = "NumeroCliente";
     private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
+    private static final String KEY_LOCALIZACAO = "Localizacao";
 
     //Names para cada Bundle Específica
     private static final String NAME_ACOMPANHAMENTO = "Acompanhamento";
@@ -82,7 +87,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acompanham_equipe_tecnica);
 
-
         //Recebendo bundle do MenuActivity com vários valores
 
         bundle = getIntent().getExtras();
@@ -91,17 +95,15 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
             tokenAcesso = bundle.getString(NAME_ACOMPANHAMENTO);
         }
 
-
       // LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("Acompanhamento"));
-        Log.d(TAG, "PRIMEIRO_TOKEN_ACESSO: "+tokenAcesso);
 
 
         Button btnPesquisar = (Button) findViewById(R.id.btnPesquisarEquipe);
         etNumRequerimento = (EditText) findViewById(R.id.etNumRequerimento);
-
-        progressContainer = (RelativeLayout) findViewById(R.id.progress_container);
+        progressContainer = (RelativeLayout) findViewById(R.id.progress_container);;
 
         mFirestore = FirebaseFirestore.getInstance();
+
 
         btnPesquisar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,110 +112,9 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                 progressContainer.setVisibility(View.VISIBLE);
                 final String numRequerimento = etNumRequerimento.getText().toString();
 
-
-                //Recuperar da Coleção Usuário
-                mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful() ) {
-                            progressContainer.setVisibility(View.GONE);
-                            for (DocumentSnapshot document : task.getResult()) {
-                                if( (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(etNumRequerimento.getText())))) {
-
-                                    var1 = true;
-                                    ctrl = true;
-                                    break;
-                                }
-                                    /*
-                                    Log.d(TAG, "Valor do editText: " + String.valueOf(etCpfCnpj.getText()));
-                                    Log.d(TAG, "1 Valor do recuperando: " + String.valueOf(etRecuperando.getText()));
-
-                                    Log.d(TAG, "getId: " + document.getId());
-                                    Log.d(TAG, "getData: " + document.getData());
-                                    Log.d(TAG, "getData.get(NumCliente): " + document.getData().get("NumCliente"));
-                                    Log.d(TAG, "getData.get(CpfCnpj): " + document.getData().get("CpfCnpj"));
-                                    Log.d(TAG, "getData.get(idUser): " + document.getData().get("idUser"));
-                                    Log.d(TAG, " ");
-                                    */
-
-                            }
-                            //If para o Toast funcionar
-                            if(ctrl==true){
-                               //Sem Toast de confirmamento
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(),"AAA - Número de Requerimento incorreto." , Toast.LENGTH_LONG).show();
-                            }
-
-                        }
-                        else{
-                            Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
-                        }
-                    }
-                });
-
-
-                //Recuperar da Coleção EquipeManutenção
-                mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful() ) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                if(String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(etNumRequerimento.getText()))) {
-                                    var2 = true;
-                                    ctrl = true;
-                                    break;
-                                }
-                                else{
-                                    ctrl = false;
-                                    var2 = false;
-                                }
-                            }
-                            //If para o Toast funcionar
-                            if(ctrl==true){
-                                //Sem Toast de confirmamento
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(),"Não foi possível achar a equipe de manutenção. Por favor, verifique o Número de Requerimento." , Toast.LENGTH_LONG).show();
-                            }
-                        }
-                        else{
-                            Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
-                        }
-                    }
-                });
-
-
-                //Recuperar da Coleção Usuário verificando o Token de Acesso
-                mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful() ) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                if(String.valueOf(document.getData().get(FIELD_TOKEN_ACESSO)).equals(tokenAcesso)) {
-                                    tokenAcessoCheck = true;
-                                    Log.d(TAG, "AAA - TOKEN_ACESSO: "+tokenAcesso);
-                                    ctrl = true;
-                                    break;
-                                }
-                                else{
-                                    ctrl = false;
-                                }
-                            }
-                            //If para o Toast funcionar
-                            if(ctrl==true){
-                                //Sem Toast de confirmamento
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(), "BBB - Número de Requerimento inválido", Toast.LENGTH_LONG).show();                            }
-                        }
-                        else{
-                            Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
-                        }
-                    }
-                });
-
-
+                pesquisaUsuario();
+                pesquisaEquipe();
+                pesquisaToken();
 
 //                if(((var1)&&(var2)) && tokenAcessoCheck){
 //
@@ -229,21 +130,24 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 //                }
 
                 //Chamando o Método: Começar a Activity do Google Maps
-                try {
-
+                /*try {
                     //sleep 5 seconds
-                    Thread.sleep(2000);
-                    startMapsActivity();
+                    Thread.sleep(1000);
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
+                }*/
+
+                startMapsActivity();
 
 
 
             }
         });
     }
+
+
+
 
     //Método: Checkar CPF e Número do cliente
     public boolean checkHasCpfAndClientNumber() {
@@ -260,9 +164,123 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
             String texto = etNumRequerimento.getText().toString();
             Intent intentMaps = new Intent(AcompanhamEquipeTecnica.this, MapsActivity.class);
             Bundle b = new Bundle();
-            b.putString("localizacao", texto);
+            b.putString(KEY_LOCALIZACAO, texto);
             intentMaps.putExtras(b);
             startActivity(intentMaps);
         }
     }
+
+    public void pesquisaUsuario(){
+
+        //Recuperar da Coleção Usuário
+        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful() ) {
+                    progressContainer.setVisibility(View.GONE);
+                    Log.d(TAG, "ORDEM 1");
+                    for (DocumentSnapshot document : task.getResult()) {
+                        if( (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(etNumRequerimento.getText())))) {
+                            var1 = true;
+                            ctrl = true;
+                            break;
+                        }
+                                    /*
+                                    Log.d(TAG, "Valor do editText: " + String.valueOf(etCpfCnpj.getText()));
+                                    Log.d(TAG, "1 Valor do recuperando: " + String.valueOf(etRecuperando.getText()));
+
+                                    Log.d(TAG, "getId: " + document.getId());
+                                    Log.d(TAG, "getData: " + document.getData());
+                                    Log.d(TAG, "getData.get(NumCliente): " + document.getData().get("NumCliente"));
+                                    Log.d(TAG, "getData.get(CpfCnpj): " + document.getData().get("CpfCnpj"));
+                                    Log.d(TAG, "getData.get(idUser): " + document.getData().get("idUser"));
+                                    Log.d(TAG, " ");
+                                    */
+                    }
+                    //If para o Toast funcionar
+                    if(ctrl==true){
+                        //Sem Toast de confirmamento
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"AAA - Número de Requerimento incorreto." , Toast.LENGTH_LONG).show();
+                    }
+                }
+                else{
+                    Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
+                }
+            }
+        });
+
+    }
+
+    public void pesquisaEquipe(){
+
+        //Recuperar da Coleção EquipeManutenção
+        mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful() ) {
+                    Log.d(TAG, "ORDEM 2");
+                    for (DocumentSnapshot document : task.getResult()) {
+                        if(String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(etNumRequerimento.getText()))) {
+                            var2 = true;
+                            ctrl = true;
+                            break;
+                        }
+                        else{
+                            ctrl = false;
+                            var2 = false;
+                        }
+                    }
+                    //If para o Toast funcionar
+                    if(ctrl==true){
+                        //Sem Toast de confirmamento
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Não foi possível achar a equipe de manutenção. Por favor, verifique o Número de Requerimento." , Toast.LENGTH_LONG).show();
+                    }
+                }
+                else{
+                    Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
+                }
+            }
+        });
+
+    }
+
+    public void pesquisaToken(){
+
+        //Recuperar da Coleção Usuário verificando o Token de Acesso
+        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful() ) {
+                    Log.d(TAG, "ORDEM 3");
+                    for (DocumentSnapshot document : task.getResult()) {
+                        if(String.valueOf(document.getData().get(FIELD_TOKEN_ACESSO)).equals(tokenAcesso)) {
+                            tokenAcessoCheck = true;
+                            Log.d(TAG, "AAA - TOKEN_ACESSO: "+tokenAcesso);
+                            ctrl = true;
+                            break;
+                        }
+                        else{
+                            ctrl = false;
+                        }
+                    }
+                    //If para o Toast funcionar
+                    if(ctrl==true){
+                        //Sem Toast de confirmamento
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "BBB - Número de Requerimento inválido", Toast.LENGTH_LONG).show();                            }
+                }
+                else{
+                    Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
+                }
+            }
+        });
+
+    }
+
 }
+
