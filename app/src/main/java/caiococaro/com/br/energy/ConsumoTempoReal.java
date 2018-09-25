@@ -113,6 +113,9 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         Button btnAtualizar = (Button) findViewById(R.id.btnAtualizar);
 
+        leituraAtual = (leituraAtual) getIntent().getSerializableExtra(
+                "leituraAtualizada");
+
         mFirestore = FirebaseFirestore.getInstance();
 
         mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

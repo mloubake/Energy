@@ -1,5 +1,6 @@
 package caiococaro.com.br.energy;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -37,7 +38,12 @@ public class AtualizaConsumo extends android.support.v4.app.DialogFragment{
                 public void onClick(DialogInterface dialog, int id) {
                     //Atualizar
                     Dialog leitura = AtualizaConsumo.this.getDialog();
-                    Log.d(TAG, "Valor do editText: " + leitura);
+                    String leituraAtual = String.valueOf(leitura);
+
+                    Intent it = new Intent(AtualizaConsumo.this, ConsumoTempoReal.class);
+                    it.putExtra("leituraAtualizada", leituraAtual);
+                    Activity.this.startActivity(it);
+                    Activity.this.finish();
                     /*Intent intent = new Intent(AtualizaConsumo.this, ConsumoTempoReal.class);
                     /Bundle bundle = new Bundle();
                     bundle.putString(LEITURA, String.valueOf(leitura));
