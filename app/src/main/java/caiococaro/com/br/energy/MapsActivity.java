@@ -32,6 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -108,14 +109,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         equipeMap = googleMap;
 
+        //Thread para atualizar o Maps
         Thread t = new Thread(){
             @Override
             public void run(){
                 while(!isInterrupted()){
-
                     try{
+                        //Atualiza o mapa de X em X milissegundos
                         Thread.sleep(1000);
-
+                        //Thread para aparecer na tela
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -127,21 +129,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             for (DocumentSnapshot document : task.getResult()) {
                                                 if (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(strLocalizacao))) {
 
+                                                    //Joga as coordenadas dentro das variáveis
                                                     geoLat = Double.parseDouble(String.valueOf(document.getGeoPoint(FIELD_LOCALIZACAO).getLatitude()));
                                                     geoLongi = Double.parseDouble(String.valueOf(document.getGeoPoint(FIELD_LOCALIZACAO).getLongitude()));
 
-
+                                                    equipeMap.clear();
                                                     // Add a marker in Sydney and move the camera
                                                     LatLng equipeBrazil = new LatLng(geoLat, geoLongi);
                                                     equipeMap.addMarker(new MarkerOptions().position(equipeBrazil).title(TITLE_EQUIPE));
                                                     equipeMap.moveCamera(CameraUpdateFactory.newLatLng(equipeBrazil));
 
+
+
+                                                    //Tentar ver quando a tela isSuccess quando dar reload tentar apagar
+//                                                    if(){
+//
+//                                                    }
+                                                    //equipeMap.clear();
                                                 }
                                             }
                                         }
                                     }
                                 });
-                                Toast.makeText(getApplicationContext(), "AAAAA", Toast.LENGTH_SHORT).show();
+
                             }
                         });
 
