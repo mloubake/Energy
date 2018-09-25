@@ -15,10 +15,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.DecimalFormat;
@@ -113,8 +117,9 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         Button btnAtualizar = (Button) findViewById(R.id.btnAtualizar);
 
-        leituraAtual = (leituraAtual) getIntent().getSerializableExtra(
-                "leituraAtualizada");
+        leituraAtual = (String) getIntent().getSerializableExtra("leituraAtualizada");
+
+        Toast.makeText(getApplicationContext(),"SERA? "+leituraAtual,Toast.LENGTH_LONG).show();
 
         mFirestore = FirebaseFirestore.getInstance();
 

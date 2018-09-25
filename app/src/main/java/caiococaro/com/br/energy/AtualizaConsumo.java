@@ -25,6 +25,11 @@ public class AtualizaConsumo extends android.support.v4.app.DialogFragment{
 
     private static final String LEITURA = "Leitura";
 
+    //TAG do Log do Console
+    private static final String TAG = "";
+
+
+    //final EditText leituraAtualMedidor = (EditText) view.findViewById(R.id.leituraAtualMedidor);
 
     @NonNull
     @Override
@@ -37,19 +42,17 @@ public class AtualizaConsumo extends android.support.v4.app.DialogFragment{
                 .setPositiveButton("Atualizar",new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     //Atualizar
-                    Dialog leitura = AtualizaConsumo.this.getDialog();
-                    String leituraAtual = String.valueOf(leitura);
+                        String leituraAtual = leituraAtualMedidor.getText().toString();
 
-                    Intent it = new Intent(AtualizaConsumo.this, ConsumoTempoReal.class);
-                    it.putExtra("leituraAtualizada", leituraAtual);
-                    Activity.this.startActivity(it);
-                    Activity.this.finish();
+                        Intent it = new Intent(AtualizaConsumo.this.getContext(), ConsumoTempoReal.class);
+                        it.putExtra("leituraAtualizada", String.valueOf(leituraAtual));
+                        startActivity(it);
                     /*Intent intent = new Intent(AtualizaConsumo.this, ConsumoTempoReal.class);
                     /Bundle bundle = new Bundle();
                     bundle.putString(LEITURA, String.valueOf(leitura));
                     intent.putExtras(bundle);
                     startActivity(intent);*/
-                }
+                    }
             });
         builder
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
