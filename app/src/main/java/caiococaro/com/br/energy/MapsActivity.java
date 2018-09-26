@@ -1,44 +1,33 @@
 package caiococaro.com.br.energy;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
-import java.util.Timer;
-import java.util.TimerTask;
-
-
-
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
 
     //TAG do Log do Console
     private static final String TAG = "";
@@ -57,19 +46,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String TITLE_EQUIPE = "Equipe";
 
 
-    private GoogleMap equipeMap;
-
     private FirebaseFirestore mFirestore;
     private Task<DocumentSnapshot> documentSnapshotTask;
 
+
+    private GoogleMap equipeMap, usuarioMap;
     double geoLat, geoLongi;
     String strLocalizacao;
 
-    int count = 1;
 
-    // Create the Handler object (on the main thread by default)
+   // Create the Handler object (on the main thread by default)
     Handler handler = new Handler();
     Runnable mRunnable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +79,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         mFirestore = FirebaseFirestore.getInstance();
-
-
     }
 
 
@@ -105,9 +92,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * installed Google Play services and returned to the app.
      */
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         equipeMap = googleMap;
+        usuarioMap = googleMap;
+
+
+
 
         //Thread para atualizar o Maps
         Thread t = new Thread(){
@@ -139,13 +131,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                                     equipeMap.addMarker(new MarkerOptions().position(equipeBrazil).title(TITLE_EQUIPE));
                                                     equipeMap.moveCamera(CameraUpdateFactory.newLatLng(equipeBrazil));
 
+                                                    PolylineOptions linha = new PolylineOptions();
+
+                                                    linha.add(equipeBrazil);
+
+                                                    equipeMap.addPolyline(linha);
 
 
-                                                    //Tentar ver quando a tela isSuccess quando dar reload tentar apagar
-//                                                    if(){
-//
-//                                                    }
-                                                    //equipeMap.clear();
                                                 }
                                             }
                                         }
@@ -163,16 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
 
         t.start();
-
-
-
-
-
-
-
-
     }
-
 }
 
 
