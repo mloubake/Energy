@@ -1,8 +1,12 @@
 package caiococaro.com.br.energy;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +30,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.DecimalFormat;
-
-import static caiococaro.com.br.energy.AtualizaConsumo.*;
 
 public class ConsumoTempoReal extends AppCompatActivity {
 
@@ -115,13 +117,41 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         final DecimalFormat df = new DecimalFormat("#.##");
 
-        Button btnAtualizar = (Button) findViewById(R.id.btnAtualizar);
-
-        leituraAtual = (String) getIntent().getSerializableExtra("leituraAtualizada");
-
-        Toast.makeText(getApplicationContext(),"SERA? "+leituraAtual,Toast.LENGTH_LONG).show();
-
         mFirestore = FirebaseFirestore.getInstance();
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        // ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_atualizar, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText editText = (EditText) dialogView.findViewById(R.id.leituraAtualMedidor);
+
+        dialogBuilder
+                .setPositiveButton("Atualizar", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //atualizar
+                        leituraAtual = editText.getText().toString();
+                        tvLeituraAtual.setText(leituraAtual);
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //cancelar
+
+                    }
+                });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        //leituraAtual = (String) getIntent().getSerializableExtra("leituraAtualizada");
+        //Toast.makeText(getApplicationContext(),"SERA? "+leituraAtual,Toast.LENGTH_LONG).show();
+
 
         mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -140,10 +170,12 @@ public class ConsumoTempoReal extends AppCompatActivity {
                                 Log.d(TAG, "ACTIVITYCONSUMO: " + leituraAtual);
                             }
 
-                            //ATUALIZAR A LEITURA ATUAL AQUI-------------------------------------------------------------------
-
                             leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
                             Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
+
+
+                            //ATUALIZAR A LEITURA ATUAL AQUI
+                            //mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual",leituraAtual);
 
                             leituraAtual = String.valueOf(document.getData().get("leituraAtual"));
                             Log.d(TAG, "LEITURAATUAL: " + leituraAtual);
@@ -282,43 +314,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     }
 
-    public void showDialog(View view){
-
-        AtualizaConsumo AtualizaConsumo = new AtualizaConsumo();
-        AtualizaConsumo.show(getSupportFragmentManager(),"my_dialog");
-    }
-
 }
-
-
-    /*
-    db.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            for (DocumentSnapshot document : task.getResult()) {
-
-                                                if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
-
-                                                    Log.d(TAG, "Numero do Cliente: " + numCliente);
-                                                }
-
-                                        /*
-                                        db = FirebaseFirestore.getInstance();
-
-                                        DocumentReference update = db.collection("Usuario").document("padrão");
-
-                                        String leitura = leituraAtualMedidor.getText().toString();
-
-                                        update
-                                                .update("leituraAtual", leitura);
-
-}
-                                }
-                                        }
-                                        });
-     */
-
 
 
 

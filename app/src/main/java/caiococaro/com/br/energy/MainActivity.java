@@ -1,5 +1,7 @@
 package caiococaro.com.br.energy;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     boolean ctrl = false;
 
     public String tokenAcesso;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

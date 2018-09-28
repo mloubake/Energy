@@ -157,16 +157,6 @@
             android:gravity="center_horizontal"
             android:paddingTop="5dp">
 
-            <Button
-                android:id="@+id/btnAtualizar"
-                android:layout_width="300dp"
-                android:layout_height="40dp"
-                android:background="@drawable/button_blue_edit"
-                android:gravity="center"
-                android:onClick="showDialog"
-                android:text="Atualizar leitura"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF" />
         </LinearLayout>
 
 
