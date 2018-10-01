@@ -1,19 +1,26 @@
 package caiococaro.com.br.energy;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,7 +34,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     //TAG do Log do Console
     private static final String TAG = "";
@@ -44,6 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Título dos Marcadores do Maps
     private static final String TITLE_EQUIPE = "Equipe";
+    private static final String TITLE_USER = "Usuário";
 
 
     private FirebaseFirestore mFirestore;
@@ -52,20 +60,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap equipeMap, usuarioMap;
     double geoLat, geoLongi;
+    double userGeoLat, userGeoLongi;
     String strLocalizacao;
 
 
-   // Create the Handler object (on the main thread by default)
+    // Create the Handler object (on the main thread by default)
     Handler handler = new Handler();
     Runnable mRunnable;
 
+    LocationManager LM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        //tentar jogar a busca no map ready
 
         Bundle bundle = getIntent().getExtras();
 
@@ -79,6 +87,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         mFirestore = FirebaseFirestore.getInstance();
+
+        LM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        String bestProvider = LM.getBestProvider(new Criteria(), true);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location l = LM.getLastKnownLocation(bestProvider);
+        if(l!=null){
+            userGeoLat = l.getLatitude();
+            userGeoLongi = l.getLongitude();
+        }
     }
 
 
@@ -98,8 +124,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         equipeMap = googleMap;
         usuarioMap = googleMap;
 
+        final LatLng userBrazil = new LatLng(userGeoLat, userGeoLongi);
+        usuarioMap.addMarker(new MarkerOptions().position(userBrazil).title(TITLE_USER));
 
 
+
+/*
 
         //Thread para atualizar o Maps
         Thread t = new Thread(){
@@ -128,7 +158,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                                     equipeMap.clear();
                                                     // Add a marker in Sydney and move the camera
                                                     LatLng equipeBrazil = new LatLng(geoLat, geoLongi);
-                                                    equipeMap.addMarker(new MarkerOptions().position(equipeBrazil).title(TITLE_EQUIPE));
+                                                    equipeMap.addMarker(new MarkerOptions().position(equipeBrazil).title(TITLE_EQUIPE)  );
                                                     equipeMap.moveCamera(CameraUpdateFactory.newLatLng(equipeBrazil));
 
                                                     PolylineOptions linha = new PolylineOptions();
@@ -154,8 +184,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
 
-        t.start();
+        t.start();*/
     }
 }
-
-

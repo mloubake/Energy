@@ -12,7 +12,10 @@
     <string name="cadastro_baixa_renda">Cadastro de baixa renda</string>
     <string name="acompanham_equipe_tecnica">Acompanhamento de equipe técnica</string>
     <string name="reclam_postal">Reclamação postal</string>
-
+    <string name="title_activity_outro_maps">Map</string>
+    <string name="default_info_title">intoTitulo</string>
+    <string name="default_info_snippet">indoSnippet</string>
+    <string name="pick_place">pickPlace</string>
 
 
 </resources>
