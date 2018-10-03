@@ -69,7 +69,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float BantarVermelha1;
     float BantarVermelha2;
 
-
     float bVerde;
     float bAzul;
     float bAmarela;
@@ -80,7 +79,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float consumo;
 
     String leituraAnterior;
-    String leituraAtual;
+    int leituraAtual;
     int leituraMes;
 
     String tokenAcesso;
@@ -114,6 +113,12 @@ public class ConsumoTempoReal extends AppCompatActivity {
         final TextView tvConsumo = (TextView) findViewById(R.id.tvConsumo);
         final TextView tvTarifa = (TextView) findViewById(R.id.tvTarifa);
         final TextView tvValor_consumo = (TextView) findViewById(R.id.tvValor_consumo);
+        final WebView wv = (WebView) findViewById(R.id.web_view);
+
+        WebSettings ws = wv.getSettings();
+        ws.setJavaScriptEnabled(true);
+        ws.setSupportZoom(false);
+        //wv.loadUrl("http://google.com.br");
 
         final DecimalFormat df = new DecimalFormat("#.##");
 
@@ -133,8 +138,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //atualizar
-                        leituraAtual = editText.getText().toString();
-                        tvLeituraAtual.setText(leituraAtual);
+                        leituraAtual = (Integer.valueOf(editText.getText().toString()));
+                        tvLeituraAtual.setText(String.valueOf(leituraAtual));
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -173,11 +178,11 @@ public class ConsumoTempoReal extends AppCompatActivity {
                             leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
                             Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
 
-
                             //ATUALIZAR A LEITURA ATUAL AQUI
-                            //mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual",leituraAtual);
+                            mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual",leituraAtual);
 
-                            leituraAtual = String.valueOf(document.getData().get("leituraAtual"));
+                            String LA = String.valueOf(document.getData().get("leituraAtual"));
+                            leituraAtual = Integer.valueOf(LA);
                             Log.d(TAG, "LEITURAATUAL: " + leituraAtual);
                             leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
 
@@ -187,7 +192,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
                             CIP = Float.valueOf(cip);
 
                             tvLeituraAnterior.setText(leituraAnterior);
-                            tvLeituraAtual.setText(leituraAtual);
+                            tvLeituraAtual.setText(String.valueOf(leituraAtual));
                             tvCIP.setText(String.valueOf(df.format(CIP)));
                             tvConsumo.setText(String.valueOf(leituraMes));
 
