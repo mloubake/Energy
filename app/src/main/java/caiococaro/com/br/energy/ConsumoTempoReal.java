@@ -79,17 +79,36 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float consumo;
 
     String leituraAnterior;
-    int leituraAtual;
+    int leituraAtual=4000;
     int leituraMes;
 
     String tokenAcesso;
 
     Bundle bundle = new Bundle();
 
+    TextView tvLeituraAnterior = null;
+    TextView tvLeituraAtual = null;
+    TextView tvCIP = null;
+    TextView tvConsumo = null;
+    TextView tvTarifa = null;
+    TextView tvValor_consumo = null;
+    WebView wv = null;
+
+    final DecimalFormat df = new DecimalFormat("#.##");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consumo_tempo_real);
+
+        tvLeituraAnterior = (TextView) findViewById(R.id.tvLeituraAnterior);
+        tvLeituraAtual = (TextView) findViewById(R.id.tvLeituraAtual);
+        tvCIP = (TextView) findViewById(R.id.tvCIP);
+        tvConsumo = (TextView) findViewById(R.id.tvConsumo);
+        tvConsumo = (TextView) findViewById(R.id.tvConsumo);
+        tvTarifa = (TextView) findViewById(R.id.tvTarifa);
+        tvValor_consumo = (TextView) findViewById(R.id.tvValor_consumo);
+        wv = (WebView) findViewById(R.id.web_view);
 
         //Recebendo bundle do MenuActivity com vários valores
         bundle = getIntent().getExtras();
@@ -105,24 +124,12 @@ public class ConsumoTempoReal extends AppCompatActivity {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        //mWebView.loadUrl("http://google.com");
-
-        final TextView tvLeituraAnterior = (TextView) findViewById(R.id.tvLeituraAnterior);
-        final TextView tvLeituraAtual = (TextView) findViewById(R.id.tvLeituraAtual);
-        final TextView tvCIP = (TextView) findViewById(R.id.tvCIP);
-        final TextView tvConsumo = (TextView) findViewById(R.id.tvConsumo);
-        final TextView tvTarifa = (TextView) findViewById(R.id.tvTarifa);
-        final TextView tvValor_consumo = (TextView) findViewById(R.id.tvValor_consumo);
-        final WebView wv = (WebView) findViewById(R.id.web_view);
-
         WebSettings ws = wv.getSettings();
         ws.setJavaScriptEnabled(true);
         ws.setSupportZoom(false);
         //wv.loadUrl("http://google.com.br");
-
-        final DecimalFormat df = new DecimalFormat("#.##");
-
         mFirestore = FirebaseFirestore.getInstance();
+
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         // ...Irrelevant code for customizing the buttons and title
@@ -139,7 +146,11 @@ public class ConsumoTempoReal extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         //atualizar
                         leituraAtual = (Integer.valueOf(editText.getText().toString()));
-                        tvLeituraAtual.setText(String.valueOf(leituraAtual));
+
+                        pesquisa();
+                        
+                        atualizar();
+
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -157,56 +168,57 @@ public class ConsumoTempoReal extends AppCompatActivity {
         //leituraAtual = (String) getIntent().getSerializableExtra("leituraAtualizada");
         //Toast.makeText(getApplicationContext(),"SERA? "+leituraAtual,Toast.LENGTH_LONG).show();
 
+      /*  int pesquisa(int numCliente){
+            mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
 
-        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
+                            if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
 
-                        if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
+                                //Recebendo bundle do MyDialog com Consumo Atual
+                                bundle = getIntent().getExtras();
+                                Log.d(TAG, "XXXXXXXXXXXXXX: " + bundle);
 
-                            //Recebendo bundle do MyDialog com Consumo Atual
-                            bundle = getIntent().getExtras();
-                            Log.d(TAG, "XXXXXXXXXXXXXX: " + bundle);
+                                if (bundle != null) {
+                                    numCliente = bundle.getString(NAME_CONSUMO_ATUAL);
+                                    Log.d(TAG, "ACTIVITYCONSUMO: " + leituraAtual);
+                                }
 
-                            if (bundle != null) {
-                                numCliente = bundle.getString(NAME_CONSUMO_ATUAL);
-                                Log.d(TAG, "ACTIVITYCONSUMO: " + leituraAtual);
+                                leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
+                                Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
+
+                                //ATUALIZAR A LEITURA ATUAL AQUI
+                                mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual", leituraAtual);
+
+                                String LA = String.valueOf(document.getData().get("leituraAtual"));
+                                leituraAtual = Integer.valueOf(LA);
+                                Log.d(TAG, "LEITURAATUAL: " + leituraAtual);
+                                leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
+
+                                consumo = Float.valueOf(leituraMes);
+
+                                String cip = String.valueOf(document.getData().get("CIP"));
+                                CIP = Float.valueOf(cip);
+
+                                tvLeituraAnterior.setText(leituraAnterior);
+                                tvLeituraAtual.setText(String.valueOf(leituraAtual));
+                                tvCIP.setText(String.valueOf(df.format(CIP)));
+                                tvConsumo.setText(String.valueOf(leituraMes));
+
+
+                                tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
+                                Log.d(TAG, "TOKEN_ACESSO: " + tokenAcesso);
+
+
                             }
-
-                            leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
-                            Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
-
-                            //ATUALIZAR A LEITURA ATUAL AQUI
-                            mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual",leituraAtual);
-
-                            String LA = String.valueOf(document.getData().get("leituraAtual"));
-                            leituraAtual = Integer.valueOf(LA);
-                            Log.d(TAG, "LEITURAATUAL: " + leituraAtual);
-                            leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
-
-                            consumo = Float.valueOf(leituraMes);
-
-                            String cip = String.valueOf(document.getData().get("CIP"));
-                            CIP = Float.valueOf(cip);
-
-                            tvLeituraAnterior.setText(leituraAnterior);
-                            tvLeituraAtual.setText(String.valueOf(leituraAtual));
-                            tvCIP.setText(String.valueOf(df.format(CIP)));
-                            tvConsumo.setText(String.valueOf(leituraMes));
-
-
-                            tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
-                            Log.d(TAG, "TOKEN_ACESSO: " + tokenAcesso);
-
-
                         }
                     }
                 }
-            }
 
-        });
+            });
+        }*/
 
         DocumentReference docRefTributario = mFirestore.collection("TarifasAplicacao").document("Tributario");
         docRefTributario.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -318,6 +330,64 @@ public class ConsumoTempoReal extends AppCompatActivity {
         tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
 
     }
+
+    void pesquisa(){
+        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+
+/*
+                        if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
+*/
+                            if (numCliente.equals(String.valueOf(document.getData().get("numCliente")))) {
+                            //Recebendo bundle do MyDialog com Consumo Atual
+                            bundle = getIntent().getExtras();
+                            Log.d(TAG, "XXXXXXXXXXXXXX: " + bundle);
+
+                            if (bundle != null) {
+                                numCliente = bundle.getString(NAME_CONSUMO_ATUAL);
+                                Log.d(TAG, "ACTIVITYCONSUMO: " + leituraAtual);
+                            }
+
+                            leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
+                            Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
+
+                            //ATUALIZAR A LEITURA ATUAL AQUI
+                            mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual", leituraAtual);
+
+                            String LA = String.valueOf(document.getData().get("leituraAtual"));
+                            leituraAtual = Integer.valueOf(LA);
+                            Log.d(TAG, "LEITURAATUAL: " + leituraAtual);
+                            leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
+
+                            consumo = Float.valueOf(leituraMes);
+
+                            String cip = String.valueOf(document.getData().get("CIP"));
+                            CIP = Float.valueOf(cip);
+
+                            tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
+                            Log.d(TAG, "TOKEN_ACESSO: " + tokenAcesso);
+
+
+                        }
+                    }
+                }
+            }
+
+        });
+    }
+
+    void atualizar(){
+        tvLeituraAtual.setText(String.valueOf(leituraAtual));
+        tvLeituraAnterior.setText(leituraAnterior);
+        tvLeituraAtual.setText(String.valueOf(leituraAtual));
+        tvCIP.setText(String.valueOf(df.format(CIP)));
+        tvConsumo.setText(String.valueOf(leituraMes));
+
+    }
+
 
 }
 
