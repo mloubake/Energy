@@ -50,6 +50,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     private static final String NAME_CONSUMO = "Consumo";
     private static final String NAME_CONSUMO_ATUAL = "ConsumoAtual";
+    private ProgressDialog progress;
 
 
     String numCliente;
@@ -147,10 +148,11 @@ public class ConsumoTempoReal extends AppCompatActivity {
                         //atualizar
                         leituraAtual = (Integer.valueOf(editText.getText().toString()));
 
-                        pesquisa();
-                        
-                        atualizar();
+                        progress = new ProgressDialog(ConsumoTempoReal.this);
+                        progress.setMessage("Calculando...");
+                        progress.show();
 
+                        update();
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -159,66 +161,18 @@ public class ConsumoTempoReal extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         //cancelar
 
+                        progress = new ProgressDialog(ConsumoTempoReal.this);
+                        progress.setMessage("Calculando...");
+                        progress.show();
+
+                        pesquisa();
+
                     }
                 });
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
 
-        //leituraAtual = (String) getIntent().getSerializableExtra("leituraAtualizada");
-        //Toast.makeText(getApplicationContext(),"SERA? "+leituraAtual,Toast.LENGTH_LONG).show();
-
-      /*  int pesquisa(int numCliente){
-            mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (DocumentSnapshot document : task.getResult()) {
-
-                            if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
-
-                                //Recebendo bundle do MyDialog com Consumo Atual
-                                bundle = getIntent().getExtras();
-                                Log.d(TAG, "XXXXXXXXXXXXXX: " + bundle);
-
-                                if (bundle != null) {
-                                    numCliente = bundle.getString(NAME_CONSUMO_ATUAL);
-                                    Log.d(TAG, "ACTIVITYCONSUMO: " + leituraAtual);
-                                }
-
-                                leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
-                                Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
-
-                                //ATUALIZAR A LEITURA ATUAL AQUI
-                                mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual", leituraAtual);
-
-                                String LA = String.valueOf(document.getData().get("leituraAtual"));
-                                leituraAtual = Integer.valueOf(LA);
-                                Log.d(TAG, "LEITURAATUAL: " + leituraAtual);
-                                leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
-
-                                consumo = Float.valueOf(leituraMes);
-
-                                String cip = String.valueOf(document.getData().get("CIP"));
-                                CIP = Float.valueOf(cip);
-
-                                tvLeituraAnterior.setText(leituraAnterior);
-                                tvLeituraAtual.setText(String.valueOf(leituraAtual));
-                                tvCIP.setText(String.valueOf(df.format(CIP)));
-                                tvConsumo.setText(String.valueOf(leituraMes));
-
-
-                                tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
-                                Log.d(TAG, "TOKEN_ACESSO: " + tokenAcesso);
-
-
-                            }
-                        }
-                    }
-                }
-
-            });
-        }*/
 
         DocumentReference docRefTributario = mFirestore.collection("TarifasAplicacao").document("Tributario");
         docRefTributario.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -304,6 +258,71 @@ public class ConsumoTempoReal extends AppCompatActivity {
             }
         });
 
+    }
+
+    void update(){
+        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+
+                        if (numCliente.equals(String.valueOf(document.getData().get("numCliente")))) {
+
+                            //ATUALIZAR A LEITURA ATUAL AQUI
+                            mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual", leituraAtual);
+                            pesquisa();
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
+    void pesquisa(){
+        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+
+                        if (numCliente.equals(String.valueOf(document.getData().get("numCliente")))) {
+                            //Recebendo bundle do MyDialog com Consumo Atual
+                            bundle = getIntent().getExtras();
+                            Log.d(TAG, "XXXXXXXXXXXXXX: " + bundle);
+
+                            if (bundle != null) {
+                                numCliente = bundle.getString(NAME_CONSUMO_ATUAL);
+                                Log.d(TAG, "ACTIVITYCONSUMO: " + leituraAtual);
+                            }
+
+                            leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
+                            Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
+
+                            String LA = String.valueOf(document.getData().get("leituraAtual"));
+                            leituraAtual = Integer.valueOf(LA);
+                            Log.d(TAG, "LEITURAATUAL: " + leituraAtual);
+                            leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
+
+                            consumo = Float.valueOf(leituraMes);
+
+                            String cip = String.valueOf(document.getData().get("CIP"));
+                            CIP = Float.valueOf(cip);
+
+                            tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
+                            Log.d(TAG, "TOKEN_ACESSO: " + tokenAcesso);
+
+                            calcula();
+                        }
+                    }
+                }
+            }
+
+        });
+    }
+
+    void calcula(){
         bVerde = (TUSD + TE) / 1000;
         bAzul = (TUSD / 1000);
         bAmarela = (BantarAmarela + bVerde);
@@ -329,54 +348,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
 
-    }
-
-    void pesquisa(){
-        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-
-/*
-                        if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
-*/
-                            if (numCliente.equals(String.valueOf(document.getData().get("numCliente")))) {
-                            //Recebendo bundle do MyDialog com Consumo Atual
-                            bundle = getIntent().getExtras();
-                            Log.d(TAG, "XXXXXXXXXXXXXX: " + bundle);
-
-                            if (bundle != null) {
-                                numCliente = bundle.getString(NAME_CONSUMO_ATUAL);
-                                Log.d(TAG, "ACTIVITYCONSUMO: " + leituraAtual);
-                            }
-
-                            leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
-                            Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
-
-                            //ATUALIZAR A LEITURA ATUAL AQUI
-                            mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual", leituraAtual);
-
-                            String LA = String.valueOf(document.getData().get("leituraAtual"));
-                            leituraAtual = Integer.valueOf(LA);
-                            Log.d(TAG, "LEITURAATUAL: " + leituraAtual);
-                            leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
-
-                            consumo = Float.valueOf(leituraMes);
-
-                            String cip = String.valueOf(document.getData().get("CIP"));
-                            CIP = Float.valueOf(cip);
-
-                            tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
-                            Log.d(TAG, "TOKEN_ACESSO: " + tokenAcesso);
-
-
-                        }
-                    }
-                }
-            }
-
-        });
+        atualizar();
     }
 
     void atualizar(){
@@ -386,7 +358,9 @@ public class ConsumoTempoReal extends AppCompatActivity {
         tvCIP.setText(String.valueOf(df.format(CIP)));
         tvConsumo.setText(String.valueOf(leituraMes));
 
+        progress.dismiss();
     }
+
 
 
 }
