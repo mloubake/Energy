@@ -8,11 +8,20 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -30,6 +39,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConsumoTempoReal extends AppCompatActivity {
 
@@ -78,6 +89,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float tarifa;
     float valor_consumo;
     float consumo;
+    float estimativaConsumo;
 
     String leituraAnterior;
     int leituraAtual=4000;
@@ -93,7 +105,9 @@ public class ConsumoTempoReal extends AppCompatActivity {
     TextView tvConsumo = null;
     TextView tvTarifa = null;
     TextView tvValor_consumo = null;
+    TextView tvValor_consumo_estimado = null;
     WebView wv = null;
+    PieChart grafico = null;
 
     final DecimalFormat df = new DecimalFormat("#.##");
 
@@ -109,7 +123,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
         tvConsumo = (TextView) findViewById(R.id.tvConsumo);
         tvTarifa = (TextView) findViewById(R.id.tvTarifa);
         tvValor_consumo = (TextView) findViewById(R.id.tvValor_consumo);
-        wv = (WebView) findViewById(R.id.web_view);
+        tvValor_consumo_estimado = (TextView) findViewById(R.id.tvValor_consumo_estimado);
 
         //Recebendo bundle do MenuActivity com vários valores
         bundle = getIntent().getExtras();
@@ -120,15 +134,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
             Log.d(TAG, "ACTIVITYCONSUMO: " + numCliente);
         }
 
-        WebView mWebView = (WebView) findViewById(R.id.web_view);
 
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-
-        WebSettings ws = wv.getSettings();
-        ws.setJavaScriptEnabled(true);
-        ws.setSupportZoom(false);
-        //wv.loadUrl("http://google.com.br");
         mFirestore = FirebaseFirestore.getInstance();
 
 
@@ -346,7 +352,11 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         valor_consumo = valor_consumo + PIS + COFINS + ICMS + CIP;
 
+        estimativaConsumo = (valor_consumo)*2;
+
         tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
+
+        tvValor_consumo_estimado.setText(String.valueOf(df.format(estimativaConsumo)));
 
         atualizar();
     }
@@ -358,9 +368,46 @@ public class ConsumoTempoReal extends AppCompatActivity {
         tvCIP.setText(String.valueOf(df.format(CIP)));
         tvConsumo.setText(String.valueOf(leituraMes));
 
-        progress.dismiss();
+        grafico();
     }
 
+    void grafico(){
+
+
+
+        float intensGrafico[] = {valor_consumo, estimativaConsumo};
+
+        String descricao[] = {"Consumo atual", "Consumo estimado"};
+
+        grafico = (PieChart) findViewById(R.id.graficoID);
+
+        List<PieEntry> entradasGrafico = new ArrayList<>();
+
+        for(int i=0;i< intensGrafico.length; i++) {
+            entradasGrafico.add(new PieEntry(intensGrafico[i], descricao[i]));
+        }
+
+        PieDataSet dataSet = new PieDataSet(entradasGrafico,"");
+
+            dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+            //dataSet.setValueFormatter();
+            dataSet.setHighlightEnabled(true);
+
+
+        PieData pieData = new PieData(dataSet);
+
+
+        grafico.setData(pieData);
+        grafico.invalidate();
+
+        grafico.animateXY(2000, 2000);
+        grafico.setUsePercentValues(true);
+        grafico.setDrawSliceText(false);
+
+
+        progress.dismiss();
+
+    }
 
 
 }

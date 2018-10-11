@@ -6,11 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MenuPrincipal">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TableLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="800dp"
             android:background="#fffafa"
             android:shrinkColumns="*"
             android:stretchColumns="*"
@@ -20,16 +23,16 @@
             <!-- Cabeçalho -->
             <TableRow
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="135dp"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:background="#FFFF"
                 android:gravity="center_horizontal">
 
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="0dp"
+                    android:layout_width="400dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="30dp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/imagemcabecalho"
                     android:visibility="visible" />
@@ -147,4 +150,5 @@
 
         </TableLayout>
 
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>
