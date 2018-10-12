@@ -116,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Contribuição iluminação pública     R$" />
+                android:text="Contribuição de iluminação pública           R$" />
             <TextView
                 android:id="@+id/tvCIP"
                 android:layout_width="wrap_content"
@@ -138,11 +138,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Consumo atual                              R$"
+                android:text="Consumo parcial                             R$"
                 android:textSize="15dp"
                 android:textStyle="bold"/>
             <TextView
-                android:id="@+id/tvValor_consumo"
+                android:id="@+id/tvValor_consumo_parcial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -164,12 +164,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Consumo estimado                      R$"
+                android:text="Consumo total estimado               R$"
                 android:textSize="15dp"
                 android:textColor="@color/bgBtnEntrar"
                 android:textStyle="bold"/>
             <TextView
-                android:id="@+id/tvValor_consumo_estimado"
+                android:id="@+id/tvTotal_estimado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

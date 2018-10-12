@@ -90,6 +90,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float valor_consumo;
     float consumo;
     float estimativaConsumo;
+    float totalEstimado;
 
     String leituraAnterior;
     int leituraAtual=4000;
@@ -104,9 +105,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
     TextView tvCIP = null;
     TextView tvConsumo = null;
     TextView tvTarifa = null;
-    TextView tvValor_consumo = null;
-    TextView tvValor_consumo_estimado = null;
-    WebView wv = null;
+    TextView tvValor_consumo_parcial = null;
+    TextView tvTotal_estimado = null;
     PieChart grafico = null;
 
     final DecimalFormat df = new DecimalFormat("#.##");
@@ -122,8 +122,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
         tvConsumo = (TextView) findViewById(R.id.tvConsumo);
         tvConsumo = (TextView) findViewById(R.id.tvConsumo);
         tvTarifa = (TextView) findViewById(R.id.tvTarifa);
-        tvValor_consumo = (TextView) findViewById(R.id.tvValor_consumo);
-        tvValor_consumo_estimado = (TextView) findViewById(R.id.tvValor_consumo_estimado);
+        tvValor_consumo_parcial = (TextView) findViewById(R.id.tvValor_consumo_parcial);
+        tvTotal_estimado = (TextView) findViewById(R.id.tvTotal_estimado);
 
         //Recebendo bundle do MenuActivity com vários valores
         bundle = getIntent().getExtras();
@@ -354,9 +354,11 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         estimativaConsumo = (valor_consumo)*2;
 
-        tvValor_consumo.setText(String.valueOf(df.format(valor_consumo)));
+        totalEstimado = valor_consumo + estimativaConsumo;
 
-        tvValor_consumo_estimado.setText(String.valueOf(df.format(estimativaConsumo)));
+        tvValor_consumo_parcial.setText(String.valueOf(df.format(valor_consumo)));
+
+        tvTotal_estimado.setText(String.valueOf(df.format(totalEstimado)));
 
         atualizar();
     }
@@ -377,7 +379,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         float intensGrafico[] = {valor_consumo, estimativaConsumo};
 
-        String descricao[] = {"Consumo atual", "Consumo estimado"};
+        String descricao[] = {String.valueOf(df.format(valor_consumo)), String.valueOf(df.format(estimativaConsumo))};
 
         grafico = (PieChart) findViewById(R.id.graficoID);
 
@@ -402,7 +404,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         grafico.animateXY(2000, 2000);
         grafico.setUsePercentValues(true);
-        grafico.setDrawSliceText(false);
+        grafico.setDrawSliceText(true);
 
 
         progress.dismiss();
