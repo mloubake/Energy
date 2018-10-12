@@ -93,7 +93,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float totalEstimado;
 
     String leituraAnterior;
-    int leituraAtual=4000;
+    int leituraAtual = 4000;
     int leituraMes;
 
     String tokenAcesso;
@@ -108,6 +108,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
     TextView tvValor_consumo_parcial = null;
     TextView tvTotal_estimado = null;
     PieChart grafico = null;
+    Button btnAtualizar = null;
 
     final DecimalFormat df = new DecimalFormat("#.##");
 
@@ -124,6 +125,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
         tvTarifa = (TextView) findViewById(R.id.tvTarifa);
         tvValor_consumo_parcial = (TextView) findViewById(R.id.tvValor_consumo_parcial);
         tvTotal_estimado = (TextView) findViewById(R.id.tvTotal_estimado);
+        btnAtualizar = (Button) findViewById(R.id.btnAtualizar);
 
         //Recebendo bundle do MenuActivity com vários valores
         bundle = getIntent().getExtras();
@@ -266,7 +268,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     }
 
-    void update(){
+    void update() {
         mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -286,7 +288,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     }
 
-    void pesquisa(){
+    void pesquisa() {
         mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -328,7 +330,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
         });
     }
 
-    void calcula(){
+    void calcula() {
         bVerde = (TUSD + TE) / 1000;
         bAzul = (TUSD / 1000);
         bAmarela = (BantarAmarela + bVerde);
@@ -352,7 +354,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         valor_consumo = valor_consumo + PIS + COFINS + ICMS + CIP;
 
-        estimativaConsumo = (valor_consumo)*2;
+        estimativaConsumo = (valor_consumo) * 2;
 
         totalEstimado = valor_consumo + estimativaConsumo;
 
@@ -363,7 +365,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
         atualizar();
     }
 
-    void atualizar(){
+    void atualizar() {
         tvLeituraAtual.setText(String.valueOf(leituraAtual));
         tvLeituraAnterior.setText(leituraAnterior);
         tvLeituraAtual.setText(String.valueOf(leituraAtual));
@@ -373,8 +375,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
         grafico();
     }
 
-    void grafico(){
-
+    void grafico() {
 
 
         float intensGrafico[] = {valor_consumo, estimativaConsumo};
@@ -385,15 +386,15 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         List<PieEntry> entradasGrafico = new ArrayList<>();
 
-        for(int i=0;i< intensGrafico.length; i++) {
+        for (int i = 0; i < intensGrafico.length; i++) {
             entradasGrafico.add(new PieEntry(intensGrafico[i], descricao[i]));
         }
 
-        PieDataSet dataSet = new PieDataSet(entradasGrafico,"");
+        PieDataSet dataSet = new PieDataSet(entradasGrafico, "");
 
-            dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-            //dataSet.setValueFormatter();
-            dataSet.setHighlightEnabled(true);
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        //dataSet.setValueFormatter();
+        dataSet.setHighlightEnabled(true);
 
 
         PieData pieData = new PieData(dataSet);
@@ -411,8 +412,55 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     }
 
+    public void AtualizaConsumo(View view) {
 
-}
+        Toast.makeText(getApplicationContext(),"teste",Toast.LENGTH_LONG).show();
+
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            // ...Irrelevant code for customizing the buttons and title
+            LayoutInflater inflater = this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialog_atualizar, null);
+            dialogBuilder.setView(dialogView);
+
+            final EditText editText = (EditText) dialogView.findViewById(R.id.leituraAtualMedidor);
+
+            dialogBuilder
+                    .setPositiveButton("Atualizar", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //atualizar
+                            leituraAtual = (Integer.valueOf(editText.getText().toString()));
+
+                            progress = new ProgressDialog(ConsumoTempoReal.this);
+                            progress.setMessage("Calculando...");
+                            progress.show();
+
+                            update();
+                        }
+                    })
+                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //cancelar
+
+                            progress = new ProgressDialog(ConsumoTempoReal.this);
+                            progress.setMessage("Calculando...");
+                            progress.show();
+
+                            pesquisa();
+
+                        }
+                    });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        }
+    }
+
+
 
 
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CadastroBaixaRenda">
+    tools:context=".ConsumoTempoReal">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:background="#FFFF"
             android:layout_gravity="left"
-            android:paddingLeft="55dp"
+            android:paddingLeft="63dp"
             android:paddingTop="0dp">
 
             <TextView
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:background="#FFFF"
             android:gravity="left"
-            android:paddingLeft="55dp"
+            android:paddingLeft="63dp"
             android:paddingTop="10dp">
 
             <TextView
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:background="#FFFF"
             android:gravity="left"
-            android:paddingLeft="55dp"
+            android:paddingLeft="63dp"
             android:paddingTop="10dp">
 
             <TextView
@@ -86,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFFF"
-            android:paddingLeft="55dp"
+            android:paddingLeft="63dp"
             android:gravity="left"
             android:paddingTop="10dp">
 
@@ -108,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFFF"
-            android:paddingLeft="55dp"
+            android:paddingLeft="63dp"
             android:gravity="left"
             android:paddingTop="10dp">
 
@@ -129,7 +129,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFFF"
-            android:paddingLeft="55dp"
+            android:paddingLeft="63dp"
             android:gravity="left"
             android:paddingTop="20dp"
             android:paddingBottom="5dp">
@@ -155,7 +155,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFFF"
-            android:paddingLeft="55dp"
+            android:paddingLeft="63dp"
             android:gravity="left"
             android:paddingTop="5dp"
             android:paddingBottom="5dp">
@@ -188,6 +188,7 @@
 
             <Button
                 android:id="@+id/btnAtualizar"
+                android:onClick="AtualizaConsumo"
                 android:layout_width="300dp"
                 android:layout_height="40dip"
                 android:layout_centerInParent="true"
