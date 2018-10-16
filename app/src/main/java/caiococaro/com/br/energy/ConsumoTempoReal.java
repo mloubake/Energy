@@ -67,7 +67,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
     String numCliente;
 
     private FirebaseFirestore mFirestore;
-    boolean ctrl;
+
+    boolean ctrl = true;
 
     float PIS;
     float COFINS;
@@ -93,7 +94,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float totalEstimado;
 
     String leituraAnterior;
-    int leituraAtual = 4000;
+    int leituraAtual;
     int leituraMes;
 
     String tokenAcesso;
@@ -129,18 +130,16 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         //Recebendo bundle do MenuActivity com vários valores
         bundle = getIntent().getExtras();
-        Log.d(TAG, "XXXXXXXXXXXXXX: " + bundle);
 
         if (bundle != null) {
             numCliente = bundle.getString(NAME_CONSUMO);
-            Log.d(TAG, "ACTIVITYCONSUMO: " + numCliente);
         }
 
 
         mFirestore = FirebaseFirestore.getInstance();
 
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         // ...Irrelevant code for customizing the buttons and title
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_atualizar, null);
@@ -234,9 +233,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
             }
         });
 
-        //Toast.makeText(getApplicationContext(), "TUSD " + TUSD, Toast.LENGTH_LONG).show();
-        //Toast.makeText(getApplicationContext(), "TE " + TE, Toast.LENGTH_LONG).show();
-
         DocumentReference docRefBantar = mFirestore.collection("TarifasAplicacao").document("Bantar");
         docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -296,13 +292,11 @@ public class ConsumoTempoReal extends AppCompatActivity {
                     for (DocumentSnapshot document : task.getResult()) {
 
                         if (numCliente.equals(String.valueOf(document.getData().get("numCliente")))) {
-                            //Recebendo bundle do MyDialog com Consumo Atual
+
                             bundle = getIntent().getExtras();
-                            Log.d(TAG, "XXXXXXXXXXXXXX: " + bundle);
 
                             if (bundle != null) {
-                                numCliente = bundle.getString(NAME_CONSUMO_ATUAL);
-                                Log.d(TAG, "ACTIVITYCONSUMO: " + leituraAtual);
+                                numCliente = bundle.getString(NAME_CONSUMO);
                             }
 
                             leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
@@ -331,37 +325,36 @@ public class ConsumoTempoReal extends AppCompatActivity {
     }
 
     void calcula() {
-        bVerde = (TUSD + TE) / 1000;
-        bAzul = (TUSD / 1000);
-        bAmarela = (BantarAmarela + bVerde);
-        bVermelha = (bVerde + BantarVermelha2);
+            bVerde = (TUSD + TE) / 1000;
+            bAzul = (TUSD / 1000);
+            bAmarela = (BantarAmarela + bVerde);
+            bVermelha = (bVerde + BantarVermelha2);
 
-        tarifa = bVermelha;
+            tarifa = bVermelha;
 
-        tvTarifa.setText(String.valueOf(tarifa));
+            tvTarifa.setText(String.valueOf(tarifa));
 
-        //Toast.makeText(getApplicationContext(), "Leitura: " + consumo, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Leitura: " + consumo, Toast.LENGTH_SHORT).show();
 
-        valor_consumo = consumo * tarifa;
-        //Toast.makeText(getApplicationContext(), "Consumo"+valor_consumo, Toast.LENGTH_SHORT).show();
+            valor_consumo = consumo * tarifa;
+            //Toast.makeText(getApplicationContext(), "Consumo"+valor_consumo, Toast.LENGTH_SHORT).show();
 
-        PIS = valor_consumo * PIS;
-        //Toast.makeText(getApplicationContext(), "PIS"+PIS, Toast.LENGTH_SHORT).show();
+            PIS = valor_consumo * PIS;
+            //Toast.makeText(getApplicationContext(), "PIS"+PIS, Toast.LENGTH_SHORT).show();
 
-        COFINS = valor_consumo * COFINS;
+            COFINS = valor_consumo * COFINS;
 
-        ICMS = valor_consumo * ICMS;
+            ICMS = valor_consumo * ICMS;
 
-        valor_consumo = valor_consumo + PIS + COFINS + ICMS + CIP;
+            valor_consumo = valor_consumo + PIS + COFINS + ICMS + CIP;
 
-        estimativaConsumo = (valor_consumo) * 2;
+            estimativaConsumo = (valor_consumo) * 2;
 
-        totalEstimado = valor_consumo + estimativaConsumo;
+            totalEstimado = valor_consumo + estimativaConsumo;
 
-        tvValor_consumo_parcial.setText(String.valueOf(df.format(valor_consumo)));
+            tvValor_consumo_parcial.setText(String.valueOf(df.format(valor_consumo)));
 
-        tvTotal_estimado.setText(String.valueOf(df.format(totalEstimado)));
-
+            tvTotal_estimado.setText(String.valueOf(df.format(totalEstimado)));
         atualizar();
     }
 
@@ -380,7 +373,10 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         float intensGrafico[] = {valor_consumo, estimativaConsumo};
 
-        String descricao[] = {String.valueOf(df.format(valor_consumo)), String.valueOf(df.format(estimativaConsumo))};
+        String vc = "R$ ".concat(String.valueOf(df.format(valor_consumo)));
+        String ec = "R$ ".concat(String.valueOf(df.format(estimativaConsumo)));
+
+        String descricao[] = {vc,ec};
 
         grafico = (PieChart) findViewById(R.id.graficoID);
 
@@ -414,8 +410,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     public void AtualizaConsumo(View view) {
 
-        Toast.makeText(getApplicationContext(),"teste",Toast.LENGTH_LONG).show();
-
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             // ...Irrelevant code for customizing the buttons and title
             LayoutInflater inflater = this.getLayoutInflater();
@@ -424,13 +418,42 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
             final EditText editText = (EditText) dialogView.findViewById(R.id.leituraAtualMedidor);
 
-            dialogBuilder
+         PIS = 0;
+         COFINS = 0;
+         ICMS = 0;
+         CIP = 0;
+
+         TE = 0;
+         BantarVerde = 0;
+         BantarAmarela = 0;
+         BantarVermelha1 = 0;
+         BantarVermelha2 = 0;
+
+         bVerde = 0;
+         bAzul = 0;
+         bAmarela = 0;
+         bVermelha = 0;
+
+         valor_consumo = 0;
+         consumo = 0;
+         estimativaConsumo = 0;
+         totalEstimado = 0;
+
+        dialogBuilder
                     .setPositiveButton("Atualizar", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                             //atualizar
                             leituraAtual = (Integer.valueOf(editText.getText().toString()));
+
+
+                            //Recebendo bundle do MenuActivity com vários valores
+                            bundle = getIntent().getExtras();
+
+                            if (bundle != null) {
+                                numCliente = bundle.getString(NAME_CONSUMO);
+                            }
 
                             progress = new ProgressDialog(ConsumoTempoReal.this);
                             progress.setMessage("Calculando...");
@@ -444,6 +467,14 @@ public class ConsumoTempoReal extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                             //cancelar
+
+
+                            //Recebendo bundle do MenuActivity com vários valores
+                            bundle = getIntent().getExtras();
+
+                            if (bundle != null) {
+                                numCliente = bundle.getString(NAME_CONSUMO);
+                            }
 
                             progress = new ProgressDialog(ConsumoTempoReal.this);
                             progress.setMessage("Calculando...");
