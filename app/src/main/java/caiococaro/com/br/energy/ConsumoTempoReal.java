@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -68,7 +69,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     private FirebaseFirestore mFirestore;
 
-    boolean ctrl = true;
+    int ctrl = 0;
 
     float PIS;
     float COFINS;
@@ -80,7 +81,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float BantarVerde;
     float BantarAmarela;
     float BantarVermelha1;
-    float BantarVermelha2;
+    float BantarVermelha2=0;
 
     float bVerde;
     float bAzul;
@@ -128,7 +129,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
         tvTotal_estimado = (TextView) findViewById(R.id.tvTotal_estimado);
         btnAtualizar = (Button) findViewById(R.id.btnAtualizar);
 
-        //Recebendo bundle do MenuActivity com vários valores
         bundle = getIntent().getExtras();
 
         if (bundle != null) {
@@ -136,133 +136,16 @@ public class ConsumoTempoReal extends AppCompatActivity {
         }
 
 
+        progress = new ProgressDialog(ConsumoTempoReal.this);
+        progress.setMessage("Calculando...");
+        progress.show();
+
         mFirestore = FirebaseFirestore.getInstance();
 
-
-         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        // ...Irrelevant code for customizing the buttons and title
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_atualizar, null);
-        dialogBuilder.setView(dialogView);
-
-        final EditText editText = (EditText) dialogView.findViewById(R.id.leituraAtualMedidor);
-
-        dialogBuilder
-                .setPositiveButton("Atualizar", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        //atualizar
-                        leituraAtual = (Integer.valueOf(editText.getText().toString()));
-
-                        progress = new ProgressDialog(ConsumoTempoReal.this);
-                        progress.setMessage("Calculando...");
-                        progress.show();
-
-                        update();
-                    }
-                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        //cancelar
-
-                        progress = new ProgressDialog(ConsumoTempoReal.this);
-                        progress.setMessage("Calculando...");
-                        progress.show();
-
-                        pesquisa();
-
-                    }
-                });
-
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
-
-
-        DocumentReference docRefTributario = mFirestore.collection("TarifasAplicacao").document("Tributario");
-        docRefTributario.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                String pis = "";
-                String cofins = "";
-                String icms = "";
-
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-
-                        pis = String.valueOf(document.getData().get("PIS"));
-
-                        cofins = String.valueOf(document.getData().get("COFINS"));
-
-                        icms = String.valueOf(document.getData().get("ICMS"));
-                    }
-
-                }
-
-                PIS = Float.valueOf(pis);
-                COFINS = Float.valueOf(cofins);
-                ICMS = Float.valueOf(icms);
-            }
-
-        });
-
-
-        DocumentReference docRefResidencial = mFirestore.collection("TarifasAplicacao").document("Residencial");
-
-        docRefResidencial.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                String te = "";
-                String tusd = "";
-
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-
-                        te = String.valueOf(document.getData().get("TE"));
-                        tusd = String.valueOf(document.getData().get("TUSD"));
-
-                    }
-                }
-                TE = Float.valueOf(te);
-                TUSD = Float.valueOf(tusd);
-
-            }
-        });
-
-        DocumentReference docRefBantar = mFirestore.collection("TarifasAplicacao").document("Bantar");
-        docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                String bantVerde = "";
-                String bantAmarela = "";
-                String bantVermelha1 = "";
-                String bantVermelha2 = "";
-
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-
-                        bantVerde = String.valueOf(document.getData().get("verde"));
-
-                        bantAmarela = String.valueOf(document.getData().get("amarela"));
-
-                        bantVermelha1 = String.valueOf(document.getData().get("vermelha1"));
-
-                        bantVermelha2 = String.valueOf(document.getData().get("vermelha2"));
-                    }
-                }
-                BantarVerde = Float.valueOf(bantVerde);
-                BantarAmarela = Float.valueOf(bantAmarela);
-                BantarVermelha1 = Float.valueOf(bantVermelha1);
-                BantarVermelha2 = Float.valueOf(bantVermelha2);
-            }
-        });
+        pesquisa1();
 
     }
+
 
     void update() {
         mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -275,7 +158,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                             //ATUALIZAR A LEITURA ATUAL AQUI
                             mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual", leituraAtual);
-                            pesquisa();
+                            pesquisa1();
                         }
                     }
                 }
@@ -284,7 +167,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     }
 
-    void pesquisa() {
+    void pesquisa1() {
         mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -314,13 +197,108 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                             tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
                             Log.d(TAG, "TOKEN_ACESSO: " + tokenAcesso);
-
-                            calcula();
                         }
+                        calcula();
                     }
                 }
             }
 
+        });
+
+        pesquisa2();
+    }
+
+    void pesquisa2() {
+
+        DocumentReference docRefTributario = mFirestore.collection("TarifasAplicacao").document("Tributario");
+        docRefTributario.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                String pis = "";
+                String cofins = "";
+                String icms = "";
+
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        pis = String.valueOf(document.getData().get("PIS"));
+
+                        cofins = String.valueOf(document.getData().get("COFINS"));
+
+                        icms = String.valueOf(document.getData().get("ICMS"));
+                    }
+
+                }
+
+                PIS = Float.valueOf(pis);
+                COFINS = Float.valueOf(cofins);
+                ICMS = Float.valueOf(icms);
+                calcula();
+            }
+
+
+        });
+        pesquisa3();
+    }
+
+    void pesquisa3() {
+
+        DocumentReference docRefResidencial = mFirestore.collection("TarifasAplicacao").document("Residencial");
+
+        docRefResidencial.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                String te = "";
+                String tusd = "";
+
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        te = String.valueOf(document.getData().get("TE"));
+                        tusd = String.valueOf(document.getData().get("TUSD"));
+
+                    }
+                }
+                TE = Float.valueOf(te);
+                TUSD = Float.valueOf(tusd);
+                calcula();
+            }
+        });
+        pesquisa4();
+    }
+
+    void pesquisa4() {
+
+        DocumentReference docRefBantar = mFirestore.collection("TarifasAplicacao").document("Bantar");
+        docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                String bantVerde = "";
+                String bantAmarela = "";
+                String bantVermelha1 = "";
+                String bantVermelha2 = "";
+
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        bantVerde = String.valueOf(document.getData().get("verde"));
+
+                        bantAmarela = String.valueOf(document.getData().get("amarela"));
+
+                        bantVermelha1 = String.valueOf(document.getData().get("vermelha1"));
+
+                        bantVermelha2 = String.valueOf(document.getData().get("vermelha2"));
+                    }
+                }
+                BantarVerde = Float.valueOf(bantVerde);
+                BantarAmarela = Float.valueOf(bantAmarela);
+                BantarVermelha1 = Float.valueOf(bantVermelha1);
+                BantarVermelha2 = Float.valueOf(bantVermelha2);
+                calcula();
+            }
         });
     }
 
@@ -355,6 +333,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
             tvValor_consumo_parcial.setText(String.valueOf(df.format(valor_consumo)));
 
             tvTotal_estimado.setText(String.valueOf(df.format(totalEstimado)));
+
         atualizar();
     }
 
@@ -480,7 +459,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
                             progress.setMessage("Calculando...");
                             progress.show();
 
-                            pesquisa();
+                            pesquisa1();
 
                         }
                     });
