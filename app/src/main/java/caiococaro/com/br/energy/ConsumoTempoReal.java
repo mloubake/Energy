@@ -22,6 +22,8 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -112,7 +114,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
     PieChart grafico = null;
     Button btnAtualizar = null;
 
-    final DecimalFormat df = new DecimalFormat("#.##");
+    final DecimalFormat df = new DecimalFormat("#,###.##");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -350,12 +352,12 @@ public class ConsumoTempoReal extends AppCompatActivity {
     void grafico() {
 
 
+/*        String vc = "R$ ".concat(String.valueOf(df.format(valor_consumo)));
+        String ec = "R$ ".concat(String.valueOf(df.format(estimativaConsumo)));*/
+
         float intensGrafico[] = {valor_consumo, estimativaConsumo};
 
-        String vc = "R$ ".concat(String.valueOf(df.format(valor_consumo)));
-        String ec = "R$ ".concat(String.valueOf(df.format(estimativaConsumo)));
-
-        String descricao[] = {vc,ec};
+        String descricao[] = {"Consumo parcial","Consumo estimado"};
 
         grafico = (PieChart) findViewById(R.id.graficoID);
 
@@ -368,7 +370,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
         PieDataSet dataSet = new PieDataSet(entradasGrafico, "");
 
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        //dataSet.setValueFormatter();
+        dataSet.setValueFormatter(new PercentFormatter());
         dataSet.setHighlightEnabled(true);
 
 
