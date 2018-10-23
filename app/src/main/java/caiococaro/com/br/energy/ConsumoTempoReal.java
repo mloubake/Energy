@@ -42,8 +42,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.text.SimpleDateFormat;
 
 public class ConsumoTempoReal extends AppCompatActivity {
 
@@ -100,6 +104,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
     int leituraAtual;
     int leituraMes;
 
+    int lastDay;
+
     String tokenAcesso;
 
     Bundle bundle = new Bundle();
@@ -114,12 +120,32 @@ public class ConsumoTempoReal extends AppCompatActivity {
     PieChart grafico = null;
     Button btnAtualizar = null;
 
+    SimpleDateFormat formatData = new SimpleDateFormat("dd-MM-yyyy");
+
     final DecimalFormat df = new DecimalFormat("#,###.##");
+
+    Date data = new Date();
+
+    String dataFormatada = formatData.format(data);
+
+    String hoje = String.valueOf(dataFormatada);
+
+    int today = 23;
+    int ultimoDia = 31;
+    int diasDif=0;
+
+    //String um = String.valueOf(today.indexOf("-"));
+    //String dois = String.valueOf(today.lastIndexOf("-"));
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consumo_tempo_real);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(data);
+        lastDay = calendar.DAY_OF_MONTH;
 
         tvLeituraAnterior = (TextView) findViewById(R.id.tvLeituraAnterior);
         tvLeituraAtual = (TextView) findViewById(R.id.tvLeituraAtual);
@@ -328,13 +354,20 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
             valor_consumo = valor_consumo + PIS + COFINS + ICMS + CIP;
 
-            estimativaConsumo = (valor_consumo) * 2;
+            diasDif = ultimoDia - today;
+
+            estimativaConsumo = (valor_consumo/today);
+
+            estimativaConsumo = estimativaConsumo * diasDif;
 
             totalEstimado = valor_consumo + estimativaConsumo;
 
             tvValor_consumo_parcial.setText(String.valueOf(df.format(valor_consumo)));
 
             tvTotal_estimado.setText(String.valueOf(df.format(totalEstimado)));
+
+            //Toast.makeText(getApplicationContext(),"today: "+today,Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),"lastDay: "+lastDay,Toast.LENGTH_LONG).show();
 
         atualizar();
     }
