@@ -1,13 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CadastroBaixaRenda">
 
-    <TextView
+
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Cadastro Baixa Renda"/>
+        android:background="#FFFF"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="250dip"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="100dip"
+                android:layout_height="150dip"
+
+                android:adjustViewBounds="true"
+                android:cropToPadding="true"
+                android:src="@drawable/tarifa_social"
+                android:visibility="visible" />
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <EditText
+                android:id="@+id/etCpfCnpj"
+                android:layout_width="271dp"
+                android:layout_height="43dip"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/rounded_edittext"
+                android:hint="NIS (Número de inscrição social)"
+                android:inputType="none|number"
+                android:shadowRadius="10"
+                android:textStyle="italic" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <EditText
+                android:id="@+id/etNumCliente"
+                android:layout_width="500dip"
+                android:layout_height="43dip"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dip"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Número do cliente (sem o dígito)"
+                android:inputType="none|number"
+                android:shadowRadius="10"
+                android:textStyle="italic" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnEntrar"
+                android:layout_width="70dip"
+                android:layout_height="45dip"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="15dip"
+                android:background="@drawable/circle_button"
+                android:text="Enviar"
+                android:textAllCaps="false"
+                android:textColor="#FFFF"
+                android:textSize="15dip"
+                android:onClick="Enviar"/>
+
+        </TableRow>
+
+
+    </TableLayout>
+
 </android.support.constraint.ConstraintLayout>
