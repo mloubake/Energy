@@ -17,5 +17,14 @@
     <string name="default_info_snippet">indoSnippet</string>
     <string name="pick_place">pickPlace</string>
 
+    <string name="erro_carregar_dados_cliente">Falha ao recuperar os dados do cliente.</string>
+
+    <string name="naoSolicitado">Não Solicitado</string>
+    <string name="solicitado">Solicitado</string>
+    <string name="emAnalise">Em Análise</string>
+    <string name="equipeSelecionada">Equipe Selecionada</string>
+    <string name="equipeACaminho">Equipe a Caminho</string>
+    <string name="emAndamento">Em Andamento</string>
+    <string name="finalizado">Finalizado</string>
 
 </resources>

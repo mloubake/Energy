@@ -14,8 +14,9 @@ public class MenuPrincipal extends AppCompatActivity {
 
     //Keys da Bundle (São os dados (ou valores) da bundle da Activity anterior)
     //(Está passando o dado numCliente para essa tela)
-    private static final String KEY_NUM_CLIENTE = "NumeroCliente";
-    private static final String NUM_CLIENTE = "NumeroCliente";
+    public static final String KEY_NUM_CLIENTE = "NumeroCliente";
+    public static final String KEY_NUM_REQUERIMENTO = "NumRequerimento";
+
     //(Está passando o dado tokenAcesso para essa tela)
     private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
 
@@ -23,14 +24,13 @@ public class MenuPrincipal extends AppCompatActivity {
     private static final String NAME_ACOMPANHAMENTO = "Acompanhamento";
     private static final String NAME_BAIXA_RENDA = "BaixaRenda";
     private static final String NAME_CLIENTE_VITAL = "ClienteVital";
-    private static final String NAME_CONSUMO = "Consumo";
+    private static final String NAME_CONSUMO = "Usuario";
     private static final String NAME_HISTORICO = "Historico";
 
     //Valores passados entre os bundles
     String valorNumCliente;
     String valorToken;
-
-
+    String valorNumRequerimento;
     //
     Bundle bundle = new Bundle();
 
@@ -46,40 +46,46 @@ public class MenuPrincipal extends AppCompatActivity {
         if(bundle != null ){
             valorNumCliente = bundle.getString(KEY_NUM_CLIENTE);
             valorToken = bundle.getString(KEY_TOKEN_ACESSO);
-            Log.d(TAG, "MENUPRINCIPALBUNDLES: "+valorNumCliente+ " / " + valorToken);
+            valorNumRequerimento = bundle.getString(KEY_NUM_REQUERIMENTO);
+            Log.d(TAG, "MENUPRINCIPALBUNDLES: "+valorNumCliente + " / " + valorToken + " / " + valorNumRequerimento) ;
         }
 
-
         Button btnConsumo = (Button) findViewById(R.id.btnConsumo);
-        Button btnHistConsumo = (Button) findViewById(R.id.btnHistConsumo);
-        Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
-        Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
+        final Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
+        final Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
         Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);
-
 
         //Inciando Activity ConsumoTempoRealbtnConsumo.setOnClickListener(new View.OnClickListener() {
             btnConsumo.setOnClickListener(new View.OnClickListener() {
-                                              @Override
-                                              public void onClick(View v) {
-                                                  Intent intentConsumo = new Intent(MenuPrincipal.this, ConsumoTempoReal.class);
+          @Override
+          public void onClick(View v) {
+              Intent intentConsumo = new Intent(MenuPrincipal.this, ConsumoTempoReal.class);
 
-                                                  //Enviando bundle para ConsumoTempoReal
-                                                  Bundle bundleConsumo = new Bundle();
-                                                  bundleConsumo.putString(NAME_CONSUMO, valorNumCliente);
-                                                  intentConsumo.putExtras(bundleConsumo);
-                                                  startActivity(intentConsumo);
-                                              }
-                                          });
+              //Enviando bundle para ConsumoTempoReal
+              Bundle bundleConsumo = new Bundle();
+              bundleConsumo.putString(NAME_CONSUMO, valorNumCliente);
+              intentConsumo.putExtras(bundleConsumo);
+              startActivity(intentConsumo);
+              Log.d(TAG, "BUNDLE-CONSUMO: " + bundleConsumo);
+          }
+      });
 
-
-        //Inciando Activity HistoricoConsumo
-        btnHistConsumo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentHistorico = new Intent(MenuPrincipal.this, HistoricoConsumo.class);
-                startActivity(intentHistorico);
-            }
-        });
+//
+//        //Inciando Activity HistoricoConsumo
+//        btnHistConsumo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intentHistorico = new Intent(MenuPrincipal.this, HistoricoConsumo.class);
+//
+//                //Enviando bundle para HistoricoConsumo
+//                Bundle bundleHistorico = new Bundle();
+//                bundleHistorico.putString(NAME_HISTORICO, valorToken);
+//                bundleHistorico.putString(KEY_NUM_CLIENTE, valorNumCliente);
+//                intentHistorico.putExtras(bundleHistorico);
+//                startActivity(intentHistorico);
+//                Log.d(TAG, "BUNDLE-HISTORICO: " + bundleHistorico);
+//            }
+//        });h
 
         //Inciando Activity AcompanhamentoEquipeTecnica
         btnAcompanhamento.setOnClickListener(new View.OnClickListener() {
@@ -89,9 +95,11 @@ public class MenuPrincipal extends AppCompatActivity {
 
                 //Enviando bundle para ConsumoTempoReal
                 Bundle bundleAcompanhamento = new Bundle();
-                bundleAcompanhamento.putString(NAME_ACOMPANHAMENTO, valorToken);
+                bundleAcompanhamento.putString(NAME_ACOMPANHAMENTO, valorNumRequerimento);
+                //bundleAcompanhamento.putString(NAME_NUM_REQUERIMENTO, valorNumRequerimento);
                 intentAcompanhamento.putExtras( bundleAcompanhamento);
                 startActivity(intentAcompanhamento);
+                Log.d(TAG, "BUNDLE-ACOMPANHAMENTO: " + bundleAcompanhamento);
             }
         });
 
@@ -101,6 +109,7 @@ public class MenuPrincipal extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intentClienteVital = new Intent(MenuPrincipal.this, CadastroClienteVital.class);
                 startActivity(intentClienteVital);
+                Log.d(TAG, "BUNDLE-CADASTRO-VITAL: " );
             }
         });
 
@@ -110,6 +119,7 @@ public class MenuPrincipal extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intentBaixaRenda= new Intent(MenuPrincipal.this, CadastroBaixaRenda.class);
                 startActivity(intentBaixaRenda);
+                Log.d(TAG, "BUNDLE-CADASTRO-RENDA: " );
             }
         });
     }

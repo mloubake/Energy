@@ -8,5 +8,8 @@
     <color name="bgTelaLogin">#40b9e6</color>
     <color name="bgEdTxt">#FFFFFF</color>
     <color name="transparente"></color>
+    <color name="colorYellow">#ffff6c</color>
+    <color name="colorGrey">#aeae99</color>
+
 
 </resources>

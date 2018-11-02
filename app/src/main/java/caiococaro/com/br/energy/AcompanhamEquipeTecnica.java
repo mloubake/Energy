@@ -1,21 +1,30 @@
 package caiococaro.com.br.energy;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Calendar;
 
 public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
@@ -33,238 +42,217 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     //Keys da Bundle
     private static final String KEY_NUM_CLIENTE = "NumeroCliente";
     private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
-    private static final String KEY_LOCALIZACAO = "Localizacao";
+    private static final String KEY_NUM_REQUERIMENTO = "NumRequerimento";
 
     //Names para cada Bundle Específica
     private static final String NAME_ACOMPANHAMENTO = "Acompanhamento";
+    private static final String CHANNEL_ID = "ID Pessoal";
 
-    boolean ctrl = false;
-    private FirebaseFirestore mFirestore;
-    boolean var1;
-    boolean var2;
 
-    String tokenAcesso;
-    boolean tokenAcessoCheck;
-
-    RelativeLayout progressContainer;
-    EditText etNumRequerimento;
+    FirebaseFirestore mFirestore;
 
     Bundle bundle = new Bundle();
+    String numRequerimento;
 
 
+    int statusPedido;
+    double porcStatusPedido;
+    ProgressBar mProgresBar;
 
-/*
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle tokenReceiver = intent.getBundleExtra("Acompanhamento2");
-
-            tokenAcesso = Integer.valueOf("Acompanhamento");
-            Log.d(TAG, "BROAD_ACESSO: "+tokenAcesso);
-        }
-    };
-*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acompanham_equipe_tecnica);
 
-        //Recebendo bundle do MenuActivity com vários valores
+
+        /*
+        MessageReceiver receiver = new MessageReceiver(new Message());
+
+        Intent intent = new Intent(AcompanhamEquipeTecnica.this, TimerService.class);
+        intent.putExtra("time", 10);
+        intent.putExtra("receiver", receiver);
+        startService(intent);
+        */
 
         bundle = getIntent().getExtras();
-
-        if(bundle != null ){
-            tokenAcesso = bundle.getString(NAME_ACOMPANHAMENTO);
+        if (bundle != null) {
+            numRequerimento = bundle.getString(NAME_ACOMPANHAMENTO);
+            Log.d("", "TOKENACESSO: " + numRequerimento);
         }
 
-      // LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("Acompanhamento"));
+        final ImageView img0 = findViewById(R.id.imagem0);
+        final ImageView img1 = findViewById(R.id.imagem1);
+        final ImageView img2 = findViewById(R.id.imagem2);
+        final ImageView img3 = findViewById(R.id.imagem3);
+        final ImageView img4 = findViewById(R.id.imagem4);
+        final ImageView img5 = findViewById(R.id.imagem5);
+        final ImageView img6 = findViewById(R.id.imagem6);
 
 
-        Button btnPesquisar = (Button) findViewById(R.id.btnPesquisarEquipe);
-        etNumRequerimento = (EditText) findViewById(R.id.etNumRequerimento);
-        progressContainer = (RelativeLayout) findViewById(R.id.progress_container);
+        /*
+        public class Message{
+            public void displayMessage(int resultCode, Bundle resultData){
+                String message = resultData.getString("message");
+                Toast.makeText(AcompanhamEquipeTecnica.this, resultCode + " " + message, Toast.LENGTH_SHORT).show();
+            }
+        }
+        */
+
+        //boolean alarmeAtivo = (PendingIntent.getBroadcast(this, 0, new Intent("ALARM_DISPARADO"), PendingIntent.FLAG_NO_CREATE) == null);
 
 
+
+
+        //acompanhamentoBD(img0, img1, img2, img3, img4, img5, img6);
+
+
+
+
+    }
+
+/*
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void ScheduleJob(View v){
+        ComponentName componentName = new ComponentName(this, ExampleJobService.class);
+        JobInfo info = new JobInfo.Builder(123, componentName)
+                .setRequiresCharging(true)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+                .setPersisted(true)
+                .setPeriodic(15 * 60 * 1000)
+                .build();
+
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = scheduler.schedule(info);
+        if(resultCode == JobScheduler.RESULT_SUCCESS){
+            Log.d(TAG, "ScheduleJob:");
+        } else {
+            Log.d(TAG, "ScheduleJob: Failed");
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void cancelJob(View v){
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.cancel(123);
+        Log.d(TAG, "Job cancelled");
+    }
+
+*/
+
+    public PendingIntent acompanhamentoBD(final ImageView img0, final ImageView img1, final ImageView img2,
+                                          final ImageView img3, final ImageView img4, final ImageView img5,
+                                          final ImageView img6){
         mFirestore = FirebaseFirestore.getInstance();
 
-
-        btnPesquisar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                progressContainer.setVisibility(View.VISIBLE);
-                final String numRequerimento = etNumRequerimento.getText().toString();
-
-                pesquisaUsuario();
-                pesquisaEquipe();
-                pesquisaToken();
-
-//                if(((var1)&&(var2)) && tokenAcessoCheck){
-//
-//                    String texto = etNumRequerimento.getText().toString();
-//                    Intent intent = new Intent(AcompanhamEquipeTecnica.this, MapsActivity.class);
-//                    Bundle b = new Bundle();
-//                    b.putString("localizacao", texto);
-//                    intent.putExtras(b);
-//                    startActivity(intent);
-//                }
-//                else {
-//                    Toast.makeText(getApplicationContext(), "Número de Requerimento incorreto", Toast.LENGTH_SHORT).show();
-//                }
-
-                //Chamando o Método: Começar a Activity do Google Maps
-                /*try {
-                    //sleep 5 seconds
-                    Thread.sleep(1000);
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
-
-                startMapsActivity();
-
-
-
-            }
-        });
-    }
-
-
-
-
-    //Método: Checkar CPF e Número do cliente
-    public boolean checkHasCpfAndClientNumber() {
-        if ((var1 && var2) && tokenAcessoCheck) {
-            return true;
-        }
-        return false;
-    }
-
-    //Método: Começar a Activity do Google Maps
-    public void startMapsActivity() {
-        if (checkHasCpfAndClientNumber()) {
-            Toast.makeText(getApplicationContext(), "Localizando a sua equipe...", Toast.LENGTH_SHORT).show();
-            String texto = etNumRequerimento.getText().toString();
-            Intent intentMaps = new Intent(AcompanhamEquipeTecnica.this, MapsActivity.class);
-            Bundle b = new Bundle();
-            b.putString(KEY_LOCALIZACAO, texto);
-            intentMaps.putExtras(b);
-            startActivity(intentMaps);
-        }
-    }
-
-    public void pesquisaUsuario(){
-
-        //Recuperar da Coleção Usuário
-        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful() ) {
-                    progressContainer.setVisibility(View.GONE);
-                    Log.d(TAG, "ORDEM 1");
-                    for (DocumentSnapshot document : task.getResult()) {
-                        if( (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(etNumRequerimento.getText())))) {
-                            var1 = true;
-                            ctrl = true;
-                            break;
-                        }
-                                    /*
-                                    Log.d(TAG, "Valor do editText: " + String.valueOf(etCpfCnpj.getText()));
-                                    Log.d(TAG, "1 Valor do recuperando: " + String.valueOf(etRecuperando.getText()));
-
-                                    Log.d(TAG, "getId: " + document.getId());
-                                    Log.d(TAG, "getData: " + document.getData());
-                                    Log.d(TAG, "getData.get(NumCliente): " + document.getData().get("NumCliente"));
-                                    Log.d(TAG, "getData.get(CpfCnpj): " + document.getData().get("CpfCnpj"));
-                                    Log.d(TAG, "getData.get(idUser): " + document.getData().get("idUser"));
-                                    Log.d(TAG, " ");
-                                    */
-                    }
-                    //If para o Toast funcionar
-                    if(ctrl==true){
-                        //Sem Toast de confirmamento
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"AAA - Número de Requerimento incorreto." , Toast.LENGTH_LONG).show();
-                    }
-                }
-                else{
-                    Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
-                }
-            }
-        });
-
-    }
-
-    public void pesquisaEquipe(){
-
-        //Recuperar da Coleção EquipeManutenção
         mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful() ) {
-                    Log.d(TAG, "ORDEM 2");
+            public void onComplete (@NonNull Task < QuerySnapshot > task) {
+                if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
-                        if(String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(etNumRequerimento.getText()))) {
-                            var2 = true;
-                            ctrl = true;
-                            break;
+                        if (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(numRequerimento))) {
+                            Log.d("", "STATUS-PEDIDO: " + String.valueOf(document.getData().get("statusPedido")));
+                            statusPedido = Integer.valueOf(String.valueOf(document.getData().get("statusPedido")));
+                            switch (statusPedido) {
+                                case 0:
+                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+                                    porcStatusPedido = 0;
+                                    img0.setImageResource(R.drawable.yellow_circle_icon);
+                                    break;
+                                case 1:
+                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+                                    porcStatusPedido = 16.666666667;
+                                    img0.setImageResource(R.drawable.yellow_circle_icon);
+                                    img1.setImageResource(R.drawable.yellow_circle_icon);
+                                    sendNotification(AcompanhamEquipeTecnica.this);
+                                    break;
+                                case 2:
+                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+                                    porcStatusPedido = 33.333333333;
+                                    img0.setImageResource(R.drawable.yellow_circle_icon);
+                                    img1.setImageResource(R.drawable.yellow_circle_icon);
+                                    img2.setImageResource(R.drawable.yellow_circle_icon);
+                                    sendNotification(AcompanhamEquipeTecnica.this);
+                                    break;
+                                case 3:
+                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+                                    porcStatusPedido = 50;
+                                    img0.setImageResource(R.drawable.yellow_circle_icon);
+                                    img1.setImageResource(R.drawable.yellow_circle_icon);
+                                    img2.setImageResource(R.drawable.yellow_circle_icon);
+                                    img3.setImageResource(R.drawable.yellow_circle_icon);
+                                    sendNotification(AcompanhamEquipeTecnica.this);
+                                    break;
+                                case 4:
+                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+                                    porcStatusPedido = 66.666666667;
+                                    img0.setImageResource(R.drawable.yellow_circle_icon);
+                                    img1.setImageResource(R.drawable.yellow_circle_icon);
+                                    img2.setImageResource(R.drawable.yellow_circle_icon);
+                                    img3.setImageResource(R.drawable.yellow_circle_icon);
+                                    img4.setImageResource(R.drawable.yellow_circle_icon);
+                                    sendNotification(AcompanhamEquipeTecnica.this);
+                                    break;
+                                case 5:
+                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+                                    porcStatusPedido = 83.333333333;
+                                    img0.setImageResource(R.drawable.yellow_circle_icon);
+                                    img1.setImageResource(R.drawable.yellow_circle_icon);
+                                    img2.setImageResource(R.drawable.yellow_circle_icon);
+                                    img3.setImageResource(R.drawable.yellow_circle_icon);
+                                    img4.setImageResource(R.drawable.yellow_circle_icon);
+                                    img5.setImageResource(R.drawable.yellow_circle_icon);
+                                    sendNotification(AcompanhamEquipeTecnica.this);
+                                    break;
+                                case 6:
+                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+                                    porcStatusPedido = 100;
+                                    img0.setImageResource(R.drawable.yellow_circle_icon);
+                                    img1.setImageResource(R.drawable.yellow_circle_icon);
+                                    img2.setImageResource(R.drawable.yellow_circle_icon);
+                                    img3.setImageResource(R.drawable.yellow_circle_icon);
+                                    img4.setImageResource(R.drawable.yellow_circle_icon);
+                                    img5.setImageResource(R.drawable.yellow_circle_icon);
+                                    img6.setImageResource(R.drawable.yellow_circle_icon);
+                                    sendNotification(AcompanhamEquipeTecnica.this);
+                                    break;
+                                default:
+
+                                    break;
+                            }
                         }
-                        else{
-                            ctrl = false;
-                            var2 = false;
-                        }
+
+
                     }
-                    //If para o Toast funcionar
-                    if(ctrl==true){
-                        //Sem Toast de confirmamento
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"Não foi possível achar a equipe de manutenção. Por favor, verifique o Número de Requerimento." , Toast.LENGTH_LONG).show();
-                    }
-                }
-                else{
-                    Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
+
+                    mProgresBar = findViewById(R.id.progress);
+                    mProgresBar.setProgress((int) porcStatusPedido);
+
+
                 }
             }
-        });
 
+        });
+        return null;
     }
 
-    public void pesquisaToken(){
 
-        //Recuperar da Coleção Usuário verificando o Token de Acesso
-        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful() ) {
-                    Log.d(TAG, "ORDEM 3");
-                    for (DocumentSnapshot document : task.getResult()) {
-                        if(String.valueOf(document.getData().get(FIELD_TOKEN_ACESSO)).equals(tokenAcesso)) {
-                            tokenAcessoCheck = true;
-                            Log.d(TAG, "AAA - TOKEN_ACESSO: "+tokenAcesso);
-                            ctrl = true;
-                            break;
-                        }
-                        else{
-                            ctrl = false;
-                        }
-                    }
-                    //If para o Toast funcionar
-                    if(ctrl==true){
-                        //Sem Toast de confirmamento
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "BBB - Número de Requerimento inválido", Toast.LENGTH_LONG).show();                            }
-                }
-                else{
-                    Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
-                }
-            }
-        });
 
+    public void sendNotification(AcompanhamEquipeTecnica view){
+        //Get an instance of a NotificationManager
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID );
+        mBuilder.setSmallIcon(R.drawable.yellow_circle_icon);
+        mBuilder.setContentTitle("Notificação Energy");
+        mBuilder.setContentText("O Status do seu agendamento mudou");
+        mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        mBuilder.build();
+
+        //Gets an instance of the NotificationManager service
+        NotificationManagerCompat mNotificationManagerCompat = NotificationManagerCompat.from(this);
+        mNotificationManagerCompat.notify(001, mBuilder.build());
     }
-
 }
+
+
+
 

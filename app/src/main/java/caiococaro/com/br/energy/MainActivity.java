@@ -13,10 +13,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,33 +35,44 @@ public class MainActivity extends AppCompatActivity {
     private static final String FIELD_CPF_CNPJ = "cpfCnpj";
     private static final String FIELD_NUM_CLIENTE = "numCliente";
     private static final String FIELD_TOKEN_ACESSO = "tokenAcesso";
+    private static final String FIELD_NUM_REQUERIMENTO= "numRequerimento";
 
     //Keys da Bundle (Dados (ou valores) que serão passados para a próxima Activity através da Bundle)
     private static final String KEY_NUM_CLIENTE = "NumeroCliente";
     private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
+    private static final String KEY_NUM_REQUERIMENTO= "NumRequerimento";
 
 
-    //private Firebase mRef;
-    //private Button mSendData;
     //Declaração da Inicialiação do FireStore
     private FirebaseFirestore mFirestore;
     boolean ctrl = false;
 
     public String tokenAcesso;
+    public String numRequerimento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        //NÃO APAGAR, USAR COMO AJUDA/EXEMPLO
+        FirebaseAuth mAuth;
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.getCurrentUser();
 
         final Button button = (Button) findViewById(R.id.btnEntrar);
         final EditText etCpfCnpj = (EditText) findViewById(R.id.etCpfCnpj);
         final EditText etNumCliente = (EditText) findViewById(R.id.etNumCliente);
         final String debugLogHeader = "Linklet Debug Message";
         //final EditText etRecuperando = (EditText) findViewById(R.id.etRecuperando);
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this,  new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String newToken = instanceIdResult.getToken();
+                Log.e("newToken",newToken);
+
+            }
+        });
 
         //Inicialização do FireStore
         mFirestore = FirebaseFirestore.getInstance();
@@ -65,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //EditTexts passando para Strings para serem usadas no Map
                 final String cpfCnpj = etCpfCnpj.getText().toString();
                 final String numCliente = etNumCliente.getText().toString();
@@ -80,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                                         && String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(String.valueOf(etNumCliente.getText()))) {
 
                                     tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
+                                    numRequerimento = document.getData().get(FIELD_NUM_REQUERIMENTO).toString();
                                     Log.d(TAG, "TOKEN_ACESSO: "+tokenAcesso);
 
                                     //Iniciar activity MenuPrincipal com Bud
@@ -87,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                                     Bundle bundle = new Bundle();
                                     bundle.putString(KEY_NUM_CLIENTE, numCliente);
                                     bundle.putString(KEY_TOKEN_ACESSO, tokenAcesso);
+                                    bundle.putString(KEY_NUM_REQUERIMENTO, numRequerimento);
                                     intent.putExtras(bundle);
                                     startActivity(intent);
                                     ctrl = true;
@@ -127,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         else{
                             Log.w(TAG, "Falha ao recuperar no Documents.", task.getException());
+                            Toast.makeText(MainActivity.this, R.string.erro_carregar_dados_cliente, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

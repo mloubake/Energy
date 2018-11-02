@@ -12,6 +12,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +20,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +29,6 @@
         </activity>
         <activity android:name=".MenuPrincipal" />
         <activity android:name=".ConsumoTempoReal" />
-        <activity android:name=".HistoricoConsumo" />
         <activity
             android:name=".AcompanhamEquipeTecnica"
             android:label="@string/title_activity_acompanham_equipe_tecnica"
@@ -49,10 +48,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBO6BcaIhXI9jOcp-CoJEn63sJTmEY3Azs" />
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"
-            android:parentActivityName=".MainActivity" />
+        <service android:name=".FirebaseMensagem">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

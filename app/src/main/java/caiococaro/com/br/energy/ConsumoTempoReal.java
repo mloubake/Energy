@@ -204,13 +204,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
 
-                        if (numCliente.equals(String.valueOf(document.getData().get("numCliente")))) {
-
-                            bundle = getIntent().getExtras();
-
-                            if (bundle != null) {
-                                numCliente = bundle.getString(NAME_CONSUMO);
-                            }
+                        if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
 
                             leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
                             Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
@@ -234,6 +228,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
             }
 
         });
+
 
         pesquisa2();
     }

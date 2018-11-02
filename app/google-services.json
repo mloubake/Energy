@@ -49,50 +49,6 @@
           "status": 2
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:890454206217:android:60302812398e65d6",
-        "android_client_info": {
-          "package_name": "com.caiococaro.com.br.energy"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "890454206217-odrjvabpq6uuagr960r3etpm7k3s5ocq.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.caiococaro.com.br.energy",
-            "certificate_hash": "4625eb9f94ff0c3cf142ec633692f2e029158d40"
-          }
-        },
-        {
-          "client_id": "890454206217-rtsvtl649dl7lj7de619n8617n4gi1e4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC4Y-nFkerk7b_GJf-DtzokEHgCDZyTIKE"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "890454206217-rtsvtl649dl7lj7de619n8617n4gi1e4.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
     }
   ],
   "configuration_version": "1"
