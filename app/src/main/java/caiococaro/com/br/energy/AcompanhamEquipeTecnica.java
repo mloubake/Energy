@@ -13,18 +13,27 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+
+import javax.annotation.Nullable;
 
 public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
@@ -48,16 +57,25 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     private static final String NAME_ACOMPANHAMENTO = "Acompanhamento";
     private static final String CHANNEL_ID = "ID Pessoal";
 
-
     FirebaseFirestore mFirestore;
 
     Bundle bundle = new Bundle();
     String numRequerimento;
 
-
     int statusPedido;
+
     double porcStatusPedido;
     ProgressBar mProgresBar;
+    LinearLayout layoutStatus;
+    TextView txtNaoSolicitado;
+
+    ImageView img1;
+    ImageView img2;
+    ImageView img3;
+    ImageView img4;
+    ImageView img5;
+    ImageView img6;
+    ArrayList<ImageView> imgArrayList = new ArrayList<>();
 
 
     @Override
@@ -66,193 +84,107 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         setContentView(R.layout.activity_acompanham_equipe_tecnica);
 
 
-        /*
-        MessageReceiver receiver = new MessageReceiver(new Message());
-
-        Intent intent = new Intent(AcompanhamEquipeTecnica.this, TimerService.class);
-        intent.putExtra("time", 10);
-        intent.putExtra("receiver", receiver);
-        startService(intent);
-        */
-
         bundle = getIntent().getExtras();
         if (bundle != null) {
             numRequerimento = bundle.getString(NAME_ACOMPANHAMENTO);
             Log.d("", "TOKENACESSO: " + numRequerimento);
         }
 
-        final ImageView img0 = findViewById(R.id.imagem0);
-        final ImageView img1 = findViewById(R.id.imagem1);
-        final ImageView img2 = findViewById(R.id.imagem2);
-        final ImageView img3 = findViewById(R.id.imagem3);
-        final ImageView img4 = findViewById(R.id.imagem4);
-        final ImageView img5 = findViewById(R.id.imagem5);
-        final ImageView img6 = findViewById(R.id.imagem6);
+        mProgresBar = findViewById(R.id.progress);
+        img1 = findViewById(R.id.imagem1);
+        img2 = findViewById(R.id.imagem2);
+        img3 = findViewById(R.id.imagem3);
+        img4 = findViewById(R.id.imagem4);
+        img5 = findViewById(R.id.imagem5);
+        img6 = findViewById(R.id.imagem6);
+        imgArrayList.add(img1);
+        imgArrayList.add(img2);
+        imgArrayList.add(img3);
+        imgArrayList.add(img4);
+        imgArrayList.add(img5);
+        imgArrayList.add(img6);
+        txtNaoSolicitado = findViewById(R.id.txt_nao_solicitado);
 
+        layoutStatus = findViewById(R.id.layoutStatus);
 
-        /*
-        public class Message{
-            public void displayMessage(int resultCode, Bundle resultData){
-                String message = resultData.getString("message");
-                Toast.makeText(AcompanhamEquipeTecnica.this, resultCode + " " + message, Toast.LENGTH_SHORT).show();
-            }
-        }
-        */
-
-        //boolean alarmeAtivo = (PendingIntent.getBroadcast(this, 0, new Intent("ALARM_DISPARADO"), PendingIntent.FLAG_NO_CREATE) == null);
-
-
-
-
-        //acompanhamentoBD(img0, img1, img2, img3, img4, img5, img6);
-
-
-
+        acompanhamentoBD();
 
     }
 
-/*
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void ScheduleJob(View v){
-        ComponentName componentName = new ComponentName(this, ExampleJobService.class);
-        JobInfo info = new JobInfo.Builder(123, componentName)
-                .setRequiresCharging(true)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
-                .setPersisted(true)
-                .setPeriodic(15 * 60 * 1000)
-                .build();
-
-        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        int resultCode = scheduler.schedule(info);
-        if(resultCode == JobScheduler.RESULT_SUCCESS){
-            Log.d(TAG, "ScheduleJob:");
-        } else {
-            Log.d(TAG, "ScheduleJob: Failed");
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void cancelJob(View v){
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        scheduler.cancel(123);
-        Log.d(TAG, "Job cancelled");
-    }
-
-*/
-
-    public PendingIntent acompanhamentoBD(final ImageView img0, final ImageView img1, final ImageView img2,
-                                          final ImageView img3, final ImageView img4, final ImageView img5,
-                                          final ImageView img6){
+    public void acompanhamentoBD(){
+//        TODO FAZER O FOR EM CADA CASE DO SWITCH, PARA ACENDER E APAGAR AS LUZES
         mFirestore = FirebaseFirestore.getInstance();
+        mFirestore.enableNetwork();
 
-        mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete (@NonNull Task < QuerySnapshot > task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-                        if (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(numRequerimento))) {
-                            Log.d("", "STATUS-PEDIDO: " + String.valueOf(document.getData().get("statusPedido")));
-                            statusPedido = Integer.valueOf(String.valueOf(document.getData().get("statusPedido")));
-                            switch (statusPedido) {
-                                case 0:
-                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-                                    porcStatusPedido = 0;
-                                    img0.setImageResource(R.drawable.yellow_circle_icon);
-                                    break;
-                                case 1:
-                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-                                    porcStatusPedido = 16.666666667;
-                                    img0.setImageResource(R.drawable.yellow_circle_icon);
-                                    img1.setImageResource(R.drawable.yellow_circle_icon);
-                                    sendNotification(AcompanhamEquipeTecnica.this);
-                                    break;
-                                case 2:
-                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-                                    porcStatusPedido = 33.333333333;
-                                    img0.setImageResource(R.drawable.yellow_circle_icon);
-                                    img1.setImageResource(R.drawable.yellow_circle_icon);
-                                    img2.setImageResource(R.drawable.yellow_circle_icon);
-                                    sendNotification(AcompanhamEquipeTecnica.this);
-                                    break;
-                                case 3:
-                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-                                    porcStatusPedido = 50;
-                                    img0.setImageResource(R.drawable.yellow_circle_icon);
-                                    img1.setImageResource(R.drawable.yellow_circle_icon);
-                                    img2.setImageResource(R.drawable.yellow_circle_icon);
-                                    img3.setImageResource(R.drawable.yellow_circle_icon);
-                                    sendNotification(AcompanhamEquipeTecnica.this);
-                                    break;
-                                case 4:
-                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-                                    porcStatusPedido = 66.666666667;
-                                    img0.setImageResource(R.drawable.yellow_circle_icon);
-                                    img1.setImageResource(R.drawable.yellow_circle_icon);
-                                    img2.setImageResource(R.drawable.yellow_circle_icon);
-                                    img3.setImageResource(R.drawable.yellow_circle_icon);
-                                    img4.setImageResource(R.drawable.yellow_circle_icon);
-                                    sendNotification(AcompanhamEquipeTecnica.this);
-                                    break;
-                                case 5:
-                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-                                    porcStatusPedido = 83.333333333;
-                                    img0.setImageResource(R.drawable.yellow_circle_icon);
-                                    img1.setImageResource(R.drawable.yellow_circle_icon);
-                                    img2.setImageResource(R.drawable.yellow_circle_icon);
-                                    img3.setImageResource(R.drawable.yellow_circle_icon);
-                                    img4.setImageResource(R.drawable.yellow_circle_icon);
-                                    img5.setImageResource(R.drawable.yellow_circle_icon);
-                                    sendNotification(AcompanhamEquipeTecnica.this);
-                                    break;
-                                case 6:
-                                    Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-                                    porcStatusPedido = 100;
-                                    img0.setImageResource(R.drawable.yellow_circle_icon);
-                                    img1.setImageResource(R.drawable.yellow_circle_icon);
-                                    img2.setImageResource(R.drawable.yellow_circle_icon);
-                                    img3.setImageResource(R.drawable.yellow_circle_icon);
-                                    img4.setImageResource(R.drawable.yellow_circle_icon);
-                                    img5.setImageResource(R.drawable.yellow_circle_icon);
-                                    img6.setImageResource(R.drawable.yellow_circle_icon);
-                                    sendNotification(AcompanhamEquipeTecnica.this);
-                                    break;
-                                default:
-
-                                    break;
-                            }
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                    if (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(numRequerimento))) {
+                        Log.d("", "STATUS-PEDIDO: " + String.valueOf(document.getData().get("statusPedido")));
+                        statusPedido = Integer.valueOf(String.valueOf(document.getData().get("statusPedido")));
+                        showStatus();
+                        if(statusPedido >= 1 && statusPedido <= imgArrayList.size()){
+                            Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+                            tintIcon();
+                        }else{
+                            hideStatus();
                         }
 
-
+//                        switch (statusPedido) {
+//                            case 1:
+//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+//                                tintIcon();
+//                                break;
+//                            case 2:
+//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+//                                tintIcon();
+//                                break;
+//                            case 3:
+//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+//                                tintIcon();
+//                                break;
+//                            case 4:
+//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+//                                tintIcon();
+//                                break;
+//                            case 5:
+//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+//                                tintIcon();
+//                                break;
+//                            case 6:
+//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
+//                                tintIcon();
+//                                break;
+//                            default:
+//                                hideStatus();
+//                                break;
+//                        }
                     }
-
-                    mProgresBar = findViewById(R.id.progress);
-                    mProgresBar.setProgress((int) porcStatusPedido);
-
-
                 }
             }
-
         });
-        return null;
+
     }
 
+    public void tintIcon(){
+        mProgresBar.setProgress(100/imgArrayList.size() * statusPedido);
+        for(ImageView iv : imgArrayList){
+            int index = imgArrayList.indexOf(iv);
+            if (index < statusPedido) {
+                imgArrayList.get(index).setImageResource(R.drawable.yellow_circle_icon);
+            } else {
+                imgArrayList.get(index).setImageResource(R.drawable.grey_circle_icon);
+            }
+        }
+    }
 
-
-    public void sendNotification(AcompanhamEquipeTecnica view){
-        //Get an instance of a NotificationManager
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID );
-        mBuilder.setSmallIcon(R.drawable.yellow_circle_icon);
-        mBuilder.setContentTitle("Notificação Energy");
-        mBuilder.setContentText("O Status do seu agendamento mudou");
-        mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        mBuilder.build();
-
-        //Gets an instance of the NotificationManager service
-        NotificationManagerCompat mNotificationManagerCompat = NotificationManagerCompat.from(this);
-        mNotificationManagerCompat.notify(001, mBuilder.build());
+    private void hideStatus() {
+        layoutStatus.setVisibility(View.GONE);
+        txtNaoSolicitado.setVisibility(View.VISIBLE);
+    }
+    private void showStatus() {
+        layoutStatus.setVisibility(View.VISIBLE);
+        txtNaoSolicitado.setVisibility(View.GONE);
     }
 }
-
-
-
-

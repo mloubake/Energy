@@ -6,11 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".CadastroBaixaRenda">
 
-    <RelativeLayout
-        android:id="@+id/layoutPai"
+    <LinearLayout
+        android:id="@+id/layoutStatus"
         android:layout_width="300dp"
-        android:layout_height="375dp"
-        android:layout_centerInParent="true">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
         <ProgressBar
             android:id="@+id/progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -19,102 +21,122 @@
             android:layout_gravity="center"
             android:visibility="visible"
             android:background="@color/colorGrey"/>
-        <RelativeLayout
-            android:id="@+id/layoutImagens"
-            android:layout_width="45dp"
-            android:layout_height="match_parent"
-            android:layout_below="@id/progress">
-            <ImageView
-                android:id="@+id/imagem0"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:src="@drawable/grey_circle_icon"/>
+
+        <LinearLayout
+            android:id="@+id/layout_status_0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp">
             <ImageView
                 android:id="@+id/imagem1"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:src="@drawable/grey_circle_icon"
-                android:layout_below="@id/imagem0"/>
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/grey_circle_icon"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/solicitado"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp">
             <ImageView
                 android:id="@+id/imagem2"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:src="@drawable/grey_circle_icon"
-                android:layout_below="@id/imagem1"/>
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/grey_circle_icon"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/emAnalise"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp">
             <ImageView
                 android:id="@+id/imagem3"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/grey_circle_icon"/>
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:src="@drawable/grey_circle_icon"
-                android:layout_below="@id/imagem2"/>
+                android:layout_height="wrap_content"
+                android:text="@string/equipeSelecionada"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp">
             <ImageView
                 android:id="@+id/imagem4"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/grey_circle_icon"/>
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:src="@drawable/grey_circle_icon"
-                android:layout_below="@id/imagem3"/>
+                android:layout_height="wrap_content"
+                android:text="@string/equipeACaminho"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp">
             <ImageView
                 android:id="@+id/imagem5"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/grey_circle_icon"/>
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:src="@drawable/grey_circle_icon"
-                android:layout_below="@id/imagem4"/>
+                android:layout_height="wrap_content"
+                android:text="@string/emAndamento"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp">
             <ImageView
                 android:id="@+id/imagem6"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:src="@drawable/grey_circle_icon"
-                android:layout_below="@id/imagem5"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/layoutTexto"
-            android:layout_width="255dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/progress"
-            android:layout_marginTop="1dp"
-            android:layout_alignParentRight="true">
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/grey_circle_icon"/>
             <TextView
-                android:id="@+id/naoSolicitado"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="@string/naoSolicitado"
-                />
-            <TextView
-                android:id="@+id/solicitado"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_below="@id/naoSolicitado"
-                android:text="@string/solicitado" />
-            <TextView
-                android:id="@+id/emAnalise"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_below="@id/solicitado"
-                android:text="@string/emAnalise" />
-            <TextView
-                android:id="@+id/equipeSolicitada"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_below="@id/emAnalise"
-                android:text="@string/equipeSelecionada" />
-            <TextView
-                android:id="@+id/equipeACaminho"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_below="@id/equipeSolicitada"
-                android:text="@string/equipeACaminho" />
-            <TextView
-                android:id="@+id/emAndamento"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_below="@id/equipeACaminho"
-                android:text="@string/emAndamento" />
-            <TextView
-                android:id="@+id/finalizado"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_below="@id/emAndamento"
-                android:text="@string/finalizado" />
-        </RelativeLayout>
-    </RelativeLayout>
+                android:layout_height="wrap_content"
+                android:text="@string/finalizado"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_nao_solicitado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/naoSolicitado"
+        android:textSize="20sp"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>

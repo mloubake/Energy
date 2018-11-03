@@ -63,27 +63,7 @@
 
             </TableRow>
 
-            <!-- Linha 2 -->
-            <TableRow
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:gravity="center_horizontal"
-                android:paddingRight="20dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="20dp">
 
-                <Button
-                    android:id="@+id/btnHistConsumo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_green"
-                    android:text="@string/hist_consumo"
-                    android:textAllCaps="false"
-                    android:gravity="center"
-                    android:textColor="#FFFF"
-                    android:drawableLeft="@drawable/hist_consumo"/>
-
-            </TableRow>
 
             <!-- Linha 3 -->
             <TableRow
@@ -98,7 +78,7 @@
                     android:id="@+id/btnCadastroVital"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_red"
+                    android:background="@drawable/button_green"
                     android:text="@string/cadastro_cliente_vital"
                     android:textAllCaps="false"
                     android:gravity="center"
@@ -119,7 +99,7 @@
                     android:id="@+id/btnCadastroBaixaRenda"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_pink"
+                    android:background="@drawable/button_red"
                     android:text="@string/cadastro_baixa_renda"
                     android:textAllCaps="false"
                     android:gravity="center"
@@ -140,7 +120,7 @@
                     android:id="@+id/btnAcompanhamento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_blue"
+                    android:background="@drawable/button_pink"
                     android:text="@string/acompanham_equipe_tecnica"
                     android:textAllCaps="false"
                     android:gravity="center"

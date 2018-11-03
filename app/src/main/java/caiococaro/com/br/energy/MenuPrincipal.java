@@ -70,23 +70,6 @@ public class MenuPrincipal extends AppCompatActivity {
           }
       });
 
-//
-//        //Inciando Activity HistoricoConsumo
-//        btnHistConsumo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intentHistorico = new Intent(MenuPrincipal.this, HistoricoConsumo.class);
-//
-//                //Enviando bundle para HistoricoConsumo
-//                Bundle bundleHistorico = new Bundle();
-//                bundleHistorico.putString(NAME_HISTORICO, valorToken);
-//                bundleHistorico.putString(KEY_NUM_CLIENTE, valorNumCliente);
-//                intentHistorico.putExtras(bundleHistorico);
-//                startActivity(intentHistorico);
-//                Log.d(TAG, "BUNDLE-HISTORICO: " + bundleHistorico);
-//            }
-//        });h
-
         //Inciando Activity AcompanhamentoEquipeTecnica
         btnAcompanhamento.setOnClickListener(new View.OnClickListener() {
             @Override
