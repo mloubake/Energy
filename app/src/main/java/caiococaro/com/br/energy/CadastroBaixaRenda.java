@@ -9,36 +9,46 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class CadastroBaixaRenda extends AppCompatActivity {
+
+
+    EditText etNIS = null;
+    EditText etNumCliente = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_baixa_renda);
+
+        etNIS = (EditText) findViewById(R.id.etNIS);
+        etNumCliente = (EditText) findViewById(R.id.etNumCliente);
     }
 
     public void Enviar(View view) {
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
-        dialogBuilder
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        //atualizar
+            dialogBuilder
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
-                        Intent intent = new Intent(CadastroBaixaRenda.this, MenuPrincipal.class);
-                        startActivity(intent);
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //atualizar
+
+                            Intent intent = new Intent(CadastroBaixaRenda.this, MenuPrincipal.class);
+                            startActivity(intent);
                         }
                     });
 
-        dialogBuilder.setMessage("Solicitação enviada para análise com sucesso!");
+            dialogBuilder.setMessage("Solicitação enviada para análise com sucesso!");
 
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
+            AlertDialog alertDialog = dialogBuilder.create();
+            alertDialog.show();
 
-    }
+        }
 }
+

@@ -29,10 +29,10 @@
             <ImageView
                 android:layout_width="100dip"
                 android:layout_height="150dip"
-
                 android:adjustViewBounds="true"
                 android:cropToPadding="true"
-                android:src="@drawable/tarifa_social"
+                android:src="@mipmap/tarifa_social"
+                android:paddingBottom="20dp"
                 android:visibility="visible" />
         </TableRow>
 
@@ -43,7 +43,7 @@
             android:gravity="center_horizontal">
 
             <EditText
-                android:id="@+id/etCpfCnpj"
+                android:id="@+id/etNIS"
                 android:layout_width="271dp"
                 android:layout_height="43dip"
                 android:layout_alignParentTop="true"
