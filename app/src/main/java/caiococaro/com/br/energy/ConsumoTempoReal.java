@@ -130,14 +130,12 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     String dataFormatada = formatData.format(data);
 
-    String hoje = String.valueOf(dataFormatada);
+    int today = Integer.valueOf(dataFormatada.substring(0,2));
 
-    int today = 23;
-    int ultimoDia = 31;
+    Calendar c = Calendar.getInstance();
+
+    int ultimoDia = Integer.valueOf(c.getActualMaximum(Calendar.DAY_OF_MONTH));
     int diasDif=0;
-
-    //String um = String.valueOf(today.indexOf("-"));
-    //String dois = String.valueOf(today.lastIndexOf("-"));
 
 
     @Override
@@ -171,6 +169,9 @@ public class ConsumoTempoReal extends AppCompatActivity {
         progress.show();
 
         mFirestore = FirebaseFirestore.getInstance();
+
+        Toast.makeText(getApplicationContext(),""+ultimoDia,Toast.LENGTH_LONG).show();
+
 
         pesquisa1();
 
