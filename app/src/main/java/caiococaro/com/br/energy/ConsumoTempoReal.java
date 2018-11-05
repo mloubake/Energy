@@ -170,9 +170,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         mFirestore = FirebaseFirestore.getInstance();
 
-        Toast.makeText(getApplicationContext(),""+ultimoDia,Toast.LENGTH_LONG).show();
-
-
         pesquisa1();
 
     }
