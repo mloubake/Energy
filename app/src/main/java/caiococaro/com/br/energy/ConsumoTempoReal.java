@@ -66,7 +66,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     //Names para cada Bundle Específica
 
-    private static final String NAME_CONSUMO = "Consumo";
+    private static final String NAME_CONSUMO = "Usuario";
     private static final String NAME_CONSUMO_ATUAL = "ConsumoAtual";
     private ProgressDialog progress;
 
@@ -163,8 +163,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         if (bundle != null) {
             numCliente = bundle.getString(NAME_CONSUMO);
-        }
 
+        }
 
         progress = new ProgressDialog(ConsumoTempoReal.this);
         progress.setMessage("Calculando...");
@@ -221,6 +221,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                             tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
                             Log.d(TAG, "TOKEN_ACESSO: " + tokenAcesso);
+
                         }
                         //calcula();
                     }
@@ -252,6 +253,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
                         cofins = String.valueOf(document.getData().get("COFINS"));
 
                         icms = String.valueOf(document.getData().get("ICMS"));
+
                     }
 
                 }
@@ -283,6 +285,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                         te = String.valueOf(document.getData().get("TE"));
                         tusd = String.valueOf(document.getData().get("TUSD"));
+
 
                     }
                 }
@@ -316,6 +319,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
                         bantVermelha1 = String.valueOf(document.getData().get("vermelha1"));
 
                         bantVermelha2 = String.valueOf(document.getData().get("vermelha2"));
+
                     }
                 }
                 BantarVerde = Float.valueOf(bantVerde);
