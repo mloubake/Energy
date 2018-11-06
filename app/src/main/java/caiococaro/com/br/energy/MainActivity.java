@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     public String tokenAcesso;
     public String numRequerimento;
 
+    Bundle bundle = new Bundle();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                                     numRequerimento = document.getData().get(FIELD_NUM_REQUERIMENTO).toString();
                                     Log.d(TAG, "TOKEN_ACESSO: "+tokenAcesso);
 
-                                    //Iniciar activity MenuPrincipal com Bud
+                                    //Iniciar activity MenuPrincipal com Bundle
                                     Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
                                     Bundle bundle = new Bundle();
                                     bundle.putString(KEY_NUM_CLIENTE, numCliente);

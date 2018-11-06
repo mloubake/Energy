@@ -75,8 +75,7 @@ public class MenuPrincipal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intentAcompanhamento= new Intent(MenuPrincipal.this, AcompanhamEquipeTecnica.class);
-
-                //Enviando bundle para ConsumoTempoReal
+                //Enviando bundle para AcompanhamentoEquipeTecnica
                 Bundle bundleAcompanhamento = new Bundle();
                 bundleAcompanhamento.putString(NAME_ACOMPANHAMENTO, valorNumRequerimento);
                 //bundleAcompanhamento.putString(NAME_NUM_REQUERIMENTO, valorNumRequerimento);
@@ -91,8 +90,14 @@ public class MenuPrincipal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intentClienteVital = new Intent(MenuPrincipal.this, CadastroClienteVital.class);
+                //Enviando bundle para CadastroClienteVital
+                Bundle bundleClienteVital = new Bundle();
+                bundleClienteVital.putString(KEY_NUM_CLIENTE, valorNumCliente);
+                bundleClienteVital.putString(KEY_NUM_REQUERIMENTO, valorNumRequerimento);
+                intentClienteVital.putExtras( bundleClienteVital);
                 startActivity(intentClienteVital);
-                Log.d(TAG, "BUNDLE-CADASTRO-VITAL: " );
+                Log.d(TAG, "BUNDLE-CADASTRO-VITAL: " + bundleClienteVital);
+
             }
         });
 
