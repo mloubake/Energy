@@ -33,7 +33,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="TODO"
                 android:cropToPadding="true"
-                android:src="@mipmap/enel"
+                android:src="@mipmap/energy"
                 android:visibility="visible" />
         </TableRow>
 
