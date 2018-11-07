@@ -172,9 +172,11 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         for(ImageView iv : imgArrayList){
             int index = imgArrayList.indexOf(iv);
             if (index < statusPedido) {
-                imgArrayList.get(index).setImageResource(R.drawable.yellow_circle_icon);
-            } else {
-                imgArrayList.get(index).setImageResource(R.drawable.grey_circle_icon);
+                imgArrayList.get(index).setImageResource(R.drawable.check);
+            }if (index == statusPedido) {
+                imgArrayList.get(index).setImageResource(R.drawable.carro);
+            } if(index > statusPedido) {
+                imgArrayList.get(index).setImageResource(R.drawable.vazio);
             }
         }
     }

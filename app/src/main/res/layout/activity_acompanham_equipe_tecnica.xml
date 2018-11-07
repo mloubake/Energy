@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CadastroBaixaRenda">
+    tools:context=".AcompanhamEquipeTecnica">
 
     <LinearLayout
         android:id="@+id/layoutStatus"
@@ -13,14 +13,6 @@
         android:orientation="vertical"
         android:layout_centerInParent="true"
         android:visibility="gone">
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            android:visibility="visible"
-            android:background="@color/colorGrey"/>
 
         <LinearLayout
             android:id="@+id/layout_status_0"
@@ -93,6 +85,7 @@
                 android:text="@string/equipeACaminho"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="16dp"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -129,10 +122,45 @@
                 android:text="@string/finalizado"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="16dp"/>
+
         </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            android:background="@drawable/rounded_edittext"/>
     </LinearLayout>
 
-    <TextView
+    <RelativeLayout
+        android:layout_width="279dp"
+        android:layout_height="217dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginBottom="50dp"
+            android:layout_marginRight="200dp"
+            android:text="0%" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+
+            android:layout_alignParentTop="true"
+            android:layout_gravity="left"
+            android:text="100%" />
+
+
+    </RelativeLayout>
+
+  <TextView
         android:id="@+id/txt_nao_solicitado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

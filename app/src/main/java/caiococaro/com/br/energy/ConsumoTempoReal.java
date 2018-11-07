@@ -467,7 +467,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
                         if(leituraAtual < Integer.valueOf(leituraAnterior)){
 
                             Toast.makeText(getApplicationContext(),"ERRO: verifique a leitura e tente novamente",Toast.LENGTH_LONG).show();
-                            
+
                         }
                         else {
 
