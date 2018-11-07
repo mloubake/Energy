@@ -112,7 +112,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     }
 
     public void acompanhamentoBD(){
-//        TODO FAZER O FOR EM CADA CASE DO SWITCH, PARA ACENDER E APAGAR AS LUZES
+//        TODO numSolicitação em cima dos status
         mFirestore = FirebaseFirestore.getInstance();
         mFirestore.enableNetwork();
 
