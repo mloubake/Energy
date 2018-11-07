@@ -75,6 +75,61 @@
         </TableRow>
 
         <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tvnomeCliente"
+                android:layout_width="500dip"
+                android:layout_height="43dip"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dip"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Nome"
+                android:inputType="none|number"
+                android:shadowRadius="10"
+                android:textStyle="italic" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tvcpfCliente"
+                android:layout_width="500dip"
+                android:layout_height="43dip"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dip"
+                android:background="@drawable/rounded_edittext"
+                android:hint="CPF"
+                android:inputType="none|number"
+                android:shadowRadius="10"
+                android:textStyle="italic" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tvendCliente"
+                android:layout_width="500dip"
+                android:layout_height="43dip"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dip"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Endereço"
+                android:inputType="none|number"
+                android:shadowRadius="10"
+                android:textStyle="italic" />
+
+        </TableRow>
+
+        <TableRow
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
