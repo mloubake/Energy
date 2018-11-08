@@ -1,11 +1,18 @@
 package caiococaro.com.br.energy;
 
+import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,12 +22,17 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.Layout;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -77,6 +89,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     ImageView img6;
     ArrayList<ImageView> imgArrayList = new ArrayList<>();
 
+    Dialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,13 +121,15 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         layoutStatus = findViewById(R.id.layoutStatus);
 
         acompanhamentoBD();
-
     }
 
     public void acompanhamentoBD(){
-//        TODO numSolicitação em cima dos status
+//        TODO numSolicitação em cima dos status | fazer popup com rating de estrela e comentário
         mFirestore = FirebaseFirestore.getInstance();
         mFirestore.enableNetwork();
+
+        RatingBar mRatingBar= new RatingBar(this);
+//        mRatingBar.setOnRatingBarChangeListener(new RatingBar.Rating);
 
         mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -127,39 +142,15 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                         if(statusPedido >= 1 && statusPedido <= imgArrayList.size()){
                             Log.d("", "***STATUS-PEDIDO: " + statusPedido);
                             tintIcon();
-                        }else{
+                            if(statusPedido == 6){
+//                               mDialog = new Dialog(AcompanhamEquipeTecnica.this);
+                                showPopUp();
+                            }
+                        }
+                        else{
                             hideStatus();
                         }
 
-//                        switch (statusPedido) {
-//                            case 1:
-//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-//                                tintIcon();
-//                                break;
-//                            case 2:
-//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-//                                tintIcon();
-//                                break;
-//                            case 3:
-//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-//                                tintIcon();
-//                                break;
-//                            case 4:
-//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-//                                tintIcon();
-//                                break;
-//                            case 5:
-//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-//                                tintIcon();
-//                                break;
-//                            case 6:
-//                                Log.d("", "***STATUS-PEDIDO: " + statusPedido);
-//                                tintIcon();
-//                                break;
-//                            default:
-//                                hideStatus();
-//                                break;
-//                        }
                     }
                 }
             }
@@ -173,9 +164,11 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
             int index = imgArrayList.indexOf(iv);
             if (index < statusPedido) {
                 imgArrayList.get(index).setImageResource(R.drawable.check);
-            }if (index == statusPedido) {
+            }/*
+            else if (index == statusPedido) {
                 imgArrayList.get(index).setImageResource(R.drawable.carro);
-            } if(index > statusPedido) {
+            }*/
+             else{
                 imgArrayList.get(index).setImageResource(R.drawable.vazio);
             }
         }
@@ -189,4 +182,56 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         layoutStatus.setVisibility(View.VISIBLE);
         txtNaoSolicitado.setVisibility(View.GONE);
     }
+
+    public void showPopUp(){
+//        mDialog.setContentView(R.layout.custom_popup);
+//
+//        btbEnviarAvaliacao = mDialog.findViewById(R.id.btnClosePopup);
+//        btbEnviarAvaliacao.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mDialog.hide();
+//            }
+//        });
+
+        /*
+        setContentView(R.layout.custom_popup);
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+
+
+        getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
+//        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button btbEnviarAvaliacao = findViewById(R.id.btnClosePopup);
+        btbEnviarAvaliacao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });*/
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        // ...Irrelevant code for customizing the buttons and title
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.custom_popup, null);
+        dialogBuilder.setView(dialogView);
+
+        dialogBuilder.setPositiveButton("Enviar Avaliação", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+
+
 }

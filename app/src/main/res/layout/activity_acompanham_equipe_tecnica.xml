@@ -121,7 +121,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/finalizado"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"/>
+                android:layout_marginLeft="16dp"
+                android:onClick="showPopUp"/>
 
         </LinearLayout>
         <ProgressBar

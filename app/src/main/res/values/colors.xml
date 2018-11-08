@@ -7,7 +7,8 @@
     <color name="btnEntrar">#FFFFFF</color>
     <color name="bgTelaLogin">#40b9e6</color>
     <color name="bgEdTxt">#FFFFFF</color>
-    <color name="transparente"></color>
+    <color name="transparente">#000e0e0e</color>
+    <color name="transparentePreto">#cd0e0e0e</color>
     <color name="colorYellow">#ffff6c</color>
     <color name="colorGrey">#aeae99</color>
 
