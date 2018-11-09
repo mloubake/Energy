@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,6 +38,8 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     private static final String KEY_NUM_CLIENTE = "NumeroCliente";
     private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
     private static final String KEY_NUM_REQUERIMENTO = "NumRequerimento";
+    private static final String KEY_NOME = "Nome";
+    private static final String KEY_ENDERECO= "Endereco";
 
     //Names para cada Bundle Específica
     private static final String NAME_ACOMPANHAMENTO = "Acompanhamento";
@@ -48,12 +49,14 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
     Bundle bundle = new Bundle();
     String numRequerimento;
+    String numCliente;
+    String nomeCliente;
+    String enderecoCliente;
 
     int statusPedido;
 
     TextView txtNumCliente;
 
-    ProgressBar mProgresBar;
     LinearLayout layoutStatus;
     TextView txtNaoSolicitado;
 
@@ -72,15 +75,18 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
         bundle = getIntent().getExtras();
         if (bundle != null) {
-            numRequerimento = bundle.getString(NAME_ACOMPANHAMENTO);
+            numRequerimento = bundle.getString(KEY_NUM_REQUERIMENTO);
+            numCliente = bundle.getString(KEY_NUM_CLIENTE);
+            nomeCliente = bundle.getString(KEY_NOME);
+            enderecoCliente = bundle.getString(KEY_ENDERECO);
             Log.d("", "TOKENACESSO: " + numRequerimento);
         }
 
-        txtNumCliente = findViewById(R.id.txtNumCliente);
+        txtNumCliente = findViewById(R.id.txtInfoCliente);
 
-        txtNumCliente.setText("Número do Requerimento: " + numRequerimento);
+        txtNumCliente.setText("  Usuário / Número do Cliente: " + nomeCliente + " / " + numCliente +
+                "\n  Endereço: " + enderecoCliente + "\n  Número do Requerimento: " + numRequerimento);
 
-        mProgresBar = findViewById(R.id.progress);
         img1 = findViewById(R.id.imagem1);
         img2 = findViewById(R.id.imagem2);
         img3 = findViewById(R.id.imagem3);
@@ -129,7 +135,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     }
 
     public void tintIcon(){
-        mProgresBar.setProgress(100/imgArrayList.size() * statusPedido);
         for(ImageView iv : imgArrayList){
             int index = imgArrayList.indexOf(iv);
             if (index < statusPedido) {

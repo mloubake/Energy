@@ -16,6 +16,8 @@ public class MenuPrincipal extends AppCompatActivity {
     //(Está passando o dado numCliente para essa tela)
     public static final String KEY_NUM_CLIENTE = "NumeroCliente";
     public static final String KEY_NUM_REQUERIMENTO = "NumRequerimento";
+    public static final String KEY_NOME= "Nome";
+    public static final String KEY_ENDERECO = "Endereco";
 
     //(Está passando o dado tokenAcesso para essa tela)
     private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
@@ -31,6 +33,8 @@ public class MenuPrincipal extends AppCompatActivity {
     String valorNumCliente;
     String valorToken;
     String valorNumRequerimento;
+    String valorNome;
+    String valorEndereco;
     //
     Bundle bundle = new Bundle();
 
@@ -47,13 +51,15 @@ public class MenuPrincipal extends AppCompatActivity {
             valorNumCliente = bundle.getString(KEY_NUM_CLIENTE);
             valorToken = bundle.getString(KEY_TOKEN_ACESSO);
             valorNumRequerimento = bundle.getString(KEY_NUM_REQUERIMENTO);
+            valorNome = bundle.getString(KEY_NOME);
+            valorEndereco = bundle.getString(KEY_ENDERECO);
             Log.d(TAG, "MENUPRINCIPALBUNDLES: "+valorNumCliente + " / " + valorToken + " / " + valorNumRequerimento) ;
         }
 
-        Button btnConsumo = (Button) findViewById(R.id.btnConsumo);
-        final Button btnAcompanhamento = (Button) findViewById(R.id.btnAcompanhamento);
-        final Button btnCadastroVital = (Button) findViewById(R.id.btnCadastroVital);
-        Button btnCadastroBaixaRenda = (Button) findViewById(R.id.btnCadastroBaixaRenda);
+        Button btnConsumo = findViewById(R.id.btnConsumo);
+        final Button btnAcompanhamento = findViewById(R.id.btnAcompanhamento);
+        final Button btnCadastroVital = findViewById(R.id.btnCadastroVital);
+        Button btnCadastroBaixaRenda = findViewById(R.id.btnCadastroBaixaRenda);
 
         //Inciando Activity ConsumoTempoRealbtnConsumo.setOnClickListener(new View.OnClickListener() {
             btnConsumo.setOnClickListener(new View.OnClickListener() {
@@ -77,8 +83,10 @@ public class MenuPrincipal extends AppCompatActivity {
                 Intent intentAcompanhamento= new Intent(MenuPrincipal.this, AcompanhamEquipeTecnica.class);
                 //Enviando bundle para AcompanhamentoEquipeTecnica
                 Bundle bundleAcompanhamento = new Bundle();
-                bundleAcompanhamento.putString(NAME_ACOMPANHAMENTO, valorNumRequerimento);
-                //bundleAcompanhamento.putString(NAME_NUM_REQUERIMENTO, valorNumRequerimento);
+                bundleAcompanhamento.putString(KEY_NUM_REQUERIMENTO, valorNumRequerimento);
+                bundleAcompanhamento.putString(KEY_NUM_CLIENTE, valorNumCliente);
+                bundleAcompanhamento.putString(KEY_NOME, valorNome);
+                bundleAcompanhamento.putString(KEY_ENDERECO, valorEndereco);
                 intentAcompanhamento.putExtras( bundleAcompanhamento);
                 startActivity(intentAcompanhamento);
                 Log.d(TAG, "BUNDLE-ACOMPANHAMENTO: " + bundleAcompanhamento);

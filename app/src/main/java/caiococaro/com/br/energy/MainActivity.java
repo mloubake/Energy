@@ -35,12 +35,16 @@ public class MainActivity extends AppCompatActivity {
     private static final String FIELD_CPF_CNPJ = "cpfCnpj";
     private static final String FIELD_NUM_CLIENTE = "numCliente";
     private static final String FIELD_TOKEN_ACESSO = "tokenAcesso";
-    private static final String FIELD_NUM_REQUERIMENTO= "numRequerimento";
+    private static final String FIELD_NUM_REQUERIMENTO = "numRequerimento";
+    private static final String FIELD_NOME_CLIENTE = "nomeCliente";
+    private static final String FIELD_ENDERECO_CLIENTE = "enderecoCliente";
 
     //Keys da Bundle (Dados (ou valores) que serão passados para a próxima Activity através da Bundle)
     private static final String KEY_NUM_CLIENTE = "NumeroCliente";
     private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
-    private static final String KEY_NUM_REQUERIMENTO= "NumRequerimento";
+    private static final String KEY_NUM_REQUERIMENTO = "NumRequerimento";
+    private static final String KEY_NOME = "Nome";
+    private static final String KEY_ENDERECO = "Endereco";
 
 
     //Declaração da Inicialiação do FireStore
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
     public String tokenAcesso;
     public String numRequerimento;
+    public String nomeCliente;
+    public String enderecoCliente;
 
     Bundle bundle = new Bundle();
 
@@ -98,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
 
                                     tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
                                     numRequerimento = document.getData().get(FIELD_NUM_REQUERIMENTO).toString();
+                                    nomeCliente = document.getData().get(FIELD_NOME_CLIENTE).toString();
+                                    enderecoCliente = document.getData().get(FIELD_ENDERECO_CLIENTE).toString();
                                     Log.d(TAG, "TOKEN_ACESSO: "+tokenAcesso);
 
                                     //Iniciar activity MenuPrincipal com Bundle
@@ -106,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
                                     bundle.putString(KEY_NUM_CLIENTE, numCliente);
                                     bundle.putString(KEY_TOKEN_ACESSO, tokenAcesso);
                                     bundle.putString(KEY_NUM_REQUERIMENTO, numRequerimento);
+                                    bundle.putString(KEY_NOME, nomeCliente);
+                                    bundle.putString(KEY_ENDERECO, enderecoCliente);
                                     intent.putExtras(bundle);
                                     startActivity(intent);
                                     ctrl = true;
