@@ -1,41 +1,17 @@
 package caiococaro.com.br.energy;
 
-import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.text.Layout;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,7 +19,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import javax.annotation.Nullable;
 
@@ -76,7 +51,8 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
     int statusPedido;
 
-    double porcStatusPedido;
+    TextView txtNumCliente;
+
     ProgressBar mProgresBar;
     LinearLayout layoutStatus;
     TextView txtNaoSolicitado;
@@ -89,19 +65,20 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     ImageView img6;
     ArrayList<ImageView> imgArrayList = new ArrayList<>();
 
-    Dialog mDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acompanham_equipe_tecnica);
-
 
         bundle = getIntent().getExtras();
         if (bundle != null) {
             numRequerimento = bundle.getString(NAME_ACOMPANHAMENTO);
             Log.d("", "TOKENACESSO: " + numRequerimento);
         }
+
+        txtNumCliente = findViewById(R.id.txtNumCliente);
+
+        txtNumCliente.setText("Número do Requerimento: " + numRequerimento);
 
         mProgresBar = findViewById(R.id.progress);
         img1 = findViewById(R.id.imagem1);
@@ -124,12 +101,8 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     }
 
     public void acompanhamentoBD(){
-//        TODO numSolicitação em cima dos status | fazer popup com rating de estrela e comentário
         mFirestore = FirebaseFirestore.getInstance();
         mFirestore.enableNetwork();
-
-        RatingBar mRatingBar= new RatingBar(this);
-//        mRatingBar.setOnRatingBarChangeListener(new RatingBar.Rating);
 
         mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -142,20 +115,17 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                         if(statusPedido >= 1 && statusPedido <= imgArrayList.size()){
                             Log.d("", "***STATUS-PEDIDO: " + statusPedido);
                             tintIcon();
+
                             if(statusPedido == 6){
-//                               mDialog = new Dialog(AcompanhamEquipeTecnica.this);
                                 showPopUp();
                             }
-                        }
-                        else{
+                        } else{
                             hideStatus();
                         }
-
                     }
                 }
             }
         });
-
     }
 
     public void tintIcon(){
@@ -164,11 +134,9 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
             int index = imgArrayList.indexOf(iv);
             if (index < statusPedido) {
                 imgArrayList.get(index).setImageResource(R.drawable.check);
-            }/*
-            else if (index == statusPedido) {
-                imgArrayList.get(index).setImageResource(R.drawable.carro);
-            }*/
-             else{
+            } else if (index == statusPedido) {
+                imgArrayList.get(index).setImageResource(R.drawable.yellow_circle_icon);
+            } else{
                 imgArrayList.get(index).setImageResource(R.drawable.vazio);
             }
         }
@@ -184,36 +152,6 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     }
 
     public void showPopUp(){
-//        mDialog.setContentView(R.layout.custom_popup);
-//
-//        btbEnviarAvaliacao = mDialog.findViewById(R.id.btnClosePopup);
-//        btbEnviarAvaliacao.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mDialog.hide();
-//            }
-//        });
-
-        /*
-        setContentView(R.layout.custom_popup);
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-
-
-        getWindow().setLayout((int) (width * 0.8), (int) (height * .6));
-//        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        Button btbEnviarAvaliacao = findViewById(R.id.btnClosePopup);
-        btbEnviarAvaliacao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });*/
-
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         // ...Irrelevant code for customizing the buttons and title
         LayoutInflater inflater = this.getLayoutInflater();
@@ -221,17 +159,12 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
 
         dialogBuilder.setPositiveButton("Enviar Avaliação", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
-
-
-
 }
