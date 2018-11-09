@@ -84,8 +84,10 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
         txtNumCliente = findViewById(R.id.txtInfoCliente);
 
-        txtNumCliente.setText("  Usuário / Número do Cliente: " + nomeCliente + " / " + numCliente +
-                "\n  Endereço: " + enderecoCliente + "\n  Número do Requerimento: " + numRequerimento);
+        txtNumCliente.setText("  Usuário: " + nomeCliente
+                + "\n  Número do Cliente: " + numCliente
+                + "\n  Endereço: " + enderecoCliente
+                + "\n  Número do Requerimento: " + numRequerimento);
 
         img1 = findViewById(R.id.imagem1);
         img2 = findViewById(R.id.imagem2);
