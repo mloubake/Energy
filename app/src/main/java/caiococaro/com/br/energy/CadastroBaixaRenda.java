@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -21,27 +22,26 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import static caiococaro.com.br.energy.MenuPrincipal.KEY_CPF_CNPJ;
+import static caiococaro.com.br.energy.MenuPrincipal.KEY_ENDERECO;
+import static caiococaro.com.br.energy.MenuPrincipal.KEY_NOME;
+import static caiococaro.com.br.energy.MenuPrincipal.KEY_NUM_CLIENTE;
+
 public class CadastroBaixaRenda extends AppCompatActivity {
 
     private static final String TABLE_USUARIO = "Usuario";
     private FirebaseFirestore mFirestore;
 
-    String nome = "", end = "", numCliente = "456";
+    String nomeCliente, numCliente, endCliente, CPF;
 
     Bundle bundle = new Bundle();
 
-   /* bundle = getIntent().getExtras();
-
-        if (bundle != null) {
-        numCliente = bundle.getString(NAME_CONSUMO);
-
-    }*/
 
     EditText etNIS = null;
-    EditText etNumCliente = null;
-
+    TextView etNumCliente = null;
     TextView tvNomeCliente = null;
     TextView tvEndCliente = null;
+    TextView tvCpfCnpj = null;
 
 
 
@@ -50,34 +50,25 @@ public class CadastroBaixaRenda extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_baixa_renda);
 
+
+        bundle = getIntent().getExtras();
+        if (bundle != null) {
+            numCliente = bundle.getString(KEY_NUM_CLIENTE);
+            nomeCliente = bundle.getString(KEY_NOME);
+            endCliente = bundle.getString(KEY_ENDERECO);
+            CPF = bundle.getString(KEY_CPF_CNPJ);
+        }
+
         etNIS = (EditText) findViewById(R.id.etNIS);
-        etNumCliente = (EditText) findViewById(R.id.etNumCliente);
+        etNumCliente = (TextView) findViewById(R.id.TVNumCliente);
         tvNomeCliente = (TextView) findViewById(R.id.tvnomeCliente);
+        tvCpfCnpj = (TextView) findViewById(R.id.tvcpfCliente);
         tvEndCliente= (TextView) findViewById(R.id.tvendCliente);
 
-        mFirestore = FirebaseFirestore.getInstance();
-
-        pesquisa();
-
-        /*etNumCliente.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                tvNomeCliente.setText("Eu");
-                tvEndCliente.setText("Rua alguma");
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });*/
-
+        etNumCliente.setText(String.valueOf("Número do cliente: "+numCliente));
+        tvCpfCnpj.setText(String.valueOf("CPF: "+CPF));
+        tvNomeCliente.setText(String.valueOf("Nome: "+nomeCliente));
+        tvEndCliente.setText(String.valueOf("Endereço: "+endCliente));
 
     }
 
@@ -105,32 +96,6 @@ public class CadastroBaixaRenda extends AppCompatActivity {
 
         }
 
-        public void pesquisa(){
 
-            mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (DocumentSnapshot document : task.getResult()) {
-
-                            if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
-                                nome = String.valueOf(document.getData().get("nome"));
-                                end = String.valueOf(document.getData().get("endereco"));
-
-                                Toast.makeText(getApplicationContext(),""+nome,Toast.LENGTH_LONG).show();
-
-                                if (nome != "" && end != "") {
-
-                                    tvEndCliente.setText(String.valueOf(end));
-                                    tvNomeCliente.setText(String.valueOf(nome));
-                                }
-                            }
-
-                        }
-                    }
-                }
-            });
-
-        }
 }
 

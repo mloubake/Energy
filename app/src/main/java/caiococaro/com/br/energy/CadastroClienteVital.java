@@ -1,6 +1,10 @@
 package caiococaro.com.br.energy;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -65,11 +70,13 @@ public class CadastroClienteVital extends AppCompatActivity {
         Log.d(TAG, "VALORNUMCLIENTE 2: " + valorNumCliente);
 
         EditText etNomePaciente = findViewById(R.id.etNomePaciente);
-        EditText etNumPaciente = findViewById(R.id.etNumPaciente);
+        TextView tvNumPaciente = findViewById(R.id.tvNumPaciente);
         final EditText etCrmMedico = findViewById(R.id.etCRMMedico);
         EditText etEquipamento = findViewById(R.id.etEquipamento);
         final Button btnFoto = findViewById(R.id.btnFoto);
         final Button btnAtualizar = findViewById(R.id.btnAtualizar);
+
+        tvNumPaciente.setText(String.valueOf("Número do cliente: "+valorNumCliente));
 
         mFirestore = FirebaseFirestore.getInstance();
         //Usar ambos os BDs, linkando numCliente e cpfCnpj de cada banco
@@ -100,6 +107,7 @@ public class CadastroClienteVital extends AppCompatActivity {
     btnFoto.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
             startActivity(intent);
         }
@@ -115,4 +123,34 @@ public class CadastroClienteVital extends AppCompatActivity {
 
 
     }
+
+
+    public void Enviar (View view){
+
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+
+        dialogBuilder
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //atualizar
+
+                        Intent intent = new Intent(CadastroClienteVital.this, MenuPrincipal.class);
+                        startActivity(intent);
+                    }
+                });
+
+        dialogBuilder.setMessage("Solicitação enviada para análise com sucesso!");
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+    }
+
+
+
 }
+
+

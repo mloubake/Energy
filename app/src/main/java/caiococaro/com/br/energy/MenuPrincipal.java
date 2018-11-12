@@ -15,6 +15,7 @@ public class MenuPrincipal extends AppCompatActivity {
     //Keys da Bundle (São os dados (ou valores) da bundle da Activity anterior)
     //(Está passando o dado numCliente para essa tela)
     public static final String KEY_NUM_CLIENTE = "NumeroCliente";
+    public static final String KEY_CPF_CNPJ = "cpfCnpj";
     public static final String KEY_NUM_REQUERIMENTO = "NumRequerimento";
     public static final String KEY_NOME= "Nome";
     public static final String KEY_ENDERECO = "Endereco";
@@ -35,6 +36,7 @@ public class MenuPrincipal extends AppCompatActivity {
     String valorNumRequerimento;
     String valorNome;
     String valorEndereco;
+    String cpfCnpj;
     //
     Bundle bundle = new Bundle();
 
@@ -52,6 +54,7 @@ public class MenuPrincipal extends AppCompatActivity {
             valorToken = bundle.getString(KEY_TOKEN_ACESSO);
             valorNumRequerimento = bundle.getString(KEY_NUM_REQUERIMENTO);
             valorNome = bundle.getString(KEY_NOME);
+            cpfCnpj = bundle.getString(KEY_CPF_CNPJ);
             valorEndereco = bundle.getString(KEY_ENDERECO);
             Log.d(TAG, "MENUPRINCIPALBUNDLES: "+valorNumCliente + " / " + valorToken + " / " + valorNumRequerimento) ;
         }
@@ -114,6 +117,14 @@ public class MenuPrincipal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intentBaixaRenda= new Intent(MenuPrincipal.this, CadastroBaixaRenda.class);
+
+                //Enviando bundle para CadastroBaixaRenda
+                Bundle bundleBaixaRenda = new Bundle();
+                bundleBaixaRenda.putString(KEY_NUM_CLIENTE, valorNumCliente);
+                bundleBaixaRenda.putString(KEY_NOME, valorNome);
+                bundleBaixaRenda.putString(KEY_ENDERECO, valorEndereco);
+                bundleBaixaRenda.putString(KEY_CPF_CNPJ, cpfCnpj);
+                intentBaixaRenda.putExtras(bundleBaixaRenda);
                 startActivity(intentBaixaRenda);
                 Log.d(TAG, "BUNDLE-CADASTRO-RENDA: " );
             }

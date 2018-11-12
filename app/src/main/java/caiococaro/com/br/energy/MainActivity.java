@@ -23,6 +23,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import static caiococaro.com.br.energy.MenuPrincipal.KEY_CPF_CNPJ;
+
 public class MainActivity extends AppCompatActivity {
 
     //TAG do Log do Console
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                                     Intent intent = new Intent(MainActivity.this, MenuPrincipal.class);
                                     Bundle bundle = new Bundle();
                                     bundle.putString(KEY_NUM_CLIENTE, numCliente);
+                                    bundle.putString(KEY_CPF_CNPJ, cpfCnpj);
                                     bundle.putString(KEY_TOKEN_ACESSO, tokenAcesso);
                                     bundle.putString(KEY_NUM_REQUERIMENTO, numRequerimento);
                                     bundle.putString(KEY_NOME, nomeCliente);

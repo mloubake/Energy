@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_people_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_local_hotel_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,8 +45,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="imageAsset" value="C:\Users\Caio Cocaro\Desktop\tarifa-social-e1496836048183.jpg" />
-                                      <entry key="outputName" value="tarifa_social" />
-                                      <entry key="theme" value="CUSTOM" />
+                                      <entry key="outputName" value="vital_2" />
                                       <entry key="themeColor" value="3f51b5" />
                                     </map>
                                   </option>
@@ -147,7 +146,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
+                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>

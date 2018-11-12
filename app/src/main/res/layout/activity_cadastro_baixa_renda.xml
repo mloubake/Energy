@@ -60,8 +60,8 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal">
 
-            <EditText
-                android:id="@+id/etNumCliente"
+            <TextView
+                android:id="@+id/TVNumCliente"
                 android:layout_width="500dip"
                 android:layout_height="43dip"
                 android:layout_centerHorizontal="true"
