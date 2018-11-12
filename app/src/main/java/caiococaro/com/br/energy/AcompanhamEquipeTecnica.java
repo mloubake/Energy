@@ -58,6 +58,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     TextView txtNumCliente;
 
     LinearLayout layoutStatus;
+    LinearLayout layoutLegenda;
     TextView txtNaoSolicitado;
 
     ImageView img1;
@@ -104,6 +105,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         txtNaoSolicitado = findViewById(R.id.txt_nao_solicitado);
 
         layoutStatus = findViewById(R.id.layoutStatus);
+        layoutLegenda = findViewById(R.id.layoutLegenda);
 
         acompanhamentoBD();
     }
@@ -151,10 +153,12 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
 
     private void hideStatus() {
         layoutStatus.setVisibility(View.GONE);
+        layoutLegenda.setVisibility(View.GONE);
         txtNaoSolicitado.setVisibility(View.VISIBLE);
     }
     private void showStatus() {
         layoutStatus.setVisibility(View.VISIBLE);
+        layoutLegenda.setVisibility(View.VISIBLE);
         txtNaoSolicitado.setVisibility(View.GONE);
     }
 
