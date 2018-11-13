@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
     Bundle bundle = new Bundle();
 
+    private ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
                 final String cpfCnpj = etCpfCnpj.getText().toString();
                 final String numCliente = etNumCliente.getText().toString();
 
+                progress = new ProgressDialog(MainActivity.this);
+                progress.setMessage("Fazendo login...");
+                progress.show();
+
                 //Recuperando os dados
                 mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -125,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 }
                                 else{
+                                    progress.dismiss();
                                     ctrl = false;
                                 }
                                     /*
