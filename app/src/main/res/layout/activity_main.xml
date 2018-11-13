@@ -33,7 +33,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="TODO"
                 android:cropToPadding="true"
-                android:src="@mipmap/energy"
+                android:src="@mipmap/logo"
                 android:visibility="visible" />
         </TableRow>
 
@@ -48,7 +48,7 @@
                 android:layout_height="43dip"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_edittext"
                 android:hint="CPF ou CNPJ"
                 android:inputType="none|number"

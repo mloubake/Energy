@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:text="Digite o número atual do medidor:"
+            android:text="Digite a leitura atual do medidor:"
             android:textAlignment="center"
             android:layout_gravity="center"
             android:textStyle="bold"
