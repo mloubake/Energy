@@ -27,71 +27,83 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="4dp">
+            android:layout_margin="4dp"
+            android:paddingLeft="40dp">
             <ImageView
                 android:id="@+id/imagem1"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/grey_circle_icon"/>
+                android:src="@drawable/grey_circle_icon"
+                android:background="@drawable/button_blue_edit_2"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/solicitado"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"/>
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/rounded_edittext"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="4dp">
+            android:layout_margin="4dp"
+            android:paddingLeft="40dp">
             <ImageView
                 android:id="@+id/imagem2"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/grey_circle_icon"/>
+                android:src="@drawable/grey_circle_icon"
+                android:background="@drawable/button_blue_edit_2"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/emAnalise"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"/>
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/rounded_edittext"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="4dp">
+            android:layout_margin="4dp"
+            android:paddingLeft="40dp">
             <ImageView
                 android:id="@+id/imagem3"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/grey_circle_icon"/>
+                android:src="@drawable/grey_circle_icon"
+                android:background="@drawable/button_blue_edit_2"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/equipeSelecionada"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"/>
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/rounded_edittext"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="4dp">
+            android:layout_margin="4dp"
+            android:paddingLeft="40dp">
             <ImageView
                 android:id="@+id/imagem4"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/grey_circle_icon"/>
+                android:src="@drawable/grey_circle_icon"
+                android:background="@drawable/button_blue_edit_2"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/equipeACaminho"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"/>
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/rounded_edittext"/>
 
         </LinearLayout>
 
@@ -99,38 +111,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="4dp">
+            android:layout_margin="4dp"
+            android:paddingLeft="40dp">
             <ImageView
                 android:id="@+id/imagem5"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/grey_circle_icon"/>
+                android:src="@drawable/grey_circle_icon"
+                android:background="@drawable/button_blue_edit_2"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/emAndamento"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"/>
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/rounded_edittext"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="4dp">
+            android:layout_margin="4dp"
+            android:paddingLeft="40dp">
             <ImageView
                 android:id="@+id/imagem6"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/grey_circle_icon"/>
+                android:src="@drawable/grey_circle_icon"
+                android:background="@drawable/button_blue_edit_2"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/finalizado"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="16dp"
-                />
-
+                android:background="@drawable/rounded_edittext"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -144,7 +160,9 @@
         android:gravity="bottom"
         android:orientation="horizontal"
         android:layout_alignParentLeft="true"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:background="@drawable/borda_legenda"
+        android:layout_marginBottom="1dp">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -170,7 +188,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="end"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="40dp">
 
             <ImageView
                 android:layout_width="24dp"
@@ -181,7 +200,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Concluído" />
+                android:text="Concluído"/>
         </LinearLayout>
     </LinearLayout>
 
