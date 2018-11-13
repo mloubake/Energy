@@ -86,7 +86,7 @@
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="cropped" value="true" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\Caio Cocaro\Desktop\icones\icone_app.png" />
+                                      <entry key="imageAsset" value="C:\Users\Caio Cocaro\Desktop\icones\logo.png" />
                                       <entry key="outputName" value="ic_launcher_round" />
                                     </map>
                                   </option>
@@ -146,7 +146,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
+                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
                           </map>
                         </option>
                       </PersistentState>
