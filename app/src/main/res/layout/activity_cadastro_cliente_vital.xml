@@ -35,6 +35,8 @@
             android:layout_height="55dp"
             android:background="@drawable/rounded_edittext"
             android:hint="Número do cliente (UC)"
+            android:textStyle="bold"
+            android:textSize="18dp"
             android:gravity="center"
             android:layout_marginBottom="10dp"/>
         <EditText
@@ -57,20 +59,21 @@
             android:id="@+id/btnFoto"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:text="Anexar Foto"
+            android:text="Anexar Foto do laudo"
             android:textColor="#FFFFFF"
             android:background="@drawable/circle_button"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"/>
+
         <Button
-            android:id="@+id/btnAtualizar"
+            android:id="@+id/btnEnviar"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:text="Atualizar Dados"
-            android:textColor="#FFFFFF"
             android:background="@drawable/circle_button"
+            android:gravity="center"
             android:onClick="Enviar"
-            android:gravity="center_horizontal"/>
+            android:text="Enviar Dados"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -24,6 +24,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class CadastroClienteVital extends AppCompatActivity {
@@ -39,6 +40,9 @@ public class CadastroClienteVital extends AppCompatActivity {
     private static final String FIELD_CPF_CNPJ = "cpfCnpj";
     private static final String FIELD_NUM_CLIENTE = "numCliente";
 
+    String nomePaciente, equipamentos, CRM;
+
+
     FirebaseFirestore mFirestore;
 
     Map<String, String> clienteMap;
@@ -49,6 +53,13 @@ public class CadastroClienteVital extends AppCompatActivity {
     String valorNumRequerimento;
 
     Bundle bundle = new Bundle();
+
+     EditText etNomePaciente;
+     TextView tvNumPaciente;
+     EditText etCrmMedico;
+     EditText etEquipamento;
+     Button btnFoto;
+     Button btnAtualizar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +80,12 @@ public class CadastroClienteVital extends AppCompatActivity {
         }
         Log.d(TAG, "VALORNUMCLIENTE 2: " + valorNumCliente);
 
-        EditText etNomePaciente = findViewById(R.id.etNomePaciente);
-        TextView tvNumPaciente = findViewById(R.id.tvNumPaciente);
-        final EditText etCrmMedico = findViewById(R.id.etCRMMedico);
-        EditText etEquipamento = findViewById(R.id.etEquipamento);
-        final Button btnFoto = findViewById(R.id.btnFoto);
-        final Button btnAtualizar = findViewById(R.id.btnAtualizar);
+          etNomePaciente = findViewById(R.id.etNomePaciente);
+          tvNumPaciente = findViewById(R.id.tvNumPaciente);
+          etCrmMedico = findViewById(R.id.etCRMMedico);
+          etEquipamento = findViewById(R.id.etEquipamento);
+          btnFoto = findViewById(R.id.btnFoto);
+          btnAtualizar = findViewById(R.id.btnEnviar);
 
         tvNumPaciente.setText(String.valueOf("Número do cliente: "+valorNumCliente));
 
@@ -84,25 +95,23 @@ public class CadastroClienteVital extends AppCompatActivity {
 
         final String crmMedico = etCrmMedico.getText().toString();
 
-        btnAtualizar.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            mFirestore.collection("ClienteVital").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if(task.isSuccessful() ) {
-                        for (DocumentSnapshot document : task.getResult()) {
-                            if(String.valueOf(document.getData().get(FIELD_CPF_CNPJ)).equals(String.valueOf(valorNumCliente))
-                                   /* && String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(String.valueOf(bundle numcliente.getText()))*/) {
-                                Log.d(TAG, "VALORNUMCLIENTE 3: " + valorNumCliente);
-                                mFirestore.collection("ClienteVital").document().update("crmMedico", crmMedico);
-                            }
+        mFirestore.collection("ClienteVital").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+
+                        if (String.valueOf(valorNumCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
+
+                            usuarioCadastrado();
+
                         }
+
                     }
                 }
-            });
-        }
-    });
+            }
+
+        });
 
     btnFoto.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -137,6 +146,8 @@ public class CadastroClienteVital extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         //atualizar
 
+                        criaDocumento();
+
                         Intent intent = new Intent(CadastroClienteVital.this, MenuPrincipal.class);
                         startActivity(intent);
                     }
@@ -144,6 +155,44 @@ public class CadastroClienteVital extends AppCompatActivity {
 
         dialogBuilder.setMessage("Solicitação enviada para análise com sucesso!");
 
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+    }
+
+    void criaDocumento(){
+
+        nomePaciente = etNomePaciente.getText().toString();
+        equipamentos = etEquipamento.getText().toString();
+        CRM = etCrmMedico.getText().toString();
+
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("nomePaciente",nomePaciente);
+        data.put("numCliente",valorNumCliente);
+        data.put("equipamentos",equipamentos);
+        data.put("CRM",CRM);
+
+        mFirestore.collection("ClienteVital").add(data);
+
+    }
+
+    void usuarioCadastrado(){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+
+        dialogBuilder
+                .setMessage("Cadastro de cliente vital já solicitado!")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //atualizar
+
+                        Intent intent = new Intent(CadastroClienteVital.this, MenuPrincipal.class);
+                        startActivity(intent);
+                    }
+                });
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
 

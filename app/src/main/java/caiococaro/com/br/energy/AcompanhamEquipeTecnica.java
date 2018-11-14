@@ -2,6 +2,7 @@ package caiococaro.com.br.energy;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -205,6 +206,9 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         dialogBuilder.setPositiveButton("Fechar popup", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
+
+                Intent intent = new Intent(AcompanhamEquipeTecnica.this, MenuPrincipal.class);
+                startActivity(intent);
             }
         });
 
@@ -217,26 +221,4 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     }
 
 }
-
-
-
-/*
-- statusPedido muda para 6
-- popup aparece
-- clica na avaliacao, popup some e aparece o agradecimento
-- sai da tela e volta na tela
-- popup tem que ficar escondido
-- fecha o app, popup tem que ficar escondido
-
-isAvaliado = document.("isAvaliado");
-
-if(isAvaliado == false){
-    showpopup();
-        showpopup some quando clicado no botão
-        no BD "isAvaliado" ==  true
-} else{
-    popupAgradecimento
-        }
-*/
-
 

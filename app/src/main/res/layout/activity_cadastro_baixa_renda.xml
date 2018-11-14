@@ -52,6 +52,7 @@
                 android:hint="NIS (Número de inscrição social)"
                 android:inputType="none|number"
                 android:shadowRadius="10"
+                android:textSize="18dp"
                 android:textStyle="italic" />
         </TableRow>
 
@@ -66,11 +67,12 @@
                 android:layout_height="43dip"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dip"
+                android:textSize="18dp"
                 android:background="@drawable/rounded_edittext"
                 android:hint="Número do cliente (sem o dígito)"
                 android:inputType="none|number"
                 android:shadowRadius="10"
-                android:textStyle="italic" />
+                android:textStyle="bold" />
 
         </TableRow>
 
@@ -83,13 +85,14 @@
                 android:id="@+id/tvnomeCliente"
                 android:layout_width="500dip"
                 android:layout_height="43dip"
+                android:textSize="18dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dip"
                 android:background="@drawable/rounded_edittext"
                 android:hint="Nome"
                 android:inputType="none|number"
                 android:shadowRadius="10"
-                android:textStyle="italic" />
+                android:textStyle="bold" />
         </TableRow>
 
         <TableRow
@@ -103,11 +106,12 @@
                 android:layout_height="43dip"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dip"
+                android:textSize="18dp"
                 android:background="@drawable/rounded_edittext"
                 android:hint="CPF"
                 android:inputType="none|number"
                 android:shadowRadius="10"
-                android:textStyle="italic" />
+                android:textStyle="bold" />
         </TableRow>
 
         <TableRow
@@ -121,11 +125,12 @@
                 android:layout_height="43dip"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dip"
+                android:textSize="18dp"
                 android:background="@drawable/rounded_edittext"
                 android:hint="Endereço"
                 android:inputType="none|number"
                 android:shadowRadius="10"
-                android:textStyle="italic" />
+                android:textStyle="bold" />
 
         </TableRow>
 

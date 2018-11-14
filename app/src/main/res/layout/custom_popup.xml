@@ -11,7 +11,7 @@
             <ImageView
                 android:layout_width="125dp"
                 android:layout_height="125dp"
-                android:src="@drawable/ic_launcher"
+                android:src="@mipmap/logo"
                 android:layout_gravity="center"/>
             <TextView
                 android:layout_width="match_parent"
