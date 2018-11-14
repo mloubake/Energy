@@ -213,20 +213,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     }
 
     void updateAvaliacao(final String myId) {
-        mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-                        if (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(numRequerimento))) {
-                            //ATUALIZAR A LEITURA ATUAL AQUI
-                            mFirestore.collection(TABLE_USUARIO).document(String.valueOf(myId)).update("isAvaliado", true);
-                            Log.d(TAG, "ID COLECAO 3: " + myId);
-                        }
-                    }
-                }
-            }
-        });
+        mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).document(String.valueOf(myId)).update("isAvaliado", true);
     }
 
 }
