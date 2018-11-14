@@ -3,6 +3,7 @@ package caiococaro.com.br.energy;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,6 +58,8 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
     String enderecoCliente;
 
     int statusPedido;
+
+    boolean isAvaliado;
 
     TextView txtNumCliente;
 
@@ -119,15 +125,23 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                     if (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(numRequerimento))) {
+
+                        String myId = document.getId();
+                        Log.d(TAG, "ID COLECAO 1: " + myId);
+
                         Log.d("", "STATUS-PEDIDO: " + String.valueOf(document.getData().get("statusPedido")));
                         statusPedido = Integer.valueOf(String.valueOf(document.getData().get("statusPedido")));
                         showStatus();
+
                         if(statusPedido >= 1 && statusPedido <= imgArrayList.size()){
                             Log.d("", "***STATUS-PEDIDO: " + statusPedido);
                             tintIcon();
 
                             if(statusPedido == 6){
-                                showPopUp();
+                                isAvaliado = Boolean.valueOf(String.valueOf(document.getData().get("isAvaliado")));
+                                if(isAvaliado == false){
+                                    showPopUp(myId);
+                                }
                             }
                         } else{
                             hideStatus();
@@ -162,14 +176,33 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         txtNaoSolicitado.setVisibility(View.GONE);
     }
 
-    public void showPopUp(){
+    public void showPopUp(final String myId){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        // ...Irrelevant code for customizing the buttons and title
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.custom_popup, null);
         dialogBuilder.setView(dialogView);
 
+        Log.d(TAG, "ID COLECAO 2: " + myId);
+
         dialogBuilder.setPositiveButton("Enviar Avaliação", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                showPopUpAgradecimento();
+                updateAvaliacao(myId);
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    public void showPopUpAgradecimento(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.custom_popup_agradecimento, null);
+        dialogBuilder.setView(dialogView);
+
+        dialogBuilder.setPositiveButton("Fechar popup", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
             }
@@ -178,4 +211,45 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
+
+    void updateAvaliacao(final String myId) {
+        mFirestore.collection(TABLE_EQUIPE_MANUTENCAO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        if (String.valueOf(document.getData().get(FIELD_NUM_REQUERIMENTO)).equals(String.valueOf(numRequerimento))) {
+                            //ATUALIZAR A LEITURA ATUAL AQUI
+                            mFirestore.collection(TABLE_USUARIO).document(String.valueOf(myId)).update("isAvaliado", true);
+                            Log.d(TAG, "ID COLECAO 3: " + myId);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
 }
+
+
+
+/*
+- statusPedido muda para 6
+- popup aparece
+- clica na avaliacao, popup some e aparece o agradecimento
+- sai da tela e volta na tela
+- popup tem que ficar escondido
+- fecha o app, popup tem que ficar escondido
+
+isAvaliado = document.("isAvaliado");
+
+if(isAvaliado == false){
+    showpopup();
+        showpopup some quando clicado no botão
+        no BD "isAvaliado" ==  true
+} else{
+    popupAgradecimento
+        }
+*/
+
+

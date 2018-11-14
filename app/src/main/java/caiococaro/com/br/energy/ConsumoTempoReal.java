@@ -192,7 +192,6 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     void pesquisa1() {
