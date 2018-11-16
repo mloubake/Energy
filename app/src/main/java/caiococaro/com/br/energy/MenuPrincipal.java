@@ -105,6 +105,7 @@ public class MenuPrincipal extends AppCompatActivity {
                 Bundle bundleClienteVital = new Bundle();
                 bundleClienteVital.putString(KEY_NUM_CLIENTE, valorNumCliente);
                 bundleClienteVital.putString(KEY_NUM_REQUERIMENTO, valorNumRequerimento);
+                bundleClienteVital.putString(KEY_CPF_CNPJ, cpfCnpj);
                 intentClienteVital.putExtras( bundleClienteVital);
                 startActivity(intentClienteVital);
                 Log.d(TAG, "BUNDLE-CADASTRO-VITAL: " + bundleClienteVital);

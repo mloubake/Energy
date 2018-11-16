@@ -32,34 +32,46 @@ public class CadastroClienteVital extends AppCompatActivity {
     private static final String TAG = "";
 //    private static final int CAMERA_PIC_REQUEST = "";
 
+    //Tabelas do FireStore
+    private static final String TABLE_USUARIO = "Usuario";
+    private static final String TABLE_CLIENTE_VITAL = "ClienteVital";
+
     //Keys da Bundle (São os dados (ou valores) da bundle da Activity anterior)
     public static final String KEY_NUM_CLIENTE = "NumeroCliente";
+    public static final String KEY_CPFCNPJ = "cpfCnpj";
     public static final String KEY_NUM_REQUERIMENTO = "NumRequerimento";
 
     //Campos do Firebase
     private static final String FIELD_CPF_CNPJ = "cpfCnpj";
+    private static final String FIELD_CRM_MEDICO = "crmMedico";
+    private static final String FIELD_EQUIPAMENTO = "equipamento";
+    private static final String FIELD_IS_CLIENTE_VITAL_CADASTRADO = "isClienteVitalCadastrado";
+    private static final String FIELD_NOME_PACIENTE = "nomePaciente";
     private static final String FIELD_NUM_CLIENTE = "numCliente";
+    private static final String FIELD_NUM_PACIENTE = "numPaciente";
 
     String nomePaciente, equipamentos, CRM;
 
 
-    FirebaseFirestore mFirestore;
 
-    Map<String, String> clienteMap;
+    FirebaseFirestore mFirestore;
 
     //Valores passados entre os bundles
     String valorNumCliente;
+    String valorCpfCnpj;
     String valorToken;
     String valorNumRequerimento;
 
     Bundle bundle = new Bundle();
 
-     EditText etNomePaciente;
-     TextView tvNumPaciente;
-     EditText etCrmMedico;
-     EditText etEquipamento;
-     Button btnFoto;
-     Button btnAtualizar;
+    EditText etNomePaciente;
+    TextView tvNumPaciente;
+    EditText etCrmMedico;
+    EditText etEquipamento;
+    Button btnFoto;
+    Button btnAtualizar;
+
+    String myId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +86,9 @@ public class CadastroClienteVital extends AppCompatActivity {
         //Setando os valores do bundle da MainActivity para MenuPrincipal para depois setar os bundles das outras Activities
         if(bundle != null ){
             valorNumCliente = bundle.getString(KEY_NUM_CLIENTE);
-            Log.d(TAG, "VALORNUMCLIENTE 1: " + valorNumCliente);
+            valorCpfCnpj = bundle.getString(KEY_CPFCNPJ);
             valorNumRequerimento = bundle.getString(KEY_NUM_REQUERIMENTO);
+            Log.d(TAG, "VALORNUMCLIENTE 1: " + valorNumCliente);
             Log.d(TAG, "MENUPRINCIPALBUNDLES: "+valorNumCliente + " / " + valorToken + " / " + valorNumRequerimento) ;
         }
         Log.d(TAG, "VALORNUMCLIENTE 2: " + valorNumCliente);
@@ -93,26 +106,58 @@ public class CadastroClienteVital extends AppCompatActivity {
         //Usar ambos os BDs, linkando numCliente e cpfCnpj de cada banco
         //BD para cliente vital, caso fique estranho, adicionar mais campos no BD usuario
 
-        final String crmMedico = etCrmMedico.getText().toString();
+//        mFirestore.collection(TABLE_CLIENTE_VITAL).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (DocumentSnapshot document : task.getResult()) {
+//                        Log.d(TAG, "myID myID: "+ myId);
+//                        if (String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)) {
+//                            if(document.getData().get(FIELD_IS_CLIENTE_VITAL_CADASTRADO).equals(true)) {
+//                                usuarioCadastrado();
+//                            }
+//                        return;
+//                        }
+//                    }
+//                }
+//            }
+//        });
 
-        mFirestore.collection("ClienteVital").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot document : task.getResult()) {
-
-                        if (String.valueOf(valorNumCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
-
-                            usuarioCadastrado();
-
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot document : task.getResult()){
+                        if(String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)){
+                            if(document.getData().get(FIELD_IS_CLIENTE_VITAL_CADASTRADO).equals(true)){
+                                usuarioCadastrado();
+                            } else{
+                                //Procura se o documento existe e tem aquele número dentro desse documento
+                                mFirestore.collection(TABLE_CLIENTE_VITAL).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if(task.isSuccessful()){
+                                            for (DocumentSnapshot document : task.getResult()){
+                                                if(document.exists() &&
+                                                        String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)){
+                                                    aguardandoAnalise();
+                                                    etNomePaciente.setText( String.valueOf(document.getData().get(FIELD_NOME_PACIENTE)));
+                                                    etEquipamento.setText( String.valueOf(document.getData().get(FIELD_EQUIPAMENTO)));
+                                                    etCrmMedico.setText( String.valueOf(document.getData().get(FIELD_CRM_MEDICO)));
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            }
                         }
-
                     }
                 }
             }
-
         });
 
+
+        //Todo: Verificar a câmera nos despositivos
     btnFoto.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -135,18 +180,14 @@ public class CadastroClienteVital extends AppCompatActivity {
 
 
     public void Enviar (View view){
-
-
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
         dialogBuilder
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //atualizar
-
-                        criaDocumento();
+                        criarDocumento(myId);
 
                         Intent intent = new Intent(CadastroClienteVital.this, MenuPrincipal.class);
                         startActivity(intent);
@@ -160,7 +201,7 @@ public class CadastroClienteVital extends AppCompatActivity {
 
     }
 
-    void criaDocumento(){
+    void criarDocumento(String myId){
 
         nomePaciente = etNomePaciente.getText().toString();
         equipamentos = etEquipamento.getText().toString();
@@ -168,19 +209,21 @@ public class CadastroClienteVital extends AppCompatActivity {
 
         Map<String, Object> data = new HashMap<>();
 
-        data.put("nomePaciente",nomePaciente);
-        data.put("numCliente",valorNumCliente);
-        data.put("equipamentos",equipamentos);
-        data.put("CRM",CRM);
+        data.put(FIELD_NOME_PACIENTE,nomePaciente);
+        data.put(FIELD_NUM_CLIENTE,valorNumCliente);
+        data.put(FIELD_EQUIPAMENTO,equipamentos);
+        data.put(FIELD_CRM_MEDICO,CRM);
+        //Campos que vão ser criados no BD para não ter trabalho extra nas futuras manutenções
+        data.put(FIELD_IS_CLIENTE_VITAL_CADASTRADO, false);
+        data.put(FIELD_NUM_PACIENTE, null);
+        data.put(FIELD_CPF_CNPJ, valorCpfCnpj);
 
-        mFirestore.collection("ClienteVital").add(data);
-
+        mFirestore.collection(TABLE_CLIENTE_VITAL).add(data);
     }
 
     void usuarioCadastrado(){
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-
         dialogBuilder
                 .setMessage("Cadastro de cliente vital já solicitado!")
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -195,11 +238,24 @@ public class CadastroClienteVital extends AppCompatActivity {
                 });
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
-
     }
 
+    public void aguardandoAnalise (){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
+        dialogBuilder
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
 
+        dialogBuilder.setMessage("Análise em andamento...");
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+    }
 }
 
 

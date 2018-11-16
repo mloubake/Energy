@@ -153,7 +153,7 @@
     <LinearLayout
         android:id="@+id/layoutLegenda"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_weight="1"
@@ -162,7 +162,8 @@
         android:layout_alignParentLeft="true"
         android:visibility="gone"
         android:background="@drawable/borda_legenda"
-        android:layout_marginBottom="1dp">
+        android:layout_marginBottom="1dp"
+        android:padding="8dp">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
