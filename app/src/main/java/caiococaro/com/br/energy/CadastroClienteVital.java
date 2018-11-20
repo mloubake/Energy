@@ -1,11 +1,17 @@
 package caiococaro.com.br.energy;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -71,14 +77,11 @@ public class CadastroClienteVital extends AppCompatActivity {
     Button btnFoto;
     Button btnAtualizar;
 
-    String myId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_cliente_vital);
-
-
 
         //Recebendo a bundle da MainActivity com vários valores
         bundle = getIntent().getExtras();
@@ -103,26 +106,25 @@ public class CadastroClienteVital extends AppCompatActivity {
         tvNumPaciente.setText(String.valueOf("Número do cliente: "+valorNumCliente));
 
         mFirestore = FirebaseFirestore.getInstance();
-        //Usar ambos os BDs, linkando numCliente e cpfCnpj de cada banco
-        //BD para cliente vital, caso fique estranho, adicionar mais campos no BD usuario
 
-//        mFirestore.collection(TABLE_CLIENTE_VITAL).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (DocumentSnapshot document : task.getResult()) {
-//                        Log.d(TAG, "myID myID: "+ myId);
-//                        if (String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)) {
-//                            if(document.getData().get(FIELD_IS_CLIENTE_VITAL_CADASTRADO).equals(true)) {
-//                                usuarioCadastrado();
-//                            }
-//                        return;
-//                        }
-//                    }
-//                }
+
+
+
+        anexarLaudo();
+//        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//            if (requestCode == CAMERA_PIC_REQUEST) {
+//                Bitmap image = (Bitmap) data.getExtras().get("data");
+//                ImageView imageview = (ImageView) findViewById(R.id.ImageView01); //sets imageview as the bitmap
+//                imageview.setImageBitmap(image);
 //            }
-//        });
+//        }
+        //TODO: Tentar resolver o bug de voltar com tudo null, tentar botar no onResume()
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
         mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -139,44 +141,29 @@ public class CadastroClienteVital extends AppCompatActivity {
                                         if(task.isSuccessful()){
                                             for (DocumentSnapshot document : task.getResult()){
                                                 if(document.exists() &&
-                                                        String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)){
+                                                        String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)
+                                                        && document.getData().get("isAndamento").equals(true)){
                                                     aguardandoAnalise();
                                                     etNomePaciente.setText( String.valueOf(document.getData().get(FIELD_NOME_PACIENTE)));
                                                     etEquipamento.setText( String.valueOf(document.getData().get(FIELD_EQUIPAMENTO)));
                                                     etCrmMedico.setText( String.valueOf(document.getData().get(FIELD_CRM_MEDICO)));
                                                 }
+
+                                                return;
                                             }
                                         }
                                     }
                                 });
                             }
                         }
+                        return;
                     }
                 }
             }
         });
-
-
-        //Todo: Verificar a câmera nos despositivos
-    btnFoto.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-            startActivity(intent);
-        }
-    });
-
-//        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//            if (requestCode == CAMERA_PIC_REQUEST) {
-//                Bitmap image = (Bitmap) data.getExtras().get("data");
-//                ImageView imageview = (ImageView) findViewById(R.id.ImageView01); //sets imageview as the bitmap
-//                imageview.setImageBitmap(image);
-//            }
-//        }
-
-
     }
+
+
 
 
     public void Enviar (View view){
@@ -187,7 +174,7 @@ public class CadastroClienteVital extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //atualizar
-                        criarDocumento(myId);
+                        criarDocumento();
 
                         Intent intent = new Intent(CadastroClienteVital.this, MenuPrincipal.class);
                         startActivity(intent);
@@ -201,7 +188,7 @@ public class CadastroClienteVital extends AppCompatActivity {
 
     }
 
-    void criarDocumento(String myId){
+    void criarDocumento(){
 
         nomePaciente = etNomePaciente.getText().toString();
         equipamentos = etEquipamento.getText().toString();
@@ -231,7 +218,6 @@ public class CadastroClienteVital extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //atualizar
-
                         Intent intent = new Intent(CadastroClienteVital.this, MenuPrincipal.class);
                         startActivity(intent);
                     }
@@ -247,6 +233,7 @@ public class CadastroClienteVital extends AppCompatActivity {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        finish();
                     }
                 });
 
@@ -256,6 +243,48 @@ public class CadastroClienteVital extends AppCompatActivity {
         alertDialog.show();
 
     }
+
+    public void anexarLaudo(){
+
+        //Todo: Verificar a câmera nos despositivos
+        btnFoto.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+//                        ActivityCompat.requestPermissions(CadastroClienteVital.this, new String[]{Manifest.permission.CAMERA}, 1);
+                        startActivity(intent);
+                    }
+                } else{
+                    startActivity(intent);
+                }
+
+//
+//                Log.d(TAG, "BUILD VERSION SDK INT: " + Build.VERSION.SDK_INT);
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//                        ActivityCompat.requestPermissions(CadastroClienteVital.this, new String[]{Manifest.permission.CAMERA}, 1);
+//                    }
+//                }
+                if (ActivityCompat.checkSelfPermission(CadastroClienteVital.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    ActivityCompat.requestPermissions(CadastroClienteVital.this, new String[]{Manifest.permission.CAMERA}, 1);
+                    return;
+                }
+            }
+        });
+    }
+
 }
 
 
