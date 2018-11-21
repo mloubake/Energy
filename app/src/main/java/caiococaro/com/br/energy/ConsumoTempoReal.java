@@ -100,7 +100,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
     float estimativaConsumo;
     float totalEstimado;
 
-    String leituraAnterior;
+    int leituraAnterior;
     int leituraAtual;
     int leituraMes;
 
@@ -184,7 +184,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                         if (numCliente.equals(String.valueOf(document.getData().get("numCliente")))) {
 
-                            //ATUALIZAR A LEITURA ATUAL AQUI
+                            //Atualiza leituras
+                            mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAnterior", leituraAnterior);
                             mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual", leituraAtual);
                             pesquisa1();
                         }
@@ -203,7 +204,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                         if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
 
-                            leituraAnterior = String.valueOf(document.getData().get("leituraAnterior"));
+                            leituraAnterior = Integer.valueOf(String.valueOf(document.getData().get("leituraAnterior")));
                             Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
 
                             String LA = String.valueOf(document.getData().get("leituraAtual"));
@@ -376,7 +377,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
         tvTarifa.setText(String.valueOf(tf.format(tarifa)));
         tvTotal_estimado.setText(String.valueOf(df.format(totalEstimado)));
         tvLeituraAtual.setText(String.valueOf(leituraAtual));
-        tvLeituraAnterior.setText(leituraAnterior);
+        tvLeituraAnterior.setText(String.valueOf(leituraAnterior));
         tvLeituraAtual.setText(String.valueOf(leituraAtual));
         tvCIP.setText(String.valueOf(df.format(CIP)));
         tvConsumo.setText(String.valueOf(leituraMes));
@@ -432,7 +433,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.dialog_atualizar, null);
         dialogBuilder.setView(dialogView);
 
-        final EditText editText = (EditText) dialogView.findViewById(R.id.leituraAtualMedidor);
+        final EditText anterior = (EditText) dialogView.findViewById(R.id.leituraAnteriorMedidor);
+        final EditText atual = (EditText) dialogView.findViewById(R.id.leituraAtualMedidor);
 
         PIS = 0;
         COFINS = 0;
@@ -461,28 +463,39 @@ public class ConsumoTempoReal extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //atualizar
-                        leituraAtual = (Integer.valueOf(editText.getText().toString()));
+                        if((!anterior.getText().toString().equals("")) && (!atual.getText().toString().equals(""))){
 
-                        if(leituraAtual < Integer.valueOf(leituraAnterior)){
+                            leituraAnterior = (Integer.valueOf(anterior.getText().toString()));
+                            leituraAtual = (Integer.valueOf(atual.getText().toString()));
 
-                            Toast.makeText(getApplicationContext(),"ERRO: verifique a leitura e tente novamente",Toast.LENGTH_LONG).show();
 
-                        }
-                        else {
 
-                            //Recebendo bundle do MenuActivity com vários valores
-                            bundle = getIntent().getExtras();
+                            if(leituraAtual < Integer.valueOf(leituraAnterior)){
 
-                            if (bundle != null) {
-                                numCliente = bundle.getString(NAME_CONSUMO);
+                                Toast.makeText(getApplicationContext(),"ERRO: verifique a leitura e tente novamente",Toast.LENGTH_LONG).show();
+
                             }
+                            else {
 
-                            progress = new ProgressDialog(ConsumoTempoReal.this);
-                            progress.setMessage("Calculando...");
-                            progress.show();
+                                //Recebendo bundle do MenuActivity com vários valores
+                                bundle = getIntent().getExtras();
 
-                            update();
+                                if (bundle != null) {
+                                    numCliente = bundle.getString(NAME_CONSUMO);
+                                }
+
+                                progress = new ProgressDialog(ConsumoTempoReal.this);
+                                progress.setMessage("Calculando...");
+                                progress.show();
+
+                                update();
+                            }
                         }
+                        else{
+                                Toast.makeText(getApplicationContext(),"Verifique os dados informados e tente novamente",Toast.LENGTH_LONG).show();
+
+                        }
+
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
