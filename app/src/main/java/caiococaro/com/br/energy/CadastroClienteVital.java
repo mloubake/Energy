@@ -3,17 +3,15 @@ package caiococaro.com.br.energy;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraManager;
+import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,10 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -36,7 +31,6 @@ import java.util.Map;
 public class CadastroClienteVital extends AppCompatActivity {
 
     private static final String TAG = "";
-//    private static final int CAMERA_PIC_REQUEST = "";
 
     //Tabelas do FireStore
     private static final String TABLE_USUARIO = "Usuario";
@@ -56,26 +50,20 @@ public class CadastroClienteVital extends AppCompatActivity {
     private static final String FIELD_NUM_CLIENTE = "numCliente";
     private static final String FIELD_NUM_PACIENTE = "numPaciente";
 
+
     String nomePaciente, equipamentos, CRM;
-
-
 
     FirebaseFirestore mFirestore;
 
     //Valores passados entre os bundles
-    String valorNumCliente;
-    String valorCpfCnpj;
-    String valorToken;
-    String valorNumRequerimento;
+    String valorNumCliente, valorCpfCnpj,
+            valorToken, valorNumRequerimento;
 
     Bundle bundle = new Bundle();
 
-    EditText etNomePaciente;
+    EditText etNomePaciente,etCrmMedico, etEquipamento;
     TextView tvNumPaciente;
-    EditText etCrmMedico;
-    EditText etEquipamento;
-    Button btnFoto;
-    Button btnAtualizar;
+    Button btnFoto, btnAtualizar;
 
 
     @Override
@@ -107,19 +95,7 @@ public class CadastroClienteVital extends AppCompatActivity {
 
         mFirestore = FirebaseFirestore.getInstance();
 
-
-
-
         anexarLaudo();
-//        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//            if (requestCode == CAMERA_PIC_REQUEST) {
-//                Bitmap image = (Bitmap) data.getExtras().get("data");
-//                ImageView imageview = (ImageView) findViewById(R.id.ImageView01); //sets imageview as the bitmap
-//                imageview.setImageBitmap(image);
-//            }
-//        }
-        //TODO: Tentar resolver o bug de voltar com tudo null, tentar botar no onResume()
-
     }
 
     @Override
@@ -132,6 +108,7 @@ public class CadastroClienteVital extends AppCompatActivity {
                     for(DocumentSnapshot document : task.getResult()){
                         if(String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)){
                             if(document.getData().get(FIELD_IS_CLIENTE_VITAL_CADASTRADO).equals(true)){
+
                                 usuarioCadastrado();
                             } else{
                                 //Procura se o documento existe e tem aquele número dentro desse documento
@@ -143,12 +120,12 @@ public class CadastroClienteVital extends AppCompatActivity {
                                                 if(document.exists() &&
                                                         String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)
                                                         && document.getData().get("isAndamento").equals(true)){
+
                                                     aguardandoAnalise();
                                                     etNomePaciente.setText( String.valueOf(document.getData().get(FIELD_NOME_PACIENTE)));
                                                     etEquipamento.setText( String.valueOf(document.getData().get(FIELD_EQUIPAMENTO)));
                                                     etCrmMedico.setText( String.valueOf(document.getData().get(FIELD_CRM_MEDICO)));
                                                 }
-
                                                 return;
                                             }
                                         }
@@ -162,9 +139,6 @@ public class CadastroClienteVital extends AppCompatActivity {
             }
         });
     }
-
-
-
 
     public void Enviar (View view){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -185,7 +159,6 @@ public class CadastroClienteVital extends AppCompatActivity {
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
-
     }
 
     void criarDocumento(){
@@ -241,7 +214,6 @@ public class CadastroClienteVital extends AppCompatActivity {
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
-
     }
 
     public void anexarLaudo(){
@@ -255,36 +227,23 @@ public class CadastroClienteVital extends AppCompatActivity {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-//                        ActivityCompat.requestPermissions(CadastroClienteVital.this, new String[]{Manifest.permission.CAMERA}, 1);
                         startActivity(intent);
+//                        btnFoto.setBackgroundColor(Color.GREEN);
                     }
                 } else{
                     startActivity(intent);
                 }
 
-//
-//                Log.d(TAG, "BUILD VERSION SDK INT: " + Build.VERSION.SDK_INT);
-//
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//                        ActivityCompat.requestPermissions(CadastroClienteVital.this, new String[]{Manifest.permission.CAMERA}, 1);
-//                    }
-//                }
-                if (ActivityCompat.checkSelfPermission(CadastroClienteVital.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                if (ActivityCompat.checkSelfPermission(CadastroClienteVital.this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(CadastroClienteVital.this, new String[]{Manifest.permission.CAMERA}, 1);
                     return;
                 }
+                btnFoto.setBackgroundColor(Color.GREEN);
+                Toast.makeText(getApplicationContext(), "Foto anexada com sucesso", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
 }
 
 

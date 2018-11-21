@@ -131,7 +131,9 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 }
                                 else{
-                                    progress.dismiss();
+
+
+                                    ;
                                     ctrl = false;
                                 }
                                     /*
