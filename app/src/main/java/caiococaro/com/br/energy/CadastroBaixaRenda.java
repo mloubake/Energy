@@ -19,33 +19,38 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-import static caiococaro.com.br.energy.MenuPrincipal.KEY_CPF_CNPJ;
-import static caiococaro.com.br.energy.MenuPrincipal.KEY_ENDERECO;
-import static caiococaro.com.br.energy.MenuPrincipal.KEY_NOME;
-
 public class CadastroBaixaRenda extends AppCompatActivity {
 
     private FirebaseFirestore mFirestore;
-
-    private static final String TAG = "";
 
     //Tabelas do FireStore
     private static final String TABLE_BAIXA_RENDA = "BaixaRenda";
     private static final String TABLE_USUARIO = "Usuario";
 
-    //Keys da Bundle (São os dados (ou valores) da bundle da Activity anterior)
-    public static final String KEY_NUM_CLIENTE = "NumeroCliente";
-    public static final String KEY_CPFCNPJ = "cpfCnpj";
-    public static final String KEY_NUM_REQUERIMENTO = "NumRequerimento";
+    //Variáveis da Bundle
+    private static final String VAR_BUNDLE_NUM_CLIENTE = "NumeroCliente";
+    private static final String VAR_BUNDLE_CPF_CNPJ = "CpfCnpj";
+    private static final String VAR_BUNDLE_NOME = "Nome";
+    private static final String VAR_BUNDLE_ENDERECO = "Endereco";
 
     //Campos do Firebase
     private static final String FIELD_CPF_CNPJ = "cpfCnpj";
     private static final String FIELD_ENDERECO = "endereco";
-    private static final String FIELD_IS_BAIXA_RENDA_CADASTRADO = "isBaixaRendaCadastrado";
-    private static final String FIELD_NOME = "nome";
+    private static final String FIELD_IS_BAIXA_RENDA_ANDAMENTO = "isBaixaRendaAndamento";
+    public static final String FIELD_IS_BAIXA_RENDA_CADASTRADO = "isBaixaRendaCadastrado";
+    private static final String FIELD_NOME_CLIENTE = "nomeCliente";
     private static final String FIELD_NUM_CLIENTE = "numCliente";
     private static final String FIELD_NIS = "NIS";
 
+    //Texts da classe
+    private static final String TEXT_ANALISE_ANDAMENTO = "Análise em andamento...";
+    private static final String TEXT_CADASTRO_BAIXA_RENDA_SOLICITADO = "Cadastro de baixa renda já solicitado!";
+    private static final String TEXT_CPF = "CPF: ";
+    private static final String TEXT_ENDERECO = "Endereço: ";
+    private static final String TEXT_OK = "Ok";
+    private static final String TEXT_NOME = "Nome: ";
+    private static final String TEXT_NUMERO_CLIENTE = "Número do cliente: ";
+    private static final String TEXT_SOLICITACAO = "Solicitação enviada para análise com sucesso!";
 
 
     String nomeCliente, numCliente, endCliente, CPF, NIS;
@@ -65,10 +70,10 @@ public class CadastroBaixaRenda extends AppCompatActivity {
 
         bundle = getIntent().getExtras();
         if (bundle != null) {
-            numCliente = bundle.getString(KEY_NUM_CLIENTE);
-            nomeCliente = bundle.getString(KEY_NOME);
-            endCliente = bundle.getString(KEY_ENDERECO);
-            CPF = bundle.getString(KEY_CPF_CNPJ);
+            numCliente = bundle.getString(VAR_BUNDLE_NUM_CLIENTE);
+            nomeCliente = bundle.getString(VAR_BUNDLE_NOME);
+            endCliente = bundle.getString(VAR_BUNDLE_ENDERECO);
+            CPF = bundle.getString(VAR_BUNDLE_CPF_CNPJ);
         }
 
         etNIS = findViewById(R.id.etNIS);
@@ -77,10 +82,10 @@ public class CadastroBaixaRenda extends AppCompatActivity {
         tvCpfCnpj = findViewById(R.id.tvcpfCliente);
         tvEndCliente = findViewById(R.id.tvendCliente);
 
-        tvNumCliente.setText(String.valueOf("Número do cliente: " + numCliente));
-        tvCpfCnpj.setText(String.valueOf("CPF: " + CPF));
-        tvNomeCliente.setText(String.valueOf("Nome: " + nomeCliente));
-        tvEndCliente.setText(String.valueOf("Endereço: " + endCliente));
+        tvNumCliente.setText(String.valueOf(TEXT_NUMERO_CLIENTE + numCliente));
+        tvCpfCnpj.setText(String.valueOf(TEXT_CPF + CPF));
+        tvNomeCliente.setText(String.valueOf(TEXT_NOME + nomeCliente));
+        tvEndCliente.setText(String.valueOf(TEXT_ENDERECO + endCliente));
 
         mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -88,7 +93,7 @@ public class CadastroBaixaRenda extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
                         if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)))) {
-                            if (document.getData().get(FIELD_IS_BAIXA_RENDA_CADASTRADO).equals(true)) {
+                            if(document.getData().get(FIELD_IS_BAIXA_RENDA_CADASTRADO).equals(true)) {
                                 usuarioCadastrado();
                             } else {
                                 //Procura se o documento existe e tem aquele número dentro desse documento
@@ -99,11 +104,11 @@ public class CadastroBaixaRenda extends AppCompatActivity {
                                             for (DocumentSnapshot document : task.getResult()) {
                                                 if (document.exists() &&
                                                         String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(numCliente)
-                                                        && document.getData().get("isBaixaRendaAndamento").equals(true)) {
+                                                        && document.getData().get(FIELD_IS_BAIXA_RENDA_ANDAMENTO).equals(true)) {
 
                                                     aguardandoAnalise();
                                                     etNIS.setText(String.valueOf(document.getData().get(FIELD_NIS)));
-                                                    tvNomeCliente.setText(String.valueOf(document.getData().get(FIELD_NOME)));
+                                                    tvNomeCliente.setText(String.valueOf(document.getData().get(FIELD_NOME_CLIENTE)));
                                                     tvCpfCnpj.setText(String.valueOf(document.getData().get(FIELD_CPF_CNPJ)));
                                                     tvEndCliente.setText(String.valueOf(document.getData().get(FIELD_ENDERECO)));
                                                 }
@@ -124,7 +129,7 @@ public class CadastroBaixaRenda extends AppCompatActivity {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
             dialogBuilder
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(TEXT_OK, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
@@ -136,7 +141,7 @@ public class CadastroBaixaRenda extends AppCompatActivity {
                         }
                     });
 
-            dialogBuilder.setMessage("Solicitação enviada para análise com sucesso!");
+            dialogBuilder.setMessage(TEXT_SOLICITACAO);
 
             AlertDialog alertDialog = dialogBuilder.create();
             alertDialog.show();
@@ -148,12 +153,11 @@ public class CadastroBaixaRenda extends AppCompatActivity {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
             dialogBuilder
-                    .setMessage("Cadastro de baixa renda já solicitado!")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    .setMessage(TEXT_CADASTRO_BAIXA_RENDA_SOLICITADO)
+                    .setPositiveButton(TEXT_OK, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            //atualizar
 
                             Intent intent = new Intent(CadastroBaixaRenda.this, MenuPrincipal.class);
                             startActivity(intent);
@@ -165,18 +169,17 @@ public class CadastroBaixaRenda extends AppCompatActivity {
         }
 
         void criaDocumento(){
-
             NIS = String.valueOf(etNIS.getText());
 
             Map<String, Object> data = new HashMap<>();
 
-            data.put("NIS",NIS);
-            data.put("numCliente",numCliente);
-            data.put("nome",nomeCliente);
-            data.put("cpfCnpj",CPF);
-            data.put("endereco",endCliente);
+            data.put(FIELD_NIS,NIS);
+            data.put(FIELD_NUM_CLIENTE,numCliente);
+            data.put(FIELD_NOME_CLIENTE,nomeCliente);
+            data.put(FIELD_CPF_CNPJ,CPF);
+            data.put(FIELD_ENDERECO,endCliente);
 
-            mFirestore.collection("BaixaRenda").add(data);
+            mFirestore.collection(TABLE_BAIXA_RENDA).add(data);
 
         }
 
@@ -184,14 +187,14 @@ public class CadastroBaixaRenda extends AppCompatActivity {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
         dialogBuilder
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                .setPositiveButton(TEXT_OK, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         finish();
                     }
                 });
 
-        dialogBuilder.setMessage("Análise em andamento...");
+        dialogBuilder.setMessage(TEXT_ANALISE_ANDAMENTO);
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();

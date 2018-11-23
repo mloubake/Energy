@@ -1,28 +1,23 @@
 package caiococaro.com.br.energy;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.preference.PreferenceFragment;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,79 +27,80 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import android.view.ContextThemeWrapper;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.text.SimpleDateFormat;
 
 public class ConsumoTempoReal extends AppCompatActivity {
 
-    //TAG do Log do Console
-    private static final String TAG = "";
-
     //Tabelas do FireStore
     private static final String TABLE_USUARIO = "Usuario";
+    private static final String TABLE_TARIFAS_APLICACAO = "TarifasAplicacao";
 
-    //Campos do Firebase
+    //Documentos do Firestore
+    private static final String DOCUMENT_BANTAR= "Bantar";
+    private static final String DOCUMENT_RESIDENCIAL= "Residencial";
+    private static final String DOCUMENT_TRIBUTARIO= "Tributario";
+
+
+    //Campos do Firestore - Usuario
+    private static final String FIELD_CIP= "CIP";
+    private static final String FIELD_LEITURA_ANTERIOR = "leituraAnterior";
+    private static final String FIELD_LEITURA_ATUAL= "leituraAtual";
+    private static final String FIELD_NUM_CLIENTE = "numCliente";
     private static final String FIELD_TOKEN_ACESSO = "tokenAcesso";
 
-    //Keys da Bundle
-    private static final String KEY_NUM_CLIENTE = "NumeroCliente";
-    private static final String KEY_TOKEN_ACESSO = "TokenAcesso";
+    //Campos do Firestore - Aplicação - Tributário
+    private static final String FIELD_COFINS= "COFINS";
+    private static final String FIELD_ICMS= "ICMS";
+    private static final String FIELD_PIS= "PIS";
 
-    //Names para cada Bundle Específica
+    //Campos do Firestore - Aplicação - Tributário
+    private static final String FIELD_TE= "TE";
+    private static final String FIELD_TUSD= "TUSD";
 
-    private static final String NAME_CONSUMO = "Usuario";
-    private static final String NAME_CONSUMO_ATUAL = "ConsumoAtual";
+    private static final String FIELD_AMARELA= "amarela";
+    private static final String FIELD_VERDE= "verde";
+    private static final String FIELD_VERMELHA_1= "vermelha1";
+    private static final String FIELD_VERMELHA_2= "vermelha2";
+
+    //Variáveis da Bundle
+    private static final String VAR_BUNDLE_NUM_CLIENTE = "NumeroCliente";
+
+    //Texts da classe
+    private static final String TEXT_ATUALIZAR = "Atualizar";
+    private static final String TEXT_CALCULANDO = "Calculando...";
+    private static final String TEXT_CANCELAR = "Cancelar";
+    private static final String TEXT_ERRO_VERIFIQUE_LEITURA = "ERRO: verifique a leitura e tente novamente";
+    private static final String TEXT_ERRO_VERIFIQUE_DADOS = "Verifique os dados informados e tente novamente";
+
+
     private ProgressDialog progress;
-
 
     String numCliente;
 
     private FirebaseFirestore mFirestore;
+    String myId;
 
     int ctrl = 0;
 
-    float PIS;
-    float COFINS;
-    float ICMS;
-    float CIP;
+    float PIS, COFINS, ICMS, CIP;
 
-    float TUSD;
-    float TE;
-    float BantarVerde;
-    float BantarAmarela;
-    float BantarVermelha1;
-    float BantarVermelha2=0;
+    float TUSD, TE;
+    float BantarVerde, BantarAmarela,
+            BantarVermelha1,
+            BantarVermelha2=0;
 
-    float bVerde;
-    float bAzul;
-    float bAmarela;
-    float bVermelha;
+    float bVerde, bAzul, bAmarela, bVermelha;
 
-    float tarifa;
-    float valor_consumo;
-    float consumo;
-    float estimativaConsumo;
-    float totalEstimado;
+    float tarifa, valor_consumo, consumo,
+            estimativaConsumo, totalEstimado;
 
-    int leituraAnterior;
-    int leituraAtual;
-    int leituraMes;
-
-    int lastDay;
+    int leituraAnterior, leituraAtual,
+            leituraMes, lastDay;
 
     String tokenAcesso;
 
@@ -135,7 +131,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
     Calendar c = Calendar.getInstance();
 
     int ultimoDia = Integer.valueOf(c.getActualMaximum(Calendar.DAY_OF_MONTH));
-    int diasDif=0;
+    int diasDif = 0;
 
 
     @Override
@@ -147,30 +143,29 @@ public class ConsumoTempoReal extends AppCompatActivity {
         calendar.setTime(data);
         lastDay = calendar.DAY_OF_MONTH;
 
-        tvLeituraAnterior = (TextView) findViewById(R.id.tvLeituraAnterior);
-        tvLeituraAtual = (TextView) findViewById(R.id.tvLeituraAtual);
-        tvCIP = (TextView) findViewById(R.id.tvCIP);
-        tvConsumo = (TextView) findViewById(R.id.tvConsumo);
-        tvConsumo = (TextView) findViewById(R.id.tvConsumo);
-        tvTarifa = (TextView) findViewById(R.id.tvTarifa);
-        tvValor_consumo_parcial = (TextView) findViewById(R.id.tvValor_consumo_parcial);
-        tvTotal_estimado = (TextView) findViewById(R.id.tvTotal_estimado);
-        btnAtualizar = (Button) findViewById(R.id.btnAtualizar);
+        tvLeituraAnterior = findViewById(R.id.tvLeituraAnterior);
+        tvLeituraAtual = findViewById(R.id.tvLeituraAtual);
+        tvCIP = findViewById(R.id.tvCIP);
+        tvConsumo = findViewById(R.id.tvConsumo);
+        tvConsumo = findViewById(R.id.tvConsumo);
+        tvTarifa = findViewById(R.id.tvTarifa);
+        tvValor_consumo_parcial = findViewById(R.id.tvValor_consumo_parcial);
+        tvTotal_estimado = findViewById(R.id.tvTotal_estimado);
+        btnAtualizar = findViewById(R.id.btnAtualizar);
 
         bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            numCliente = bundle.getString(NAME_CONSUMO);
-
+            numCliente = bundle.getString(VAR_BUNDLE_NUM_CLIENTE);
         }
 
         progress = new ProgressDialog(ConsumoTempoReal.this);
-        progress.setMessage("Calculando...");
+        progress.setMessage(TEXT_CALCULANDO);
         progress.show();
 
         mFirestore = FirebaseFirestore.getInstance();
 
-        pesquisa1();
+        pesquisa();
 
     }
 
@@ -181,13 +176,11 @@ public class ConsumoTempoReal extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
-
-                        if (numCliente.equals(String.valueOf(document.getData().get("numCliente")))) {
-
+                        if (numCliente.equals(String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)))) {
                             //Atualiza leituras
-                            mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAnterior", leituraAnterior);
-                            mFirestore.collection(TABLE_USUARIO).document("padrão").update("leituraAtual", leituraAtual);
-                            pesquisa1();
+                            mFirestore.collection(TABLE_USUARIO).document(myId).update(FIELD_LEITURA_ANTERIOR, leituraAnterior);
+                            mFirestore.collection(TABLE_USUARIO).document(myId).update(FIELD_LEITURA_ATUAL, leituraAtual);
+                            pesquisa();
                         }
                     }
                 }
@@ -195,33 +188,29 @@ public class ConsumoTempoReal extends AppCompatActivity {
         });
     }
 
-    void pesquisa1() {
+    void pesquisa() {
         mFirestore.collection(TABLE_USUARIO).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot document : task.getResult()) {
 
-                        if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get("numCliente")))) {
+                        if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)))) {
+                            myId = document.getId();
+                            leituraAnterior = Integer.valueOf(String.valueOf(document.getData().get(FIELD_LEITURA_ANTERIOR)));
 
-                            leituraAnterior = Integer.valueOf(String.valueOf(document.getData().get("leituraAnterior")));
-                            Log.d(TAG, "LEITURAANTERIOR: " + leituraAnterior);
-
-                            String LA = String.valueOf(document.getData().get("leituraAtual"));
+                            String LA = String.valueOf(document.getData().get(FIELD_LEITURA_ATUAL));
                             leituraAtual = Integer.valueOf(LA);
-                            Log.d(TAG, "LEITURAATUAL: " + leituraAtual);
                             leituraMes = (Integer.valueOf(leituraAtual)) - (Integer.valueOf(leituraAnterior));
 
                             consumo = Float.valueOf(leituraMes);
 
-                            String cip = String.valueOf(document.getData().get("CIP"));
+                            String cip = String.valueOf(document.getData().get(FIELD_CIP));
                             CIP = Float.valueOf(cip);
 
                             tokenAcesso = document.getData().get(FIELD_TOKEN_ACESSO).toString();
-                            Log.d(TAG, "TOKEN_ACESSO: " + tokenAcesso);
 
                         }
-                        //calcula();
                     }
                 }
             }
@@ -234,7 +223,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     void pesquisa2() {
 
-        DocumentReference docRefTributario = mFirestore.collection("TarifasAplicacao").document("Tributario");
+        DocumentReference docRefTributario = mFirestore.collection(TABLE_TARIFAS_APLICACAO).document(DOCUMENT_TRIBUTARIO);
         docRefTributario.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -246,14 +235,10 @@ public class ConsumoTempoReal extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        pis = String.valueOf(document.getData().get("PIS"));
-
-                        cofins = String.valueOf(document.getData().get("COFINS"));
-
-                        icms = String.valueOf(document.getData().get("ICMS"));
-
+                        pis = String.valueOf(document.getData().get(FIELD_PIS));
+                        cofins = String.valueOf(document.getData().get(FIELD_COFINS));
+                        icms = String.valueOf(document.getData().get(FIELD_ICMS));
                     }
-
                 }
 
                 PIS = Float.valueOf(pis);
@@ -269,7 +254,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     void pesquisa3() {
 
-        DocumentReference docRefResidencial = mFirestore.collection("TarifasAplicacao").document("Residencial");
+        DocumentReference docRefResidencial = mFirestore.collection(TABLE_TARIFAS_APLICACAO).document(DOCUMENT_RESIDENCIAL);
 
         docRefResidencial.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -281,8 +266,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        te = String.valueOf(document.getData().get("TE"));
-                        tusd = String.valueOf(document.getData().get("TUSD"));
+                        te = String.valueOf(document.getData().get(FIELD_TE));
+                        tusd = String.valueOf(document.getData().get(FIELD_TUSD));
 
 
                     }
@@ -297,7 +282,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     void pesquisa4() {
 
-        DocumentReference docRefBantar = mFirestore.collection("TarifasAplicacao").document("Bantar");
+        DocumentReference docRefBantar = mFirestore.collection(TABLE_TARIFAS_APLICACAO).document(DOCUMENT_BANTAR);
         docRefBantar.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -309,15 +294,10 @@ public class ConsumoTempoReal extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-
-                        bantVerde = String.valueOf(document.getData().get("verde"));
-
-                        bantAmarela = String.valueOf(document.getData().get("amarela"));
-
-                        bantVermelha1 = String.valueOf(document.getData().get("vermelha1"));
-
-                        bantVermelha2 = String.valueOf(document.getData().get("vermelha2"));
-
+                        bantVerde = String.valueOf(document.getData().get(FIELD_VERDE));
+                        bantAmarela = String.valueOf(document.getData().get(FIELD_AMARELA));
+                        bantVermelha1 = String.valueOf(document.getData().get(FIELD_VERMELHA_1));
+                        bantVermelha2 = String.valueOf(document.getData().get(FIELD_VERMELHA_2));
                     }
                 }
                 BantarVerde = Float.valueOf(bantVerde);
@@ -348,17 +328,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         valor_consumo = consumo * tarifa;
 
-            /*PIS *= valor_consumo;
-            COFINS *= valor_consumo;
-            ICMS *= valor_consumo;
-
-            valor_consumo += PIS + COFINS + ICMS;*/
-
         //RESULTADO
         valor_consumo += CIP;
-
-        //Toast.makeText(getApplicationContext(),"today: "+today,Toast.LENGTH_LONG).show();
-        //Toast.makeText(getApplicationContext(),"lastDay: "+lastDay,Toast.LENGTH_LONG).show();
 
         atualizar();
     }
@@ -387,15 +358,11 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     void grafico() {
 
-
-/*        String vc = "R$ ".concat(String.valueOf(df.format(valor_consumo)));
-        String ec = "R$ ".concat(String.valueOf(df.format(estimativaConsumo)));*/
-
         float intensGrafico[] = {valor_consumo, estimativaConsumo};
 
-        String descricao[] = {"Consumo parcial","Consumo estimado"};
+        String descricao[] = {"","" };
 
-        grafico = (PieChart) findViewById(R.id.graficoID);
+        grafico = findViewById(R.id.graficoID);
 
         List<PieEntry> entradasGrafico = new ArrayList<>();
 
@@ -433,8 +400,8 @@ public class ConsumoTempoReal extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.dialog_atualizar, null);
         dialogBuilder.setView(dialogView);
 
-        final EditText anterior = (EditText) dialogView.findViewById(R.id.leituraAnteriorMedidor);
-        final EditText atual = (EditText) dialogView.findViewById(R.id.leituraAtualMedidor);
+        final EditText anterior = dialogView.findViewById(R.id.leituraAnteriorMedidor);
+        final EditText atual = dialogView.findViewById(R.id.leituraAtualMedidor);
 
         PIS = 0;
         COFINS = 0;
@@ -458,7 +425,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
         totalEstimado = 0;
 
         dialogBuilder
-                .setPositiveButton("Atualizar", new DialogInterface.OnClickListener() {
+                .setPositiveButton(TEXT_ATUALIZAR, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -472,7 +439,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
                             if(leituraAtual < Integer.valueOf(leituraAnterior)){
 
-                                Toast.makeText(getApplicationContext(),"ERRO: verifique a leitura e tente novamente",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),TEXT_ERRO_VERIFIQUE_LEITURA,Toast.LENGTH_LONG).show();
 
                             }
                             else {
@@ -481,24 +448,24 @@ public class ConsumoTempoReal extends AppCompatActivity {
                                 bundle = getIntent().getExtras();
 
                                 if (bundle != null) {
-                                    numCliente = bundle.getString(NAME_CONSUMO);
+                                    numCliente = bundle.getString(VAR_BUNDLE_NUM_CLIENTE);
                                 }
 
                                 progress = new ProgressDialog(ConsumoTempoReal.this);
-                                progress.setMessage("Calculando...");
+                                progress.setMessage(TEXT_CALCULANDO);
                                 progress.show();
 
                                 update();
                             }
                         }
                         else{
-                                Toast.makeText(getApplicationContext(),"Verifique os dados informados e tente novamente",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),TEXT_ERRO_VERIFIQUE_DADOS,Toast.LENGTH_LONG).show();
 
                         }
 
                     }
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                .setNegativeButton(TEXT_CANCELAR, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -512,10 +479,3 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
     }
 }
-
-
-
-
-
-
-

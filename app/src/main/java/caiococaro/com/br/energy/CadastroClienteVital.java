@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,21 +29,20 @@ import java.util.Map;
 
 public class CadastroClienteVital extends AppCompatActivity {
 
-    private static final String TAG = "";
-
     //Tabelas do FireStore
     private static final String TABLE_USUARIO = "Usuario";
     private static final String TABLE_CLIENTE_VITAL = "ClienteVital";
 
-    //Keys da Bundle (São os dados (ou valores) da bundle da Activity anterior)
-    public static final String KEY_NUM_CLIENTE = "NumeroCliente";
-    public static final String KEY_CPFCNPJ = "cpfCnpj";
-    public static final String KEY_NUM_REQUERIMENTO = "NumRequerimento";
+    //Variáveis da Bundle
+    public static final String VAR_BUNDLE_NUM_CLIENTE = "NumeroCliente";
+    public static final String VAR_BUNDLE_CPF_CNPJ = "CpfCnpj";
+    public static final String VAR_BUNDLE_NUM_REQUERIMENTO = "NumRequerimento";
 
     //Campos do Firebase
     private static final String FIELD_CPF_CNPJ = "cpfCnpj";
     private static final String FIELD_CRM_MEDICO = "crmMedico";
     private static final String FIELD_EQUIPAMENTO = "equipamento";
+    private static final String FIELD_IS_CLIENTE_VITAL_ANDAMENTO = "isClienteVitalAndamento";
     private static final String FIELD_IS_CLIENTE_VITAL_CADASTRADO = "isClienteVitalCadastrado";
     private static final String FIELD_NOME_PACIENTE = "nomePaciente";
     private static final String FIELD_NUM_CLIENTE = "numCliente";
@@ -76,13 +74,10 @@ public class CadastroClienteVital extends AppCompatActivity {
 
         //Setando os valores do bundle da MainActivity para MenuPrincipal para depois setar os bundles das outras Activities
         if(bundle != null ){
-            valorNumCliente = bundle.getString(KEY_NUM_CLIENTE);
-            valorCpfCnpj = bundle.getString(KEY_CPFCNPJ);
-            valorNumRequerimento = bundle.getString(KEY_NUM_REQUERIMENTO);
-            Log.d(TAG, "VALORNUMCLIENTE 1: " + valorNumCliente);
-            Log.d(TAG, "MENUPRINCIPALBUNDLES: "+valorNumCliente + " / " + valorToken + " / " + valorNumRequerimento) ;
+            valorNumCliente = bundle.getString(VAR_BUNDLE_NUM_CLIENTE);
+            valorCpfCnpj = bundle.getString(VAR_BUNDLE_CPF_CNPJ);
+            valorNumRequerimento = bundle.getString(VAR_BUNDLE_NUM_REQUERIMENTO);
         }
-        Log.d(TAG, "VALORNUMCLIENTE 2: " + valorNumCliente);
 
           etNomePaciente = findViewById(R.id.etNomePaciente);
           tvNumPaciente = findViewById(R.id.tvNumPaciente);
@@ -91,7 +86,7 @@ public class CadastroClienteVital extends AppCompatActivity {
           btnFoto = findViewById(R.id.btnFoto);
           btnAtualizar = findViewById(R.id.btnEnviar);
 
-        tvNumPaciente.setText(String.valueOf("Número do cliente: "+valorNumCliente));
+        tvNumPaciente.setText(String.valueOf("Número do cliente: " + valorNumCliente));
 
         mFirestore = FirebaseFirestore.getInstance();
 
@@ -119,7 +114,7 @@ public class CadastroClienteVital extends AppCompatActivity {
                                             for (DocumentSnapshot document : task.getResult()){
                                                 if(document.exists() &&
                                                         String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)
-                                                        && document.getData().get("isAndamento").equals(true)){
+                                                        && document.getData().get(FIELD_IS_CLIENTE_VITAL_ANDAMENTO).equals(true)){
 
                                                     aguardandoAnalise();
                                                     etNomePaciente.setText( String.valueOf(document.getData().get(FIELD_NOME_PACIENTE)));
@@ -228,7 +223,6 @@ public class CadastroClienteVital extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         startActivity(intent);
-//                        btnFoto.setBackgroundColor(Color.GREEN);
                     }
                 } else{
                     startActivity(intent);
