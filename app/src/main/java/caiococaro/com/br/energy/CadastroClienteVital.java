@@ -71,7 +71,6 @@ public class CadastroClienteVital extends AppCompatActivity {
 
         //Recebendo a bundle da MainActivity com vários valores
         bundle = getIntent().getExtras();
-
         //Setando os valores do bundle da MainActivity para MenuPrincipal para depois setar os bundles das outras Activities
         if(bundle != null ){
             valorNumCliente = bundle.getString(VAR_BUNDLE_NUM_CLIENTE);
@@ -102,8 +101,7 @@ public class CadastroClienteVital extends AppCompatActivity {
                 if(task.isSuccessful()){
                     for(DocumentSnapshot document : task.getResult()){
                         if(String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)){
-                            if(document.getData().get(FIELD_IS_CLIENTE_VITAL_CADASTRADO).equals(true)){
-
+                            if(String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(true)){
                                 usuarioCadastrado();
                             } else{
                                 //Procura se o documento existe e tem aquele número dentro desse documento
@@ -213,7 +211,6 @@ public class CadastroClienteVital extends AppCompatActivity {
 
     public void anexarLaudo(){
 
-        //Todo: Verificar a câmera nos despositivos
         btnFoto.setOnClickListener(new View.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.M)
             @Override

@@ -142,6 +142,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
                             hideStatus();
                         }
                     }
+                    return;
                 }
             }
         });

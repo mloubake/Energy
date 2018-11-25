@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                                     intent.putExtras(bundle);
                                     startActivity(intent);
                                     ctrl = true;
-                                    break;
+                                    return;
                                 } else{
                                     ctrl = false;
                                 }
