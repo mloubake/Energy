@@ -360,7 +360,7 @@ public class ConsumoTempoReal extends AppCompatActivity {
 
         float intensGrafico[] = {valor_consumo, estimativaConsumo};
 
-        String descricao[] = {"","" };
+        String descricao[] = {"Consumo parcial","Consumo estimado"};
 
         grafico = findViewById(R.id.graficoID);
 
