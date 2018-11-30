@@ -200,8 +200,6 @@
 
 
         </LinearLayout>
-
-
         <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="400dp"
             android:layout_height="500dp"
@@ -215,6 +213,15 @@
                 android:layout_height="298dp"
                 android:layout_marginBottom="8dp" />
         </TableRow>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="O cálculo é realizado apenas para energia, com base nas
+            alíquotas médias de tributos, não contemplando serviços de terceiros."
+            android:textColor="@color/colorPrimaryDark"
+            android:textAlignment="center"/>
 
     </TableLayout>
 </android.support.constraint.ConstraintLayout>
