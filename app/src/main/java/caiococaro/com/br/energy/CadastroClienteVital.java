@@ -101,8 +101,9 @@ public class CadastroClienteVital extends AppCompatActivity {
                 if(task.isSuccessful()){
                     for(DocumentSnapshot document : task.getResult()){
                         if(String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(valorNumCliente)){
-                            if(String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)).equals(true)){
+                            if(String.valueOf(document.getData().get(FIELD_IS_CLIENTE_VITAL_CADASTRADO)).equals(true)){
                                 usuarioCadastrado();
+                                return;
                             } else{
                                 //Procura se o documento existe e tem aquele número dentro desse documento
                                 mFirestore.collection(TABLE_CLIENTE_VITAL).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -143,8 +144,7 @@ public class CadastroClienteVital extends AppCompatActivity {
                         //atualizar
                         criarDocumento();
 
-                        Intent intent = new Intent(CadastroClienteVital.this, MenuPrincipal.class);
-                        startActivity(intent);
+                        finish();
                     }
                 });
 
@@ -167,8 +167,8 @@ public class CadastroClienteVital extends AppCompatActivity {
         data.put(FIELD_EQUIPAMENTO,equipamentos);
         data.put(FIELD_CRM_MEDICO,CRM);
         //Campos que vão ser criados no BD para não ter trabalho extra nas futuras manutenções
+        data.put(FIELD_IS_CLIENTE_VITAL_ANDAMENTO, true);
         data.put(FIELD_IS_CLIENTE_VITAL_CADASTRADO, false);
-        data.put(FIELD_NUM_PACIENTE, null);
         data.put(FIELD_CPF_CNPJ, valorCpfCnpj);
 
         mFirestore.collection(TABLE_CLIENTE_VITAL).add(data);
@@ -195,6 +195,7 @@ public class CadastroClienteVital extends AppCompatActivity {
     public void aguardandoAnalise (){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
+        dialogBuilder.setMessage("Análise em andamento...");
         dialogBuilder
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -203,7 +204,7 @@ public class CadastroClienteVital extends AppCompatActivity {
                     }
                 });
 
-        dialogBuilder.setMessage("Análise em andamento...");
+
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();

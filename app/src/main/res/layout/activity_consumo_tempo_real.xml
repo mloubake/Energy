@@ -218,8 +218,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="O cálculo é realizado apenas para energia, com base nas
-            alíquotas médias de tributos, não contemplando serviços de terceiros."
+            android:text="O cálculo é realizado apenas para energia, com base nas alíquotas médias de tributos, não contemplando serviços de terceiros."
             android:textColor="@color/colorPrimaryDark"
             android:textAlignment="center"/>
 

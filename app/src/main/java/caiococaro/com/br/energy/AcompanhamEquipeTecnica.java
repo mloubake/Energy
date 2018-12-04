@@ -210,8 +210,7 @@ public class AcompanhamEquipeTecnica extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int id) {
 
-                Intent intent = new Intent(AcompanhamEquipeTecnica.this, MenuPrincipal.class);
-                startActivity(intent);
+                finish();
             }
         });
 

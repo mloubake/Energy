@@ -95,6 +95,7 @@ public class CadastroBaixaRenda extends AppCompatActivity {
                         if (String.valueOf(numCliente).equals(String.valueOf(document.getData().get(FIELD_NUM_CLIENTE)))) {
                             if(document.getData().get(FIELD_IS_BAIXA_RENDA_CADASTRADO).equals(true)) {
                                 usuarioCadastrado();
+                                return;
                             } else {
                                 //Procura se o documento existe e tem aquele número dentro desse documento
                                 mFirestore.collection(TABLE_BAIXA_RENDA).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -111,8 +112,10 @@ public class CadastroBaixaRenda extends AppCompatActivity {
                                                     tvNomeCliente.setText(String.valueOf(document.getData().get(FIELD_NOME_CLIENTE)));
                                                     tvCpfCnpj.setText(String.valueOf(document.getData().get(FIELD_CPF_CNPJ)));
                                                     tvEndCliente.setText(String.valueOf(document.getData().get(FIELD_ENDERECO)));
+                                                    return;
+                                                } else{
+                                                    return;
                                                 }
-                                                return;
                                             }
                                         }
                                     }
@@ -136,8 +139,7 @@ public class CadastroBaixaRenda extends AppCompatActivity {
                             //atualizar
                             criaDocumento();
 
-                            Intent intent = new Intent(CadastroBaixaRenda.this, MenuPrincipal.class);
-                            startActivity(intent);
+                            finish();
                         }
                     });
 
@@ -153,18 +155,36 @@ public class CadastroBaixaRenda extends AppCompatActivity {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
             dialogBuilder
-                    .setMessage(TEXT_CADASTRO_BAIXA_RENDA_SOLICITADO)
+//                    .setMessage(TEXT_CADASTRO_BAIXA_RENDA_SOLICITADO)
                     .setPositiveButton(TEXT_OK, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-
-                            Intent intent = new Intent(CadastroBaixaRenda.this, MenuPrincipal.class);
-                            startActivity(intent);
+                            finish();
+//                            Intent intent = new Intent(CadastroBaixaRenda.this, MenuPrincipal.class);
+//                            startActivity(intent);
                         }
                     });
+            dialogBuilder.setMessage("Análise em andamento...");
+
             AlertDialog alertDialog = dialogBuilder.create();
             alertDialog.show();
+
+//            //
+//            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+//
+//            dialogBuilder
+//                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            finish();
+//                        }
+//                    });
+//
+//            dialogBuilder.setMessage("Análise em andamento...");
+//
+//            AlertDialog alertDialog = dialogBuilder.create();
+//            alertDialog.show();
 
         }
 
@@ -178,6 +198,9 @@ public class CadastroBaixaRenda extends AppCompatActivity {
             data.put(FIELD_NOME_CLIENTE,nomeCliente);
             data.put(FIELD_CPF_CNPJ,CPF);
             data.put(FIELD_ENDERECO,endCliente);
+            //Campos que vão ser criados no BD para não ter trabalho extra nas futuras manutenções
+            data.put(FIELD_IS_BAIXA_RENDA_ANDAMENTO, true);
+            data.put(FIELD_IS_BAIXA_RENDA_CADASTRADO, false);
 
             mFirestore.collection(TABLE_BAIXA_RENDA).add(data);
 
