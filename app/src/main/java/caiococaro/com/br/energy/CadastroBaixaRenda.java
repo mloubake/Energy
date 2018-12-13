@@ -165,7 +165,7 @@ public class CadastroBaixaRenda extends AppCompatActivity {
 //                            startActivity(intent);
                         }
                     });
-            dialogBuilder.setMessage("Análise em andamento...");
+            dialogBuilder.setMessage(TEXT_ANALISE_ANDAMENTO);
 
             AlertDialog alertDialog = dialogBuilder.create();
             alertDialog.show();
