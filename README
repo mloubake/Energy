@@ -1,0 +1,14 @@
+# EnergyApp
+• TCC em Android utilizando o Google Cloud Firestore / Conclusion Project in Android using Google Cloud Firestore.
+
+• Aplicativo desenvolvido em parceria com Caio Cocaro e Fernando La Rocque.
+- Desenvolvido para Android (Java e XML).
+- Google Cloud Firestore como Banco de Dados.
+
+• App developed in partnership with Caio Cocaro and Fernando La Rocque.
+- Developed for Android (Java and XML).
+- Google Cloud Firestore as Database.
+
+• Login padrão/Default login:
+- CPF ou CNPJ: 123
+- Número do Cliente: 456
